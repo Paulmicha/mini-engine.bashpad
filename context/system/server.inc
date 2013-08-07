@@ -426,7 +426,7 @@ function _environment_form_submit( $params )
         //      Creation
         if ( $params[ 'is_new' ])
             $id_environment = insert_if_no_existing_record( 'environment', $params[ 'values' ], array(
-                'unique_field_name' => 'namespace',
+                'unique_field_name' => 'title',
             ));
         
         //      Edition
