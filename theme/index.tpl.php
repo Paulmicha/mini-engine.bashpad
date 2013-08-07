@@ -23,8 +23,8 @@ because it can connect to other servers through SSH in order to execute Bash com
         "<h2>Quick start</h2>
 <ol>
     <li>Edit the settings in <code>engine/settings.inc</code>, and adjust <code>.htaccess</code> file for the rewrite rules if needed.</li>
-    <li>Install (once) DB Tables in ". l( 'system/sql/install', 'system/sql/install' ) ."</li>
-    <li>Import (once) defaults in ". l( 'system/sql/load-configuration', 'system/sql/load-configuration' ) ."</li>
+    <li>Install (once) DB Tables in ". l( 'system/setup/install', 'system/setup/install' ) ."</li>
+    <li>Import (once) defaults in ". l( 'system/setup/load-configuration', 'system/setup/load-configuration' ) ."</li>
     <li>Pick a path to start with &ndash; e.g. for ". l( "/test", "test" ) ." you need to create <code>context/test.inc</code>.<br>In this file, set these 2 variables, like : <code>\$head_page_title = 'My page title';</code> and <code>\$content .= \"Hello world\";</code>.<br>
         Once this is done, ". l( "have a look at the result", 'test' ) .".</li>
     <li>You may provide \"Navbar\" items in <code>context/global.inc</code></li>
