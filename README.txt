@@ -26,7 +26,7 @@ Third-party Bundled projects Credits :
 - Twitter Bootstrap 2.3.2 Copyright 2012 Twitter, Inc. (Apache 2)
 - Bootswatch 'Cosmo' Copyright Thomas Park (Apache 2)
 - Krumo 22 Copyright Kaloyan K. Tsvetkov <kaloyan@kaloyan.info> (LGPL)
-- PhpSecLib 0.3.1 Copyright MMVIII Jim Wigginton (MIT)
+- PhpSecLib 0.3.5 Copyright MMVIII Jim Wigginton (MIT) -- Note : with modifications for include paths
 - Chosen v0.12.1 Copyright 2011-2013 by Harvest (MIT)
 - Font Awesome 3.2.1 Copyright Dave Gandy (MIT + SIL OFL 1.1)
 - HighlightJS 7.3 Copyright (c) 2006, Ivan Sagalaev + github.com style (c) Vasily Polovnyov
