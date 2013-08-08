@@ -25,7 +25,7 @@ $arg3 = check_plain( arg( 3 ));
 $tab_items = array(
     array( "Batch", 'batch' ),
     array( "Presets", 'batch/presets' ),
-    array( "Archives", 'batch/archives' ),
+    array( "Archives", 'batch/archives', 'path_is_in_base_route' ),
     array( "Status", 'batch/status' ),
 );
 $subtab_items = array();
@@ -38,7 +38,14 @@ if ( empty( $arg1 ) || $arg1 == 'add' )
     $subtab_items[] = array( "<i class='icon-rocket'></i>&nbsp;Select batch to launch", 'batch' );
     $subtab_items[] = array( "<i class='icon-plus'></i>&nbsp;Add new Batch", 'batch/add' );
 }
-elseif ( is_numeric( $arg1 ))
+
+//      Single thread archive consultation
+//else if ( $arg1 == 'archives' && ) {
+//    $tab_items[ 2 ] = array( "Archives", 'batch/archives', 'path_is_in_base_route' );
+//}
+
+//      Single Batch paths
+else if ( is_numeric( $arg1 ))
 {
     $batch_title = db_popfetch( "SELECT `title` FROM `batch` WHERE `id_batch` = ?", array( $arg1 ));
     $tab_items[ 0 ] = array( "Batch", 'batch', 'path_is_in_base_route' );
@@ -70,6 +77,8 @@ else if ( is_numeric( $arg1 ))
         include "context/batch/view.inc";
     else
         include "context/batch/$arg2.inc";
+else if ( $arg1 == 'archives' && is_numeric( $arg2 ))
+    include "context/batch/archive-view.inc";
 else
     include "context/batch/$arg1.inc";
 

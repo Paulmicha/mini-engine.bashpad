@@ -155,11 +155,11 @@ function batch_standby_phase( $batch )
     
     //      Load current step (with replaced tokens for commands)
     $batch_state_data = get_batch_state_data( $batch );
-
+    
     //      Recap
     $commands_arr = array();
     foreach( $batch_state_data[ 'execution_steps_config' ] as $step )
-        if ( !empty( $step[ 'command' ][ 'rendered_command' ]))
+        if ( !empty( $step[ 'rendered_command' ]))
             $commands_arr[] = '<hr><p>Environment : '.
                 '<strong>'.
                 $step[ 'environment' ][ 'title' ] .
@@ -172,7 +172,7 @@ function batch_standby_phase( $batch )
                 $step[ 'environment' ][ 'server' ][ 'hostname' ] .
                 '</code> '.
                 '</p>'.
-                view_source( $step[ 'command' ][ 'rendered_command' ], 'bash' ) .
+                view_source( $step[ 'rendered_command' ], 'bash' ) .
                 '';
 
     //      Display
@@ -419,7 +419,7 @@ function batch_done_phase( $batch )
     //      Failsafe
     //if ( $state_is_set )
     //{
-        $dblog_entries = get_batch_log( $batch );
+        $dblog_entries = get_batch_log( $batch[ 'id_thread' ]);
         $preprocessed_log_entries_arr = array();
         
         //      debug

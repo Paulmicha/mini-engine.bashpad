@@ -477,6 +477,9 @@ function _environment_form_submit( $params )
                 //      debug
                 //krumo( $values );
                 
+                //      Paths cannot end with a trailing slash
+                $values[ 'path' ] = rtrim( $values[ 'path' ], '/ \n\t\0' );
+                
                 $id_folder = insert_or_update( 'folder', $values, array(
                     'detect_duplicate_query' => "SELECT `id_folder` FROM `folder` WHERE `path` LIKE '". $values[ 'path' ] ."' AND `id_environment` = $id_environment",
                 ));

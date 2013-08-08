@@ -8,7 +8,7 @@
  */
 
 //      Init
-$head_page_title = "<i class='icon-hdd'></i> Listing all thread operations previously launched";
+$head_page_title = "<i class='icon-hdd'></i> Listing all batch operations previously launched";
 
 //      Paged table view
 $content .= render_pager_query_table( "SELECT * FROM `thread` ORDER BY `id_thread` DESC", array(), array(
@@ -70,7 +70,7 @@ function _preprocess_archive( $results )
             $r[ 'id_thread' ],
             
             //      Time
-            datestamp_format( $batch[ 'datestamp' ]),
+            datestamp_format( $r[ 'datestamp' ]),
             
             //      Batch
             $batch_title,

@@ -249,7 +249,7 @@ function get_batch( $id_batch, $options = array())
  *  @see engine/core/api_batch_phases.inc
  *  @see batch_done_phase()
  */
-function get_batch_log( $batch )
+function get_batch_log( $id_thread )
 {
     $logs = array();
     $dblog_entries = array();
@@ -265,7 +265,7 @@ function get_batch_log( $batch )
     $log_ids = db_fetchall( "SELECT has_dblog.id_dblog
         FROM has_dblog
         WHERE has_dblog.id = ?",
-        array( $batch[ 'id_thread' ]));
+        array( $id_thread ));
     
     //krumo( $log_ids );
     
