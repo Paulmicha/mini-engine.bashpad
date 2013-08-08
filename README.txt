@@ -12,7 +12,7 @@ I've used it over the years for repetitive tasks surrounding various PHP project
 It was never meant to be Object-Oriented, and it can be seen as a "good" source of antipatterns - if there is such a thing,
 but it could be an interesting exercise to rebuild it in "modern" PHP, using things like Symfony 2 or Laravel for example.
 
-So basically, this is a "museum" of various Php snippets from a few years back put together.
+So basically, this is a "museum" of various Php snippets put together.
 
 WARNING : this is not meant to be publicly accessible over the web, it's supposed to be run on LAN,
 because it can connect to other servers through SSH in order to execute Bash commands.

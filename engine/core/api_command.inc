@@ -24,16 +24,12 @@ function prepare_batch_commands( $batch )
     
     //      a) Configuration form submission handler
     //      Custom tokens values mapping
-    //      @todo 2013/08/02 17:40:38
     $execution_steps_config = array();
     if ( !empty( $_REQUEST[ 'batch_'. $id_batch .'_init_requested' ]))
-        foreach( $_REQUEST as $key => $value )
+        foreach( $_REQUEST as $key => $custom_value )
             if ( substr( $name, 0, 12 ) == 'custom-token' )
             {
-                //      debug
-                krumo( $value );
-                
-                //      @todo 2013/08/02 13:57:15
+                $token_namespace = str_replace( 'custom-token-', '', $name );
                 $execution_steps_config[ $step_number ][ 'custom_tokens_values_mapping' ][ $token_namespace ] = $custom_value;
             }
     
@@ -43,9 +39,12 @@ function prepare_batch_commands( $batch )
     $grouped_rendered_commands = array();
     foreach( $batch[ 'steps' ] as $step_number => $step )
     {
+        //      We need to have 'id_thread' in command_tokens_replace()
+        $execution_steps_config[ $step_number ][ 'id_thread' ] = $batch[ 'id_thread' ];
+        
         //      Copy entire steps' contents to allow "auto-matches" in tokens
         $execution_steps_config[ $step_number ] = $step;
-        $execution_steps_config[ $step_number ][ 'rendered_command' ] = command_tokens_replace( $step );
+        $execution_steps_config[ $step_number ][ 'rendered_command' ] = command_tokens_replace( $execution_steps_config[ $step_number ]);
         
         //      Failsafe
         if ( empty( $execution_steps_config[ $step_number ][ 'rendered_command' ]))
@@ -83,12 +82,12 @@ function prepare_batch_commands( $batch )
 
 
 /**
- *  Get command configuration form (per step)
+ *  Get command configuration form (per batch step)
  *  @see engine/core/api_batch.inc
  */
 function get_command_config_form_content( $command, $step_number = 0 )
 {
-    $form_html = "";
+    $form_content_html = "";
     
     if ( !empty( $command ))
     {
@@ -109,29 +108,29 @@ function get_command_config_form_content( $command, $step_number = 0 )
                         $options_arr = options_to_arr( $token[ 'options' ]);
                         $select_options = array(
                             'select_attributes' => array(
-                                'name' => 'custom-token-'. str_clean( $token[ 'namespace' ])
+                                'name' => 'custom-token-'. $token[ 'namespace' ]
                             ),
                         );
                         
                         if ( $token[ 'configuration' ] == 'multiple_options' )
-                            $form_html .= multiple_select( $token[ 'namespace' ], $options_arr, $select_options );
+                            $form_content_html .= multiple_select( "Options for <code>[". $token[ 'namespace' ] ."]</code>", $options_arr, $select_options );
                         else
-                            $form_html .= select( $token[ 'namespace' ], $options_arr, $select_options );
+                            $form_content_html .= select( "Options for <code>[". $token[ 'namespace' ] ."]</code>", $options_arr, $select_options );
                         
                         break;
                     
                     //      Text input
                     case 'raw':
                         
-                        $form_html .= input( $token[ 'namespace' ], $options_arr, array( 'input_attributes' => array(
-                            'name' => 'custom-token-'. str_clean( $token[ 'namespace' ])
+                        $form_content_html .= textarea( "Value for <code>[". $token[ 'namespace' ] ."]</code>", $options_arr, array( 'input_attributes' => array(
+                            'name' => 'custom-token-'. $token[ 'namespace' ]
                         )));
                         
                         break;
                 }
     }
     
-    return $form_html;
+    return $form_content_html;
 }
 
 

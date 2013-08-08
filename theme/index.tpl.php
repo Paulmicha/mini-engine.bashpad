@@ -11,12 +11,12 @@ print grid( array(
         "<h1>$head_page_title</h1>
 <p>This is a legacy minimalist RAD Php application,
 which was designed exclusively to execute small batch processes.<br>
-It still has its uses : namely to store & execute Bash commands (with tokens)
-on a configurable list of servers and environments.<br><br>
+<strong>It still has its uses</strong>, namely to store & execute Bash commands (with tokens)
+on a configurable list of servers and environments.<br>
 I've used it over the years for repetitive tasks around various PHP projects.
 It was never meant to be Object-Oriented, and it can be seen as a good source of antipatterns,
-but it could be an intersting exercise to rebuild it in \"modern\" PHP, using things like Symfony 2 or Laravel.<br>
-Basically, this is a \"museum\" of various Php snippets from a few years back put together.</p>
+but it could be an intersting exercise to rebuild it in \"modern\" PHP, using things like Symfony 2 or Laravel.<br><br>
+Basically, this is a \"museum\" of various Php snippets put together.</p>
 <p><strong>WARNING</strong> : this is not meant to be publicly accessible over the web, it's supposed to be run on LAN,
 because it can connect to other servers through SSH in order to execute Bash commands.</p>",
         

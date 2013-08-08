@@ -100,6 +100,8 @@ function _server_form_content()
     $form_html .= input_text( 'Host Name', array( 'input_attributes' => array( 'help-inline' =>  "Or, IP address" )));
     $form_html .= input_text( 'SSH user' );
     $form_html .= input_password( 'Password' );
+    $form_html .= input_text( 'SSH port' );
+    $form_html .= textarea( 'SSH private key' );
     
     return $form_html;
 }
@@ -141,7 +143,12 @@ function _server_form_validate( &$submit_handler_params )
                 'description' => $posted[ 'description' ],
                 'hostname' => $posted[ 'host-name' ],
                 'data' => safe_serialize( array(
-                    'ssh' => array( 'u' => $posted[ 'ssh-user' ], 'p' => $posted[ 'password' ]),
+                    'ssh' => array(
+                        'u' => $posted[ 'ssh-user' ],
+                        'p' => $posted[ 'password' ],
+                        'k' => $posted[ 'ssh-private-key' ],
+                        'port' => $posted[ 'ssh-port' ],
+                    ),
                 )),
             );
         }

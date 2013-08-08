@@ -87,17 +87,30 @@ $log = array(
     'db' => 0,
 );
 
-//      Debug level
+
+
+//--------------------------------------------------------------------------------------
+//      Debug
+
+
+//      Types of debug
 $debug = array(
     
+    //      PDO queries exceptions
     //'error' => 0,
     'error' => 1,
     
+    //      Included files (theming)
     'routing' => 0,
     //'routing' => 1,
     
-    //'exec_time' => 1,
+    //      Execution time (at the bottom every page)
+    //'exec_time' => 0,
     'exec_time' => 1,
+    
+    //      Don't execute SSH commands
+    'prevent_ssh_exec' => 0,
+    //'prevent_ssh_exec' => 1,
 );
 
 

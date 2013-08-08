@@ -103,7 +103,8 @@ function _command_form_content()
             <i class='icon-long-arrow-right'></i>&nbsp;<code>[folder:Project root dir]</code>, which will print for example <code>/my/folder/path</code> <small>Note : the argument is a <strong>Tag title</strong>.<br>It is used to match the 1<sup>st</sup> folder tagged with it in the environment in which the command will be executed.</small><br>
             <i class='icon-long-arrow-right'></i>&nbsp;<code>[username:mysql]</code> <small>Note : the string as argument is a <strong>Credential Type</strong>.<br>It is used to match the 1<sup>st</sup> username in the environment in which the command will be executed.</small><br>
             <i class='icon-long-arrow-right'></i>&nbsp;<code>[password:mysql]</code><br>
-            <i class='icon-long-arrow-right'></i>&nbsp;<code>[db_name:mysql]</code>
+            <i class='icon-long-arrow-right'></i>&nbsp;<code>[db_name:mysql]</code><br>
+            <i class='icon-long-arrow-right'></i>&nbsp;<code>[dump_filename]</code> : unique name produced by <code>[env]-[datestamp]</code>, reused between steps - allows chaining DB dumps creation and restoration in the same batch.
             ",
     )));
     
@@ -126,7 +127,7 @@ function _command_form_content()
                 "Type of configuration",
                 array(
                     '' => "---",
-                    'raw' => "Raw string argument",
+                    'raw' => "Raw string value",
                     'options' => "Options list (unique selection)",
                     'multiple_options' => "Options list (multiple selection)",
                 ),
@@ -138,7 +139,7 @@ function _command_form_content()
             'args' => array( "List of options", array( 'textarea_attributes' => array( 'help-inline' => "<span class='muted'>(if applicable)</span><br>Use the following format, one option per line :<br><i class='icon-long-arrow-right'></i>&nbsp;<code>value|Option label</code>" ))),
         ),
         array(
-            'func' => 'input_text',
+            'func' => 'textarea',
             'args' => array( "Default value", array( 'input_attributes' => array( 'help-inline' => "<span class='muted'>(optional)</span>" ))),
         ),
     ));

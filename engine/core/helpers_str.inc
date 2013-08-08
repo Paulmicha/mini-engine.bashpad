@@ -58,17 +58,21 @@ function ensure_utf8( $str )
  *  @param  [optional] String $separateur: le séparateur qui remplace les accents
  *  @return String: la chaine convertie
  */
-function str_clean( $str, $separateur = '-' )
+function str_clean( $str, $separateur = '-', $preserve_case = false )
 {
     //      debug
     //krumo::backtrace();
     
     $str = trim( $str );
-    $str = strtolower( $str );
+    
+    if ( !$preserve_case )
+        $str = strtolower( $str );
+    
     $str = basic_transliteration( $str );
     $str = strip_line_breaks( $str, $separateur );
     $str = preg_replace( '`[^a-zA-Z0-9'. $separateur .']`', $separateur, $str );
     $str = preg_replace( '`'. $separateur .'+`', $separateur, $str );
+    
     return $str;
 }
 

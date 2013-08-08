@@ -152,11 +152,14 @@ function batch_standby_phase( $batch )
 
     //      State display
     //$html .= "<p class='text-center muted'>Batch is standing by.</p>";
+    
+    //      Load current step (with replaced tokens for commands)
+    $batch_state_data = get_batch_state_data( $batch );
 
     //      Recap
     $commands_arr = array();
-    foreach( $batch[ 'steps' ] as $step )
-        if ( !empty( $step[ 'command' ][ 'command' ]))
+    foreach( $batch_state_data[ 'execution_steps_config' ] as $step )
+        if ( !empty( $step[ 'command' ][ 'rendered_command' ]))
             $commands_arr[] = '<hr><p>Environment : '.
                 '<strong>'.
                 $step[ 'environment' ][ 'title' ] .
@@ -169,7 +172,7 @@ function batch_standby_phase( $batch )
                 $step[ 'environment' ][ 'server' ][ 'hostname' ] .
                 '</code> '.
                 '</p>'.
-                view_source( $step[ 'command' ][ 'command' ], 'bash' ) .
+                view_source( $step[ 'command' ][ 'rendered_command' ], 'bash' ) .
                 '';
 
     //      Display
@@ -320,7 +323,11 @@ EOD;
             foreach( $current_step_rendered_commands as $cmd )
             {
                 //      Execute command
-                $std_out = $ssh->exec( $cmd );
+                //      Handle debug
+                if ( !empty( $GLOBALS[ 'debug' ][ 'prevent_ssh_exec' ]))
+                    $std_out = "*** Debug ". datestamp_format() ." : preventing SSH commands execution ***";
+                else
+                    $std_out = $ssh->exec( $cmd );
                 
                 //      Preview
                 $html .= view_source( $std_out, 'bash' );
@@ -450,6 +457,10 @@ function batch_done_phase( $batch )
     //}
     //else
     //    return alert( "Error : impossible to set batch state for <code>$id_batch</code>" );
+    
+    //      Clear optionally cached data
+    if ( cache_get( "dump_filename_thread_". $batch[ 'id_thread' ]))
+        cache_clear( "dump_filename_thread_". $batch[ 'id_thread' ]);
     
     return $html;
 }

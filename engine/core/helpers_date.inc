@@ -77,7 +77,7 @@ function datestamp_token( $format = "Y-m-d-H.i.s" ) {
  *  Reference datestamp (BIGINT) - ex: 20130724210454
  */
 function datestamp() {
-    return intval( date( dtstmpstr()));
+    return date( dtstmpstr());
 }
 
 

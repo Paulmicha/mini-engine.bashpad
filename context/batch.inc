@@ -255,6 +255,7 @@ function _batch_form_submit( $params )
                         
                         //      Convert command field autocompletion into 'id_command'
                         //      Format: "Title of command [123]", where 123 is the 'id_command'
+                        //      Note : this sets a Warning - Strict standards: Only variables should be passed by reference
                         $id_command = end( explode( '[', substr( $step[ 'cmd' ], 0, -1 )));
                         
                         $id_batch_step = insert_or_update(

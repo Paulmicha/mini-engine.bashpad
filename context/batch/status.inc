@@ -70,7 +70,7 @@ function _preprocess_archive( $results )
             $r[ 'id_thread' ],
             
             //      Time
-            datestamp_format( $batch[ 'datestamp' ]),
+            datestamp_format( $r[ 'datestamp' ]),
             
             //      Batch
             $batch_title,

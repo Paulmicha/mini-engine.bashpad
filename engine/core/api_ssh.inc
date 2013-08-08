@@ -18,14 +18,40 @@ function ssh( $server )
     if ( !is_array( $server ))
         $server = get_host_data( $server );
     
-    if ( empty( $connections[ $server[ 'hostname' ]]) && !empty( $server[ 'ssh' ][ 'u' ]) && !empty( $server[ 'ssh' ][ 'p' ]))
+    if ( empty( $connections[ $server[ 'hostname' ]]) && !empty( $server[ 'ssh' ][ 'u' ]))
     {
-        $ssh = new Net_SSH2( $server[ 'hostname' ]);
-        if ( !$ssh->login( $server[ 'ssh' ][ 'u' ], $server[ 'ssh' ][ 'p' ])) {
+        //      Port
+        $ssh_port = 22;
+        if ( !empty( $server[ 'ssh' ][ 'port' ]))
+            $ssh_port = $server[ 'ssh' ][ 'port' ];
+        
+        $ssh = new Net_SSH2( $server[ 'hostname' ], $ssh_port );
+        
+        //      Private key
+        if ( !empty( $server[ 'ssh' ][ 'key' ]))
+        {
+            $key = new Crypt_RSA();
+            
+            //      RSA Keys may not always have a password
+            if ( !empty( $server[ 'ssh' ][ 'p' ]))
+                $key->setPassword( $server[ 'ssh' ][ 'p' ]);
+            
+            $key->loadKey( $server[ 'ssh' ][ 'key' ]);
+            
+            //      "Keyed" login attempt
+            if ( !$ssh->login( $server[ 'ssh' ][ 'u' ], $key )) {
+                return false;
+            }
+        }
+        
+        //      "Normal" login attempt
+        elseif ( !$ssh->login( $server[ 'ssh' ][ 'u' ], $server[ 'ssh' ][ 'p' ])) {
             return false;
         }
+        
         $connections[ $server[ 'hostname' ]] = $ssh;
     }
+    
     return $connections[ $server[ 'hostname' ]];
 }
 
@@ -50,6 +76,7 @@ function sftp( $server )
         }
         $connections[ $server[ 'hostname' ]] = $sftp;
     }
+    
     return $connections[ $server[ 'hostname' ]];
 }
 

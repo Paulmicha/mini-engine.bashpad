@@ -7,9 +7,9 @@ $command = array(
     'tags' => array( "PostgreSQL" ),
     
     'command' => "cd [folder:db dumps]
-pg_dump -i -U [username:pgsql] -h localhost -F t [db_name:pgsql] > [env]-[datestamp].sql.tar
-tar czf [env]-[datestamp].sql.tar.gz [env]-[datestamp].sql.tar
-rm [env]-[datestamp].sql.tar",
+pg_dump -i -U [username:pgsql] -h localhost -F t [db_name:pgsql] > [dump_filename].sql.tar
+tar czf [dump_filename].sql.tar.gz [dump_filename].sql.tar
+rm [dump_filename].sql.tar",
 
 );
 
