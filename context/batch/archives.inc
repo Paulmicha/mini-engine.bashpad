@@ -47,8 +47,9 @@ function _preprocess_archive( $results )
         if ( !empty( $r[ 'data' ]))
             $r[ 'data' ] = safe_unserialize( $r[ 'data' ]);
         
-        //      debug
-        //krumo( $r[ 'data' ]);
+        //      Skip if thread has not been executed yet
+        if ( empty( $r[ 'data' ][ 'execution_steps_config' ]))
+            continue;
         
         //      Prepare 'servers' and 'environments' column
         $servers_arr = array();

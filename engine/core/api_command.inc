@@ -108,7 +108,8 @@ function get_command_config_form_content( $command, $step_number = 0 )
                         $options_arr = options_to_arr( $token[ 'options' ]);
                         $select_options = array(
                             'select_attributes' => array(
-                                'name' => 'custom-token-'. $token[ 'namespace' ]
+                                'name' => 'custom-token-'. $token[ 'namespace' ],
+                                'value' => $token[ 'default_value' ],
                             ),
                         );
                         
@@ -122,8 +123,9 @@ function get_command_config_form_content( $command, $step_number = 0 )
                     //      Text input
                     case 'raw':
                         
-                        $form_content_html .= textarea( "Value for <code>[". $token[ 'namespace' ] ."]</code>", $options_arr, array( 'input_attributes' => array(
-                            'name' => 'custom-token-'. $token[ 'namespace' ]
+                        $form_content_html .= textarea( "Value for <code>[". $token[ 'namespace' ] ."]</code>", array( 'textarea_attributes' => array(
+                            'name' => 'custom-token-'. $token[ 'namespace' ],
+                            'text' => $token[ 'default_value' ],
                         )));
                         
                         break;

@@ -767,7 +767,7 @@ function textarea( $label, $options = array())
     
     //      Fill-in optional defaults
     if ( !empty( $label ) && empty( $textarea_attributes[ 'placeholder' ]))
-        $textarea_attributes[ 'placeholder' ] = $label;
+        $textarea_attributes[ 'placeholder' ] = strip_tags( $label );
     else if ( empty( $label ) && !empty( $textarea_attributes[ 'placeholder' ]))
         $label = $textarea_attributes[ 'placeholder' ];
     if ( empty( $textarea_attributes[ 'name' ]) && !empty( $textarea_attributes[ 'placeholder' ]))
@@ -821,7 +821,7 @@ function textarea_raw( $label = '', $options = array())
     if ( empty( $options[ 'name' ]) && !empty( $label ))
         $options[ 'name' ] = str_clean( $label );
     if ( empty( $options[ 'placeholder' ]) && !empty( $label ))
-        $options[ 'placeholder' ] = $label;
+        $options[ 'placeholder' ] = strip_tags( $label );
     
     //      Handle bootstrap's "help text" add-ons
     $help = '';
@@ -895,7 +895,7 @@ function input_text( $label, $options = array())
     
     //      Fill-in optional defaults
     if ( !empty( $label ) && empty( $input_attributes[ 'placeholder' ]))
-        $input_attributes[ 'placeholder' ] = $label;
+        $input_attributes[ 'placeholder' ] = strip_tags( $label );
     else if ( empty( $label ) && !empty( $input_attributes[ 'placeholder' ]))
         $label = $input_attributes[ 'placeholder' ];
     if ( empty( $input_attributes[ 'name' ]))
@@ -973,7 +973,7 @@ function input_text_raw( $label, $input_attributes = array())
     
     //      Fill-in optional defaults
     if ( !empty( $label ) && empty( $input_attributes[ 'placeholder' ]))
-        $input_attributes[ 'placeholder' ] = $label;
+        $input_attributes[ 'placeholder' ] = strip_tags( $label );
     else if ( empty( $label ) && !empty( $input_attributes[ 'placeholder' ]))
         $label = $input_attributes[ 'placeholder' ];
     if ( empty( $input_attributes[ 'name' ]))

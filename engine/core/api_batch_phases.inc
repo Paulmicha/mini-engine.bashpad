@@ -68,7 +68,7 @@ function batch_init_phase( $batch )
         //      Indication : for which step / environment / server are we setting the configuration
         if ( !empty( $step_form_content_html ))
         {
-            $form_html .= '<hr><p>Configuration options for Environment : '.
+            $form_html .= '<hr><p>Configuration options for step <code>'. $step_number .'</code> - Environment : '.
                 '<strong>'.
                 $step[ 'environment' ][ 'title' ] .
                 '</strong>'.
@@ -80,6 +80,7 @@ function batch_init_phase( $batch )
                 $step[ 'environment' ][ 'server' ][ 'hostname' ] .
                 '</code> '.
                 '</p>'.
+                view_source( $step[ 'command' ][ 'command' ], 'bash' ).
                 $step_form_content_html;
         }
     }
