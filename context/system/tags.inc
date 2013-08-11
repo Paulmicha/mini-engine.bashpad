@@ -26,7 +26,7 @@ $arg2 = check_plain( arg( 2 ));
 $arg3 = check_plain( arg( 3 ));
 
 $tab_items = array(
-    array( "Browse", 'system/tags' ),
+    array( "<i class='icon-tags'></i>&nbsp;Browse all tags", 'system/tags' ),
 );
 $subtab_items = array();
 $subtab_tabs = array();
@@ -34,7 +34,7 @@ $subtab_tabs = array();
 if ( is_numeric( $arg2 ))
 {
     $tag_title = db_popfetch( "SELECT `title` FROM `tag` WHERE `id_tag` = ?", array( $arg2 ));
-    $tab_items[] = array( "$tag_title", 'system/tags/'. $arg2, 'path_is_in_base_route' );
+    $tab_items[] = array( "<i class='icon-tag'></i>&nbsp;$tag_title", 'system/tags/'. $arg2, 'path_is_in_base_route' );
     
     //      Count total number of "entities" associated with this term
     $nb = db_popfetch( "SELECT COUNT(`id_has_tag`) FROM `has_tag` WHERE `id_tag` = ?", array( $arg2 ));
@@ -78,14 +78,36 @@ else if ( is_numeric( $arg2 ))
     {
         $head_page_title = "All entities tagged '$tag_title'";
         
-        //      @todo 2013/08/11 20:32:29
-        $content .= "<p>@todo 2013/08/11 20:32:29</p>";
+        if ( !empty( $types ))
+            foreach( $types as $type )
+            {
+                $table = $type[ 'db_table' ];
+                $query = "SELECT `$table`.*
+                    FROM `$table`
+                    INNER JOIN `has_tag` ON `$table`.id_$table = `has_tag`.id
+                        AND `has_tag`.id_tag = ?
+                    GROUP BY `$table`.id_$table
+                    ORDER BY `$table`.id_$table DESC";
+                
+                $content .= "<h3>". ucfirst( $table ) ."</h3>";
+                $content .= render_pager_query_table( $query, array( $arg2 ), array(
+                    'preprocess_results' => '_preprocess_entities',
+                    'table_options' => array(
+                        'header' => array(
+                            "ID",
+                            "Title",
+                            "Description",
+                            "Data",
+                            "Tags",
+                        ),
+                    ),
+                ));
+            }
     }
     
     //      Filter by entity type
     else
     {
-        //      @todo 2013/08/11 18:37:37
         $head_page_title = ucfirst( $arg3 ) ." entities tagged '$tag_title'";
         
         $query = "SELECT `$arg3`.*
@@ -137,10 +159,10 @@ function recursive_tag_tree_builder( $id_tag_parent = 0 )
         {
             $html .= '<li>';
             $html .= l( "<i class='icon-tag'></i>&nbsp;". $tag[ 'title' ], 'system/tags/'. $tag[ 'id_tag' ]);
-            $html .= '<small class="muted">';
-            $html .= ' (id <code>';
-            $html .= $tag[ 'id_tag' ];
-            $html .= '</code>)';
+            //$html .= '<small class="muted">';
+            //$html .= ' (id <code>';
+            //$html .= $tag[ 'id_tag' ];
+            //$html .= '</code>)';
             $html .= '</small>';
             
             //      Children
@@ -172,11 +194,11 @@ function recursive_tag_tree_builder( $id_tag_parent = 0 )
         {
             $html .= '<li>';
             $html .= l( "<i class='icon-tag'></i>&nbsp;". $tag[ 'title' ], 'system/tags/'. $tag[ 'id_tag' ]);
-            $html .= '<small class="muted">';
-            $html .= ' (id <code>';
-            $html .= $tag[ 'id_tag' ];
-            $html .= '</code>)';
-            $html .= '</small>';
+            //$html .= '<small class="muted">';
+            //$html .= ' (id <code>';
+            //$html .= $tag[ 'id_tag' ];
+            //$html .= '</code>)';
+            //$html .= '</small>';
             
             //      Children
             $children_str = recursive_tag_tree_builder( $tag[ 'id_tag' ]);
@@ -213,15 +235,6 @@ function _preprocess_entities( $results )
         
         if ( !empty( $r[ 'data' ]))
             $r[ 'data' ] = safe_unserialize( $r[ 'data' ]);
-        
-        //      debug
-        //krumo( $r );
-        
-        //"ID",
-        //"Title",
-        //"Description",
-        //"Data",
-        //"Tags",
         
         //      Assemble columns
         $lines_arr[] = array(
