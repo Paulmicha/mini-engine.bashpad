@@ -132,12 +132,40 @@ function batch_standby_phase( $batch )
     $id_batch = $batch[ 'id_batch' ];
     $GLOBALS[ 'head_page_title' ] .= " - Review (standby) : Recap before launch";
 
+    //      Cancel
+    if ( !empty( $_GET[ 'cancel-batch' ]) && $_GET[ 'cancel-batch' ] == $id_batch )
+    {
+        $state_is_set = set_batch_state( $batch, 'over' );
+        if ( $state_is_set )
+        {
+            //      Release Lock
+            release_batch_lock( $id_batch );
+            
+            //      Feedback
+            return alert( "Batch <code>$id_batch</code> successfully cancelled.", 'success' );
+        }
+        else
+            return alert( "Could not set batch <code>$id_batch</code> in state 'over' when trying to cancel batch <code>$id_batch</code>", 'error' );
+    }
+
     //      Check if we submitted the "Go"
-    if ( !empty( $_REQUEST[ 'everything-looks-good-do-it' ]))
+    else if ( !empty( $_REQUEST[ 'everything-looks-good-do-it' ]))
     {
         //      Save as preset ?
         if ( !empty( $_REQUEST[ 'save-as-preset' ]))
-            db_update( 'thread', array( 'preset' => 1 ), array( 'id' => $batch[ 'id_thread' ]));
+        {
+            $id_thread = db_update( 'thread', array( 'preset' => 1 ), array( 'id' => $batch[ 'id_thread' ]));
+            
+            //      Tags for this preset
+            set_tags( array(
+                'thread' => array(
+                    $id_thread => array(
+                        'tags' => clean_values_tags_select_options( $_REQUEST[ 'tag-s-' ]),
+                        'new_tags' => explode( ',', $_REQUEST[ 'new-tag-s-' ]),
+                    ),
+                ),
+            ));
+        }
         
         //      Next phase
         $state_is_set = set_batch_state( $batch, 'processing' );
@@ -151,6 +179,9 @@ function batch_standby_phase( $batch )
     else if ( !empty( $_REQUEST[ 'poormans-submit-flag' ]))
         $html .= alert( "You need to tick the checkbox 'Everything looks good : do it' to begin execution phase.", 'warning' );
 
+    //      debug
+    //krumo( $_REQUEST );
+    
     //      State display
     //$html .= "<p class='text-center muted'>Batch is standing by.</p>";
     
@@ -188,10 +219,35 @@ function batch_standby_phase( $batch )
     $execution_form_html .= '<label class="control-label">&nbsp;</label>';
     $execution_form_html .= '<div class="controls">';
     $execution_form_html .= input_checkbox( "Everything looks good : do it" );
+    $execution_form_html .= "<hr>";
     $execution_form_html .= input_checkbox( "Save as preset" );
+    $execution_form_html .= "<p>If you save this as a preset, which allows to re-execute this batch with the same params (except datestamps) later on, you may specify tags :</p>";
+    
+    //      Tags
+    $tags_select_options = tags_select_options();
+    if ( !empty( $tags_select_options ))
+        $execution_form_html .= multiple_select( 'Tag(s)', $tags_select_options );
+    $execution_form_html .= input_text( 'New Tag(s)', array( 'input_attributes' => array( 'help-inline' => "Multiple tags must be comma-separated <code>,</code>" )));
+    
     $execution_form_html .= '</div>';
     $execution_form_html .= '</div>';
-    $html .= render_form( $execution_form_html );
+    $html .= render_form( $execution_form_html, null, array(
+        'form_attributes' => array(
+            'actions' => ''.
+                input( array(
+                    'value' => 'Go',
+                    'type' => 'submit',
+                    'class' => 'btn btn-large btn-primary',
+                ))
+                .'&nbsp;&nbsp;&nbsp;&nbsp;'.
+                l( "Cancel", get_current_path() . "?cancel-batch=$id_batch", array( 'attributes' => array( 'class' => 'btn btn-small btn-danger' )))
+                //input( array(
+                //    'value' => 'Cancel',
+                //    'type' => 'submit',
+                //    'class' => 'btn btn-small btn-danger',
+                //)),
+        ),
+    ));
 
     return $html;
 }

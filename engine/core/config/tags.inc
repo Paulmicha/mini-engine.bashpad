@@ -27,7 +27,8 @@ $default_tags = array(
         'UAT',
     ),
     
-    'Type of batch' => array(
+    //      This one is a bit generic, originally for use in 'batch' and 'presets' (thread)
+    'Topic' => array(
         'Test',
         'Cron',
         'Maintenance',
@@ -35,6 +36,9 @@ $default_tags = array(
         'Security',
         'Migration',
         'Database operations',
+        'File',
+        'Utilities',
+        'System',
     ),
     
     "Type of folder" => array(
@@ -107,6 +111,7 @@ $default_tags = array(
         'Spip',
         'Joomla',
         'Bolt',
+        'Plone',
     ),
     
     'Third-party' => array(

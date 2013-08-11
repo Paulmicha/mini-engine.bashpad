@@ -132,6 +132,9 @@ function _batch_form_content()
             'args' => array( "Command", array( 'input_attributes' => array(
                 'help-inline' => "<small class='mute'>(Autocompletion search)</small>",
                 'class' => "autocompletion-command span5",
+                
+                //      Turning off Browsers' default autocompletion, because it interferes with our own.
+                'autocomplete' => 'off',
             ))),
         ),
         

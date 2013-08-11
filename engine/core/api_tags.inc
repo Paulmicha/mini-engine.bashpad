@@ -35,7 +35,8 @@ function save_hierarchical_tags( $tags = array(), $parent_tag_id = null )
                 
                 //      Set parent relation
                 if ( !empty( $id_tag ) && !empty( $parent_tag_id ))
-                    insert_if_no_existing_record(
+                    //insert_if_no_existing_record(
+                    insert_or_update(
                         'has_tag',
                         array(
                             'id' => $id_tag,
@@ -49,16 +50,23 @@ function save_hierarchical_tags( $tags = array(), $parent_tag_id = null )
             }
             
             //      Recursive call if children is an array
-            if ( is_array( $tag ) && !empty( $id_tag ))
-                save_hierarchical_tags( $tag, $id_tag );
+            if ( is_array( $tag ))
+            {
+                if ( !empty( $id_tag ))
+                    save_hierarchical_tags( $tag, $id_tag );
+                else
+                    save_hierarchical_tags( $tag, $parent_tag_id );
+            }
             
             //      Normal tag (or leaf)
             else if ( !empty( $tag ))
             {
-                $id_tag = insert_if_no_existing_record( 'tag', array( 'title' => trim( $tag )));
+                //$id_tag = insert_if_no_existing_record( 'tag', array( 'title' => trim( $tag )));
+                $id_tag = insert_or_update( 'tag', array( 'title' => trim( $tag )));
                 
                 if ( !empty( $id_tag ) && !empty( $parent_tag_id ))
-                    insert_if_no_existing_record(
+                    //insert_if_no_existing_record(
+                    insert_or_update(
                         'has_tag',
                         array(
                             'id' => $id_tag,

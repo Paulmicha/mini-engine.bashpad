@@ -79,6 +79,10 @@
                                 
                                 
                                 <li class="divider"></li>
+                                <?php print menu_item( "Browse Tags", "system/tags", '<i class="icon-tags"></i>' ); ?>
+                                
+                                
+                                <li class="divider"></li>
                                 <li class="nav-header">Servers</li>
                                 <?php
                                 $servers_setup = db_fetchall( "SELECT * FROM `server` ORDER BY `id_server` DESC" );
