@@ -45,7 +45,7 @@ if ( is_numeric( $arg2 ))
     if ( !empty( $types ))
         foreach( $types as $type )
         {
-            //      Count total number of "entities" associated with this term
+            //      Count total number of "entities" for this type associated with this term
             $nb = db_popfetch( "SELECT COUNT(`id_has_tag`) FROM `has_tag` WHERE `id_tag` = ? AND `db_table` = ?", array( $arg2, $type[ 'db_table' ]));
             $subtab_items[] = array( ucfirst( $type[ 'db_table' ]) ." <small>($nb)</small>", 'system/tags/'. $arg2 .'/'. $type[ 'db_table' ]);
         }
@@ -152,17 +152,10 @@ function recursive_tag_tree_builder( $id_tag_parent = 0 )
             ORDER BY `tag`.title ASC"
         );
         
-        //      debug
-        //krumo( $lv0_tags );
-        
         foreach( $lv0_tags as $tag )
         {
             $html .= '<li>';
             $html .= l( "<i class='icon-tag'></i>&nbsp;". $tag[ 'title' ], 'system/tags/'. $tag[ 'id_tag' ]);
-            //$html .= '<small class="muted">';
-            //$html .= ' (id <code>';
-            //$html .= $tag[ 'id_tag' ];
-            //$html .= '</code>)';
             $html .= '</small>';
             
             //      Children
@@ -194,11 +187,6 @@ function recursive_tag_tree_builder( $id_tag_parent = 0 )
         {
             $html .= '<li>';
             $html .= l( "<i class='icon-tag'></i>&nbsp;". $tag[ 'title' ], 'system/tags/'. $tag[ 'id_tag' ]);
-            //$html .= '<small class="muted">';
-            //$html .= ' (id <code>';
-            //$html .= $tag[ 'id_tag' ];
-            //$html .= '</code>)';
-            //$html .= '</small>';
             
             //      Children
             $children_str = recursive_tag_tree_builder( $tag[ 'id_tag' ]);

@@ -24,7 +24,7 @@ $arg3 = check_plain( arg( 3 ));
 
 $tab_items = array(
     array( "Batch", 'batch' ),
-    array( "Presets", 'batch/presets' ),
+    array( "Presets", 'batch/presets', 'path_is_in_base_route' ),
     array( "Archives", 'batch/archives', 'path_is_in_base_route' ),
     array( "Status", 'batch/status' ),
 );
@@ -38,11 +38,6 @@ if ( empty( $arg1 ) || $arg1 == 'add' )
     $subtab_items[] = array( "<i class='icon-rocket'></i>&nbsp;Select batch to launch", 'batch' );
     $subtab_items[] = array( "<i class='icon-plus'></i>&nbsp;Add new Batch", 'batch/add' );
 }
-
-//      Single thread archive consultation
-//else if ( $arg1 == 'archives' && ) {
-//    $tab_items[ 2 ] = array( "Archives", 'batch/archives', 'path_is_in_base_route' );
-//}
 
 //      Single Batch paths
 else if ( is_numeric( $arg1 ))
@@ -71,14 +66,22 @@ if ( !empty( $subtab_items ))
 if ( empty( $arg1 ))
     include "context/batch/list.inc";
 
-//      Including corresponding files from paths
+//      Batch operations
 else if ( is_numeric( $arg1 ))
     if ( empty( $arg2 ))
         include "context/batch/view.inc";
     else
         include "context/batch/$arg2.inc";
+
+//      Batch execution archives
 else if ( $arg1 == 'archives' && is_numeric( $arg2 ))
     include "context/batch/archive-view.inc";
+
+//      Presets
+else if ( $arg1 == 'presets' && is_numeric( $arg2 ))
+    include "context/batch/presets-render.inc";
+
+//      Default actions
 else
     include "context/batch/$arg1.inc";
 
@@ -110,7 +113,6 @@ function _batch_form_content()
     if ( !empty( $envs_arr ))
         foreach( $envs_arr as $env )
             $envs_options_arr[ $env[ 'id_environment' ]] = db_popfetch( "SELECT `title` FROM `server` WHERE `id_server` = ?", array( $env[ 'id_server' ])) ." : ". $env[ 'title' ] ." (". $env[ 'namespace' ] .")";
-            //$envs_options_arr[ $env[ 'id_environment' ]] = db_popfetch( "SELECT `title` FROM `server` WHERE `id_server` = ?", array( $env[ 'id_server' ])) ." : ". $env[ 'title' ] ." (". $env[ 'namespace' ] .") [". $env[ 'id_environment' ] ."]";
     
     //      Multigroup : Batch Steps
     $form_html .= "<hr>";
@@ -137,12 +139,6 @@ function _batch_form_content()
                 'autocomplete' => 'off',
             ))),
         ),
-        
-        //      @evol 2013/07/29 19:31:54 - offer to select a folder based on tag to cd before executing this step ?
-        //array(
-        //    'func' => 'input_text',
-        //    'args' => array( "Folder", array( 'input_attributes' => array( 'help-inline' => "<small class='mute'>Optional : enter a number to specify steps order of execution</small>" ))),
-        //),
     ));
     
     return $form_html;
@@ -286,14 +282,6 @@ function _batch_form_submit( $params )
                                     WHERE `id_batch` = $id_batch
                                     AND `id_environment` = ". $step[ 'id_environment' ] ."
                                     AND `id_command` = $id_command"
-                                /*
-                                'detect_duplicate_query' => "SELECT `id_batch_step` FROM `batch_step`
-                                    WHERE `title` LIKE '". addcslashes( $values[ 'title' ], "'" ) ."'
-                                    AND `id_batch` = $id_batch
-                                    AND `step` = $number
-                                    AND `id_environment` = $id_environment
-                                    AND `id_command` = $id_command"
-                                */
                             )
                         );
                     }

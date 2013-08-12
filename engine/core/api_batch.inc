@@ -55,7 +55,7 @@ function batch_render( $id_batch, $options = array())
         if ( !$state_is_set )
             return alert( "Could not set batch <code>$id_batch</code> in state 'init' while trying to steal the lock.", 'error' );
     }
-    elseif ( batch_is_locked_by_someone_else( $id_batch, $options ))
+    else if ( batch_is_locked_by_someone_else( $id_batch, $options ))
     {
         $launched_by = cache_get( "batch_lock_$id_batch" );
         if ( empty( $launched_by ))
@@ -91,7 +91,7 @@ function batch_render( $id_batch, $options = array())
     if ( !empty( $batch[ 'id_thread' ]))
         $thread_over_check = db_popfetch( "SELECT `state` FROM `thread` WHERE `id_thread` = ?", array( $batch[ 'id_thread' ]));
     
-    //      We need an "n - n" relation between 'thread' and 'batch',
+    //      We need an "n - 1" relation between 'thread' and 'batch',
     //      so that we can archive != presets (in serialized data on thread) per batch,
     //      but we need to maintain a single 'active' thread per batch
     //      (~ singleton : can't have multiple 'instances' of the same batch running simultaneously)
@@ -117,7 +117,6 @@ function batch_render( $id_batch, $options = array())
     if ( empty( $state ) || $state == 'over' )
     {
         $state = 'init';
-        //set_batch_state( $id_batch, $state );
         $state_is_set = set_batch_state( $batch, $state );
         
         //      Failsafe
@@ -125,22 +124,16 @@ function batch_render( $id_batch, $options = array())
             return alert( "Could not set batch <code>$id_batch</code> back to state 'init' to start it over.", 'error' );
     }
     
-    //      debug
-    //krumo( $_REQUEST );
-    //krumo( $state );
-    
     //      Contextual rendering
     //      @see engine/core/api_batch_phases.inc
     $phase_state_handler = 'batch_'. $state .'_phase';
     if ( function_exists( $phase_state_handler ))
         $html .= $phase_state_handler( $batch );
     
-    
     //      Special state : the LAST step must only be set AFTER the above "dispatch" of state-dependent processes
     if ( $state == 'done' )
     {
         //      Final, extra state
-        //$state_is_set = set_batch_state( $id_batch, 'over' );
         $state_is_set = set_batch_state( $batch, 'over' );
         if ( $state_is_set )
         {
@@ -158,24 +151,6 @@ function batch_render( $id_batch, $options = array())
         if ( !$state_is_set )
             return alert( "Could not set batch <code>$id_batch</code> in state 'done'", 'error' );
     }
-    
-    /*
-    //      debug 2013/08/05 01:59:49 - mysterious call ???
-    if ( $state == 'over1' )
-    {
-        $state_is_set = set_batch_state( $id_batch, 'over' );
-        
-        //      Release Lock
-        release_batch_lock( $id_batch );
-        
-        return batch_done_phase( $batch );
-    }
-    elseif ( $state == 'done' )
-    {
-        //      Final, extra state
-        $state_is_set = set_batch_state( $id_batch, 'over1' );
-    }
-    */
     
     return $html;
 }
@@ -254,32 +229,18 @@ function get_batch_log( $id_thread )
     $logs = array();
     $dblog_entries = array();
     
-    //      @evol 2013/08/04 21:31:10 - do it in a single query
-    //$logs = db_fetchall( "SELECT dblog.data as data
-    //    FROM dblog
-    //    JOIN has_dblog ON dblog.id_dblog = has_dblog.id_dblog
-    //    JOIN thread ON has_dblog.id = thread.id_thread
-    //    WHERE thread.id_thread = ?",
-    //    array( $batch[ 'id_thread' ]));
-    
     $log_ids = db_fetchall( "SELECT has_dblog.id_dblog
         FROM has_dblog
         WHERE has_dblog.id = ?",
         array( $id_thread ));
     
-    //krumo( $log_ids );
-    
     if ( !empty( $log_ids ))
         foreach( $log_ids as $log_id )
             $logs[] = db_fetch( "SELECT data FROM dblog WHERE id_dblog = ?", array( $log_id[ 'id_dblog' ]));
     
-    //krumo( $logs );
-    
     if ( !empty( $logs ))
         foreach( $logs as $log )
             $dblog_entries[] = safe_unserialize( $log[ 'data' ]);
-    
-    //krumo( $dblog_entries );
     
     return $dblog_entries;
 }

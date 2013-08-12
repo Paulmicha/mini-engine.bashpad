@@ -18,6 +18,7 @@ $content .= render_pager_query_table( "SELECT * FROM `thread` WHERE `preset` = 1
     'table_options' => array(
         'header' => array(
             "ID",
+            "Execute",
             
             //      @evol 2013/08/07 01:00:52
             //"Preset description",
@@ -27,7 +28,6 @@ $content .= render_pager_query_table( "SELECT * FROM `thread` WHERE `preset` = 1
             "Steps",
             "Servers",
             "Environments",
-            "Launch",
         ),
     ),
 ));
@@ -77,6 +77,11 @@ function _preprocess_archive( $results )
             //      ID Thread
             $r[ 'id_thread' ],
             
+            //      Launch
+            l( "<i class='icon-rocket'></i>&nbsp;&nbsp;Launch", 'batch/presets/'. $r[ 'id_thread' ], array( 'attributes' => array(
+                'class' => "btn btn-small btn-primary",
+            ))),
+            
             //      Description
             //      @evol 2013/08/07 01:00:52
             //$description,
@@ -95,9 +100,6 @@ function _preprocess_archive( $results )
             
             //      Environments
             join( ', ', $environments_arr ),
-            
-            //      Launch
-            l( "Launch", 'batch/presets/'. $r[ 'id_thread' ], array( 'external' => true )),
         );
     }
     
