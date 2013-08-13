@@ -3,7 +3,7 @@
 /**
  *  @file
  *  Commands - Launch
- *  @path /batch/123/launch
+ *  @path /batch/123/render
  */
 
 //      Init

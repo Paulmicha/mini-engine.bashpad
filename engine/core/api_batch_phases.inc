@@ -241,11 +241,6 @@ function batch_standby_phase( $batch )
                 ))
                 .'&nbsp;&nbsp;&nbsp;&nbsp;'.
                 l( "Cancel", get_current_path() . "?cancel-batch=$id_batch", array( 'attributes' => array( 'class' => 'btn btn-small btn-danger' )))
-                //input( array(
-                //    'value' => 'Cancel',
-                //    'type' => 'submit',
-                //    'class' => 'btn btn-small btn-danger',
-                //)),
         ),
     ));
 

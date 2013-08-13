@@ -35,8 +35,10 @@ else
     //krumo( $batch );
     
     
+    
     //-------------------------------------------------------------------------------------
     //      1. Check if batch is locked by someone else
+    
     
     if ( $_REQUEST[ 'steal' ] == 'lock' )
     {
@@ -76,20 +78,27 @@ else
     }
     
     
+    
     //-------------------------------------------------------------------------------------
     //      2. Replace datestamps
     
+    
     //      @todo 2013/08/12 23:43:44
+    
     
     
     //-------------------------------------------------------------------------------------
     //      3. Copy preset into new thread & set it as the thread for the batch
     
+    
     //      We might have begun this batch before and not finished it,
     //      which is a case undetected by the "lock" -> deal with it first
     $thread_over_check = db_popfetch( "SELECT `state` FROM `thread` WHERE `id_thread` = ?", array( $batch[ 'id_thread' ]));
     if ( $thread_over_check != 'over' )
-        $content .= alert( "Could not set batch <code>$id_batch</code> in state 'init' while trying to steal the lock.", 'error' );
+    [
+        $content .= alert( "You must have started this batch without cancelling it before trying to launch this preset.", 'warning' );
+        $content .= "<p>You need to ". l( "<i class='icon-remove'></i>&nbsp;cancel this batch", "batch/$id_batch/render?cancel-batch=$id_batch", array( 'attributes' => array( 'class' => "btn btn-warning" ))) ." first.</p>";
+    ]
     else
     {
         $id_thread = db_insert( 'thread', array(
@@ -110,10 +119,19 @@ else
         $batch[ 'id_thread' ] = $id_thread;
         
         
+        
         //-------------------------------------------------------------------------------------
         //      4. Carry on the normal batch render process from 'standby' state
         
-        //      @todo 2013/08/12 23:43:44
+        
+        $state_is_set = set_batch_state( $batch, 'standby' );
+        if ( $state_is_set )
+        {
+            header( "Location: ". url( "batch/$id_batch/render", array( 'absolute' => true )));
+            die();
+        }
+        else
+            $content .= alert( "Could not set batch <code>$id_batch</code> state to 'standby' while finishing preset <code>$arg2</code> preparation.", 'error' );
     }
 }
 
