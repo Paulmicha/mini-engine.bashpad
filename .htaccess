@@ -10,7 +10,7 @@
     RewriteEngine On
     
     #   Adjust this to your setup
-    RewriteBase /mini-engine/www
+    RewriteBase /
     
     #   Rewrite URLs of the form '/x' to the form '/index.php?q=x'.
     RewriteCond %{REQUEST_FILENAME} !-f

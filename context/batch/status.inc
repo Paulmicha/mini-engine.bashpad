@@ -53,15 +53,16 @@ function _preprocess_archive( $results )
         //      Prepare 'servers' and 'environments' column
         $servers_arr = array();
         $environments_arr = array();
-        foreach( $r[ 'data' ][ 'execution_steps_config' ] as $step )
-        {
-            $environments_arr[] = l( $step[ 'environment' ][ 'title' ], $step[ 'environment' ][ 'url' ], array( 'external' => true ));
-            $servers_arr[] = $step[ 'environment' ][ 'server' ][ 'title' ] .
-                " ".
-                "<code>".
-                $step[ 'environment' ][ 'server' ][ 'hostname' ] .
-                "</code>";
-        }
+        if ( !empty( $r[ 'data' ][ 'execution_steps_config' ]))
+            foreach( $r[ 'data' ][ 'execution_steps_config' ] as $step )
+            {
+                $environments_arr[] = l( $step[ 'environment' ][ 'title' ], $step[ 'environment' ][ 'url' ], array( 'external' => true ));
+                $servers_arr[] = $step[ 'environment' ][ 'server' ][ 'title' ] .
+                    " ".
+                    "<code>".
+                    $step[ 'environment' ][ 'server' ][ 'hostname' ] .
+                    "</code>";
+            }
         
         //      Assemble columns
         $lines_arr[] = array(

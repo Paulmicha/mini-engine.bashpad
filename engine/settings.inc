@@ -67,7 +67,7 @@ $navbar_items = '';
 //      Theming-related
 //      Replace this string with your base path
 //      Note : base_path() always MUST start and end with "/"
-function base_path() { return "/mini-engine/www/"; }
+function base_path() { return "/"; }
 $base_path = base_path();
 $theme_path = "theme";
 $content_include = "index";

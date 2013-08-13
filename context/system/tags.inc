@@ -86,11 +86,12 @@ else if ( is_numeric( $arg2 ))
                     FROM `$table`
                     INNER JOIN `has_tag` ON `$table`.id_$table = `has_tag`.id
                         AND `has_tag`.id_tag = ?
+                        AND `has_tag`.db_table = ?
                     GROUP BY `$table`.id_$table
                     ORDER BY `$table`.id_$table DESC";
                 
                 $content .= "<h3>". ucfirst( $table ) ."</h3>";
-                $content .= render_pager_query_table( $query, array( $arg2 ), array(
+                $content .= render_pager_query_table( $query, array( $arg2, $table ), array(
                     'preprocess_results' => '_preprocess_entities',
                     'table_options' => array(
                         'header' => array(
@@ -114,10 +115,11 @@ else if ( is_numeric( $arg2 ))
             FROM `$arg3`
             INNER JOIN `has_tag` ON `$arg3`.id_$arg3 = `has_tag`.id
                 AND `has_tag`.id_tag = ?
+                AND `has_tag`.db_table = ?
             GROUP BY `$arg3`.id_$arg3
             ORDER BY `$arg3`.id_$arg3 DESC";
         
-        $content .= render_pager_query_table( $query, array( $arg2 ), array(
+        $content .= render_pager_query_table( $query, array( $arg2, $arg3 ), array(
             'preprocess_results' => '_preprocess_entities',
             'table_options' => array(
                 'header' => array(
@@ -221,8 +223,9 @@ function _preprocess_entities( $results )
         $first_key = reset( $keys );
         $table = substr( $first_key, 3 );
         
+        $r[ 'data' ] = safe_unserialize( $r[ 'data' ]);
         if ( !empty( $r[ 'data' ]))
-            $r[ 'data' ] = safe_unserialize( $r[ 'data' ]);
+            $r[ 'data' ] = kpr( $r[ 'data' ]);
         
         //      Assemble columns
         $lines_arr[] = array(
@@ -237,10 +240,10 @@ function _preprocess_entities( $results )
             $r[ 'description' ],
             
             //      Data
-            kpr( $r[ 'data' ]),
+            $r[ 'data' ],
             
             //      Tags
-            view_tags( get_tags( 'batch', $r[ 'id_'. $table ])),
+            view_tags( get_tags( $table, $r[ 'id_'. $table ])),
         );
     }
     

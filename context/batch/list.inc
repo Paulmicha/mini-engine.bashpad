@@ -15,9 +15,6 @@ $head_page_title = "<i class='icon-rocket'></i> Choose a batch to launch";
 //      Paged table view
 $content .= render_pager_query_table( "SELECT * FROM `batch` ORDER BY `id_batch` DESC", array(), array(
     'preprocess_results' => '_preprocess_batch',
-    //'pager_query_options' => array(
-    //    'nb_per_page' => 10,
-    //),
     'table_options' => array(
         'header' => array(
             "ID",
@@ -51,15 +48,27 @@ function _preprocess_batch( $results )
         $tags = get_tags( 'batch', $r[ 'id_batch' ]);
         
         $lines_arr[] = array(
+            
             $r[ 'id_batch' ],
-            l( "<i class='icon-wrench'></i>&nbsp;Setup for launch", 'batch/'. $r[ 'id_batch' ] .'/render', array( 'attributes' => array( 'class' => 'btn btn-small btn-primary' ))),
+            
+            l( "<i class='icon-wrench'></i>&nbsp;Setup for launch", 'batch/'. $r[ 'id_batch' ] .'/render', array( 'attributes' => array(
+                'class' => 'btn btn-small btn-primary',
+                'style' => 'white-space:nowrap',
+            ))),
+            
             l( $r[ 'title' ], 'batch/'. $r[ 'id_batch' ]),
+            
             $r[ 'description' ],
+            
             db_popfetch( "SELECT COUNT(*) FROM `batch_step` WHERE `id_batch` = ?", array( $r[ 'id_batch' ])),
+            
             view_tags( $tags ),
-            l( "<i class='icon-pencil'></i>&nbsp;Edit", 'batch/'. $r[ 'id_batch' ] .'/edit' )
-                ."  ".
-                l( "<i class='icon-trash'></i>&nbsp;Delete", 'batch/'. $r[ 'id_batch' ] .'/delete' )
+            
+            '<div style="white-space:nowrap">'.
+                l( "<i class='icon-pencil'></i>&nbsp;Edit", 'batch/'. $r[ 'id_batch' ] .'/edit' ) .
+                "<br>".
+                l( "<i class='icon-trash'></i>&nbsp;Delete", 'batch/'. $r[ 'id_batch' ] .'/delete' ) .
+            '</div>',
         );
     }
     
