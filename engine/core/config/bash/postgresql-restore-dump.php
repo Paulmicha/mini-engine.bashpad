@@ -4,7 +4,7 @@ $command = array(
     
     'title' => "PostgreSQL : Restore 'targzipped' Dump",
     'description' => "Requires setup for using command 'pg_restore' without password.",
-    'tags' => array( "PostgreSQL" ),
+    'tags' => array( "PostgreSQL", "Database operations" ),
     
     'command' => 'cd [folder:db dumps]
 tar xzf [dump_filename].sql.tar.gz

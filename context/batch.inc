@@ -117,6 +117,7 @@ function _batch_form_content()
     //      Multigroup : Batch Steps
     $form_html .= "<hr>";
     $form_html .= multigroup( "Batch Steps", array(
+        
         array(
             'func' => 'input_text',
             'args' => array( "Step number", array( 'input_attributes' => array( 'help-inline' => "<small class='mute'>Optional : enter a number to specify the order of execution</small>" ))),
@@ -125,6 +126,10 @@ function _batch_form_content()
             'func' => 'input_text',
             'args' => array( "Step Title" ),
         ),
+        
+        //      Options to execute SSH Command
+        "<hr><p>Select an SSH command :</p>",
+        
         array(
             'func' => 'select',
             'args' => array( "Environment", $envs_options_arr, array( 'select_attributes' => array( 'preserve_numeric_keys' => true ))),
@@ -138,6 +143,23 @@ function _batch_form_content()
                 //      Turning off Browsers' default autocompletion, because it interferes with our own.
                 'autocomplete' => 'off',
             ))),
+        ),
+        
+        //      Separation : choose between executing SSH Command or transfer a file in SFTP
+        //      @evol 2013/08/14 14:04:26 - use tabs for interface
+        "<hr><p>Transfer a file :</p>",
+        
+        array(
+            'func' => 'input_text',
+            'args' => array( "SFTP Source Filepath", array( 'input_attributes' => array( 'help-inline' => "<small class='mute'>Supports tokens - e.g. <code>[folder:db dumps]/[dump_filename]</code></small>" ))),
+        ),
+        array(
+            'func' => 'select',
+            'args' => array( "SFTP Destination Environment", $envs_options_arr, array( 'select_attributes' => array( 'preserve_numeric_keys' => true ))),
+        ),
+        array(
+            'func' => 'input_text',
+            'args' => array( "SFTP Destination Filepath", array( 'input_attributes' => array( 'help-inline' => "<small class='mute'>Destination Environment Filepath</small>" ))),
         ),
     ));
     

@@ -22,9 +22,10 @@ $default_tags = array(
     ),
     
     'Type of environment' => array(
-        'Migration',
         'Dev',
-        'UAT',
+        'Staging',
+        'Migration',
+        'Production',
     ),
     
     //      This one is a bit generic, originally for use in 'batch' and 'presets' (thread)
