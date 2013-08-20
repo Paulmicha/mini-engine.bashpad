@@ -19,10 +19,8 @@ $content .= render_pager_query_table( "SELECT * FROM `thread` WHERE `preset` = 1
         'header' => array(
             "ID",
             "Execute",
-            
-            //      @evol 2013/08/07 01:00:52
-            //"Preset description",
-            
+            "Title",
+            "Description",
             "Batch",
             "Tags",
             "Steps",
@@ -82,9 +80,11 @@ function _preprocess_archive( $results )
                 'class' => "btn btn-small btn-primary",
             ))),
             
+            //      Title
+            $r[ 'data' ][ 'preset-title' ],
+            
             //      Description
-            //      @evol 2013/08/07 01:00:52
-            //$description,
+            $r[ 'data' ][ 'preset-description' ],
             
             //      Batch
             $batch_title,

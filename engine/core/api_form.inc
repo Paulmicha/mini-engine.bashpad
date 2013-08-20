@@ -1369,6 +1369,13 @@ function input_rcb( $label, $options = array())
     if ( !empty( $required ))
         $html .= ' required';
     
+    //      Custom attributes : empty all keys in $options until we only have potential optional attributes
+    $keys_to_clean = array( 'id', 'class', 'type', 'name', 'value', 'checked', 'label_class', 'prefix', 'suffix', 'required' );
+    foreach( $keys_to_clean as $key )
+        if ( isset( $options[ $key ]))
+            unset( $options[ $key ]);
+    $html .= attributes( $options );
+    
     $html .= ' value="'. $value .'">';
     
     if ( !empty( $label ))

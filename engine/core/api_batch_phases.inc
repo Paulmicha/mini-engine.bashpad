@@ -154,7 +154,18 @@ function batch_standby_phase( $batch )
         //      Save as preset ?
         if ( !empty( $_REQUEST[ 'save-as-preset' ]))
         {
-            $id_thread = db_update( 'thread', array( 'preset' => 1 ), array( 'id' => $batch[ 'id_thread' ]));
+            //      Get exisiting thread data (override any existing data)
+            $preset = db_fetch( "SELECT * FROM `thread` WHERE `id_thread` = ?", array( $batch[ 'id_thread' ]));
+            if ( !empty( $preset[ 'data' ]))
+                $preset[ 'data' ] = safe_unserialize( $preset[ 'data' ]);
+            
+            //      Title & description
+            if ( !empty( $_REQUEST[ 'preset-title' ]))
+                $preset[ 'data' ][ 'preset-title' ] = $_REQUEST[ 'preset-title' ];
+            if ( !empty( $_REQUEST[ 'preset-description' ]))
+                $preset[ 'data' ][ 'preset-description' ] = $_REQUEST[ 'preset-description' ];
+            
+            $id_thread = db_update( 'thread', array( 'preset' => 1, 'data' => safe_serialize( $preset[ 'data' ])), array( 'id' => $batch[ 'id_thread' ]));
             
             //      Tags for this preset
             set_tags( array(
@@ -220,8 +231,14 @@ function batch_standby_phase( $batch )
     $execution_form_html .= '<div class="controls">';
     $execution_form_html .= input_checkbox( "Everything looks good : do it" );
     $execution_form_html .= "<hr>";
-    $execution_form_html .= input_checkbox( "Save as preset" );
-    $execution_form_html .= "<p>If you save this as a preset, which allows to re-execute this batch with the same params (except datestamps) later on, you may specify tags :</p>";
+    $execution_form_html .= input_checkbox( "Save as preset", array( 'id' => 'preset-hidden-fields-control' ));
+    
+    $execution_form_html .= "<div data-depends-on='preset-hidden-fields-control'>";
+    $execution_form_html .= "<p>If you save this as a preset, which allows to re-execute this batch with the same params (except datestamps) later on, you may specify :</p>";
+    
+    //      Preset title & description
+    $execution_form_html .= input_text( "Preset title" );
+    $execution_form_html .= textarea( "Preset description" );
     
     //      Tags
     $tags_select_options = tags_select_options();
@@ -229,8 +246,11 @@ function batch_standby_phase( $batch )
         $execution_form_html .= multiple_select( 'Tag(s)', $tags_select_options );
     $execution_form_html .= input_text( 'New Tag(s)', array( 'input_attributes' => array( 'help-inline' => "Multiple tags must be comma-separated <code>,</code>" )));
     
+    $execution_form_html .= "</div>";
+    
     $execution_form_html .= '</div>';
     $execution_form_html .= '</div>';
+    
     $html .= render_form( $execution_form_html, null, array(
         'form_attributes' => array(
             'actions' => ''.

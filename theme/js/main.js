@@ -23,5 +23,31 @@
             "aaSorting": [[ 0, "desc" ]]
         });
     });
+    
+    //      Depends-on (visibility switch)
+    setTimeout( function()
+    {
+        $( '[data-depends-on]' ).each( function( i )
+        {
+            var id = $(this).attr( 'data-depends-on' );
+            
+            //      Hidden by default
+            $(this).hide();
+            
+            //      Save this targetted element as data on its "controller"
+            $( '#' + id ).data( 'controlled-target', $(this));
+            
+            //      @evol 2013/08/20 14:15:28 - this assumes the eleement is a checkbox : make it more generic
+            //      (had a snippet somewhere, can't find it)
+            $( '#' + id ).change( function()
+            {
+                if ( this.checked )
+                    $(this).data( 'controlled-target' ).show();
+                else
+                    $(this).data( 'controlled-target' ).hide();
+            });
+        });
+    }, 87 );
+    
 })(jQuery);
 
