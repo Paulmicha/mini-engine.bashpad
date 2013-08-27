@@ -34,6 +34,7 @@ $default_tags = array(
         'Cron',
         'Maintenance',
         'Installation',
+        'Initialization',
         'Security',
         'Migration',
         'Database operations',

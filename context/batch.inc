@@ -127,8 +127,33 @@ function _batch_form_content()
             'args' => array( "Step Title" ),
         ),
         
-        //      Options to execute SSH Command
-        "<hr><p>Select an SSH command :</p>",
+        "<p>&nbsp;</p>",
+        //"<hr>",
+        
+        //      Left tabs - opening wrapper div
+        "<div class='tabbable tabs-left'>",
+        
+        //      Left tabs - Tabs controls (titles)
+        "<ul class='nav nav-tabs'>
+            <li class='active'><a href='#left-tab--ssh--multigroup-0' data-toggle='tab'><i class='icon-cogs'></i>&nbsp;SSH command</a></li>
+            <li><a href='#left-tab--sftp--multigroup-0' data-toggle='tab'><i class='icon-exchange'></i>&nbsp;SFTP file transfert</a></li>
+            
+            <!--
+            //      @evol 2013/08/27 13:31:45 - we could use more, for example :
+            //      Setting custom Bash raw input,
+            //      Specific interfaces, such as Drupal installation (distribution, presets / lists of modules, etc.), or Symfony (lists of Bundles, etc.)
+            -->
+            <li><a href='#left-tab--presets--multigroup-0' data-toggle='tab'><i class='icon-rocket'></i>&nbsp;Specific presets</a></li>
+            <li><a href='#left-tab--raw--multigroup-0' data-toggle='tab'><i class='icon-ambulance'></i>&nbsp;Raw Bash input</a></li>
+            
+        </ul>",
+        
+        //      Left tabs - opening Tab Contents wrapper div
+        "<div class='tab-content'>",
+        
+        //      Left tabs - Tab Content : Options to execute SSH Command
+        "<div class='tab-pane active' id='left-tab--ssh--multigroup-0'>",
+        "<p>Select an SSH command :</p>",
         
         array(
             'func' => 'select',
@@ -144,10 +169,11 @@ function _batch_form_content()
                 'autocomplete' => 'off',
             ))),
         ),
+        "</div>",
         
-        //      Separation : choose between executing SSH Command or transfer a file in SFTP
-        //      @evol 2013/08/14 14:04:26 - use tabs for interface
-        "<hr><p>Transfer a file :</p>",
+        //      Left tabs - Tab Content : transfer a file in SFTP
+        "<div class='tab-pane' id='left-tab--sftp--multigroup-0'>",
+        "<p>Transfer a file :</p>",
         
         array(
             'func' => 'input_text',
@@ -161,6 +187,29 @@ function _batch_form_content()
             'func' => 'input_text',
             'args' => array( "SFTP Destination Filepath", array( 'input_attributes' => array( 'help-inline' => "<small class='mute'>Destination Environment Filepath</small>" ))),
         ),
+        "</div>",
+        
+        //      Left tabs - Tab Content : Specific presets
+        "<div class='tab-pane' id='left-tab--presets--multigroup-0'>",
+        "<p>Specific presets :</p>",
+        "<p>@todo 2013/08/27 13:56:09</p>",
+        "<p>Specific interfaces, such as Drupal installation (distribution, presets / lists of modules, etc.), or Symfony (lists of Bundles, etc.)</p>",
+        "</div>",
+        
+        //      Left tabs - Tab Content : Raw Bash input
+        "<div class='tab-pane' id='left-tab--raw--multigroup-0'>",
+        "<p>You must know what you're doing</p>",
+        array(
+            'func' => 'textarea',
+            'args' => array( "Raw Bash Input" ),
+        ),
+        "</div>",
+        
+        //      Left tabs - closing Tab Contents wrapper div
+        "</div>",
+        
+        //      Left tabs - closing wrapper div
+        "</div>",
     ));
     
     return $form_html;
