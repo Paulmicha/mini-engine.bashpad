@@ -84,7 +84,7 @@
         repeatable_fields_html[ namespace ] = theField[ 0 ].outerHTML;
         
         //      Append HTML
-        theField.insertAfter( theLocation, $(this).closest( 'div.repeatable-wrap' ));
+        var appended_element = theField.insertAfter( theLocation, $(this).closest( 'div.repeatable-wrap' ));
         
         //      Since we use raw HTML inside javascript variable,
         //      all javascript events must be initialized on new "copies"
@@ -99,6 +99,11 @@
         if ( fieldsCount > 1 ) {
             $('.repeatable-field-remove').css( 'display', 'inline' );
         }
+        
+        //      Custom event to react to repeatable fields "addition"
+        //      @see http://ejohn.org/apps/workshop/adv-talk/#14
+        window.last_appended_element = appended_element;
+        $( "body" ).trigger( "form_field_repeated" );
         
         return false;
     });
