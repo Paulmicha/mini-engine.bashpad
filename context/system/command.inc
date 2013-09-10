@@ -100,7 +100,7 @@ function _command_form_content()
             Default tokens :<br>
             <i class='icon-long-arrow-right'></i>&nbsp;<code>[datestamp]</code>, which will print <code>". datestamp_token() ."</code><br>
             <i class='icon-long-arrow-right'></i>&nbsp;<code>[env]</code>, which will print for example <code>Project-Title-ENV</code><br>
-            <i class='icon-long-arrow-right'></i>&nbsp;<code>[folder:Project root dir]</code>, which will print for example <code>/my/folder/path</code> <small>Note : the argument is a <strong>Tag title</strong>.<br>It is used to match the 1<sup>st</sup> folder tagged with it in the environment in which the command will be executed.</small><br>
+            <i class='icon-long-arrow-right'></i>&nbsp;<code>[folder:project root]</code>, which will print for example <code>/my/folder/path</code> <small>Note : the argument is a <strong>Tag title</strong> (case insensitive).<br>It is used to match the 1<sup>st</sup> folder tagged with it in the environment in which the command will be executed.</small><br>
             <i class='icon-long-arrow-right'></i>&nbsp;<code>[username:mysql]</code> <small>Note : the string as argument is a <strong>Credential Type</strong>.<br>It is used to match the 1<sup>st</sup> username in the environment in which the command will be executed.</small><br>
             <i class='icon-long-arrow-right'></i>&nbsp;<code>[password:mysql]</code><br>
             <i class='icon-long-arrow-right'></i>&nbsp;<code>[db_name:mysql]</code><br>

@@ -129,6 +129,7 @@ function _batch_form_content()
         
         "<p>&nbsp;</p>",
         //"<hr>",
+        //"<p>Specify this step's operation :</p>",
         
         //      Left tabs - opening wrapper div
         "<div class='tabbable tabs-left'>",
@@ -185,7 +186,7 @@ function _batch_form_content()
         ),
         array(
             'func' => 'input_text',
-            'args' => array( "SFTP Destination Filepath", array( 'input_attributes' => array( 'help-inline' => "<small class='mute'>Destination Environment Filepath</small>" ))),
+            'args' => array( "SFTP Destination Filepath", array( 'input_attributes' => array( 'help-inline' => "<small class='mute'>Destination Environment Filepath</small><br><small class='mute'>Supports tokens - e.g. <code>[folder:db dumps]/[dump_filename]</code></small>" ))),
         ),
         "</div>",
         
@@ -198,11 +199,19 @@ function _batch_form_content()
         
         //      Left tabs - Tab Content : Raw Bash input
         "<div class='tab-pane' id='left-tab--raw--multigroup-0'>",
-        "<p>You must know what you're doing</p>",
+        "<p>Raw Bash Input (know what you're doing)</p>",
         array(
-            'func' => 'textarea',
-            'args' => array( "Raw Bash Input" ),
+            'func' => 'textarea_raw',
+            'args' => array( "Raw Bash Input", array( 'class' => 'span12', 'rows' => 6, )),
         ),
+        "<p>Supports Default tokens :<br>
+            <i class='icon-long-arrow-right'></i>&nbsp;<code>[datestamp]</code>, which will print <code>". datestamp_token() ."</code><br>
+            <i class='icon-long-arrow-right'></i>&nbsp;<code>[env]</code>, which will print for example <code>Project-Title-ENV</code><br>
+            <i class='icon-long-arrow-right'></i>&nbsp;<code>[folder:project root]</code>, which will print for example <code>/my/folder/path</code> <small>Note : the argument is a <strong>Tag title</strong> (case insensitive).<br>It is used to match the 1<sup>st</sup> folder tagged with it in the environment in which the command will be executed.</small><br>
+            <i class='icon-long-arrow-right'></i>&nbsp;<code>[username:mysql]</code> <small>Note : the string as argument is a <strong>Credential Type</strong>.<br>It is used to match the 1<sup>st</sup> username in the environment in which the command will be executed.</small><br>
+            <i class='icon-long-arrow-right'></i>&nbsp;<code>[password:mysql]</code><br>
+            <i class='icon-long-arrow-right'></i>&nbsp;<code>[db_name:mysql]</code><br>
+            <i class='icon-long-arrow-right'></i>&nbsp;<code>[dump_filename]</code> : unique name produced by <code>[env]-[datestamp]</code>, reused between steps - allows chaining DB dumps creation and restoration in the same batch.</p>",
         "</div>",
         
         //      Left tabs - closing Tab Contents wrapper div
