@@ -83,23 +83,15 @@ if ( !empty( $commands_results ))
 
 $inline_str = '"'. join( '","', $inline_arr ) .'"';
 
-
-//      Javascript : Autocompletion Commands
+//      Javascript : Autocompletion init var
 $footer_extra_js .= <<<EOD
 <script type="text/javascript">
-(function($)
-{
-    //      Init autocomplete
-    var cmd_arr = [ $inline_str ];
-    $( 'input.autocompletion-command' ).typeahead({ source:cmd_arr });
-    
-    //      Re-init when multigrtoup add btn is clicked
-    $( '.repeatable-field-add' ).click( function() {
-        $( 'input.autocompletion-command' ).typeahead({ source:cmd_arr });
-    });
-    
-})(jQuery);
+window.autocomplete_cmd_arr = [ $inline_str ];
 </script>
 EOD;
+
+//      Javascript : Autocompletion Commands + Hidden chosen bugfix
+$footer_extra_js .= '<script src="'. base_path() .'engine/core/js/batch_crud.js"></script>';
+
 
 

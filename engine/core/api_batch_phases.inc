@@ -92,7 +92,18 @@ function batch_init_phase( $batch )
         $form_html .= "<input type='hidden' name='batch_". $id_batch ."_init_requested' value='1'>";
 
         //      Render configuration form
-        $html .= render_form( $form_html );
+        $html .= render_form( $form_html, null, array(
+            'form_attributes' => array(
+                'actions' => ''.
+                    input( array(
+                        'value' => 'Go',
+                        'type' => 'submit',
+                        'class' => 'btn btn-large btn-primary',
+                    ))
+                    .'&nbsp;&nbsp;&nbsp;&nbsp;'.
+                    l( "Cancel", 'batch', array( 'attributes' => array( 'class' => 'btn btn-small btn-danger' )))
+            ),
+        ));
     }
 
     //      Easy case : no params for all commands in all steps
@@ -338,27 +349,28 @@ EOD;
         //      </Html-Ajax-Interface>
         
         //      <Javascript-Ajax-Interface>
-        $GLOBALS[ 'footer_extra_js' ] .= '<script src="'. base_path() .'engine/core/js/api_batch.js"></script>';
+        $GLOBALS[ 'footer_extra_js' ] .= '<script src="'. base_path() .'engine/core/js/batch_render.js"></script>';
         $GLOBALS[ 'footer_extra_js' ] .= <<<EOD
 <script type="text/javascript">
-
-$( "#btn-execute" ).click( function()
+(function($)
 {
-    if ( $(this).hasClass( 'disabled' ))
-        return false;
-    
-    execute_batch({
-        step: 0,
-        batch_url: '$ajax_batch_processing_step_url',
-        total: $last_iteration,
-        id_feedback: 'batch-execution-status',
-        id_zone: 'batch-execution-zone',
-        delay: $iteration_delay
+    $( "#btn-execute" ).click( function()
+    {
+        if ( $(this).hasClass( 'disabled' ))
+            return false;
+        
+        execute_batch({
+            step: 0,
+            batch_url: '$ajax_batch_processing_step_url',
+            total: $last_iteration,
+            id_feedback: 'batch-execution-status',
+            id_zone: 'batch-execution-zone',
+            delay: $iteration_delay
+        });
+        
+        $(this).addClass( 'disabled' );
     });
-    
-    $(this).addClass( 'disabled' );
-});
-
+})(jQuery);
 </script>
 EOD;
         //      </Javascript-Ajax-Interface>
