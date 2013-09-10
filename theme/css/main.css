@@ -34,3 +34,8 @@ td .chzn-container{margin-bottom:0;}
 .alert-info a { /*color:#fff200; fff5c1 */ background:#FFF; padding:.2em; }
 
 
+/*      Vertical tabs in "batch/add" form : height is not enough for "chosen" dropdowns
+*/
+.batch-add-form .tab-content { min-height:250px; }
+
+

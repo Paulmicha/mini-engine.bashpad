@@ -16,6 +16,7 @@ $content .= "<p>This is where we setup a new set of operations to run in a batch
 $content .= render_form( _batch_form_content(), '_batch_form_submit', array(
     'validation_handler' => '_batch_form_validate',
     'submit_handler_params' => array( 'is_new' => 1 ),
+    'form_attributes' => array( 'attributes' => array( 'class' => 'batch-add-form form-horizontal' )),
 ));
 
 //      Let's see if this holds for now
