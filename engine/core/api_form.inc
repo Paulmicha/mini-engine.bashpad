@@ -342,6 +342,10 @@ function form( $content, $options = array())
     );
     extract( $options );
     
+    //      Hack 2013/09/19 11:02:26 - extra classes (recursive data loss when += array)
+    if ( !empty( $class ))
+        $attributes[ 'class' ] = $class;
+    
     //      Permettre de gérer plusieurs fomulaires par page avec chacun leur "submit flag"
     //      @evol 2013/07/11 00:17:31 - pas encore géré avec render_form()
     if ( $poormans_submit_flag )
