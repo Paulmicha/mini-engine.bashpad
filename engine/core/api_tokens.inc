@@ -26,6 +26,7 @@ function command_tokens_replace( $execution_step_config )
         $all_tokens = simple_tokens_extract( $execution_step_config[ 'command' ][ 'command' ]);
         
         //      debug
+        //krumo( 'command_tokens_replace() - $all_tokens' );
         //krumo( $all_tokens );
         
         foreach( $all_tokens as $token_namespace => $tokens )
@@ -93,7 +94,7 @@ function command_tokens_replace( $execution_step_config )
                         $dump_filename = cache_get( $cache_namespace );
                         if ( empty( $dump_filename ))
                         {
-                            $dump_filename = strclean( $execution_step_config[ 'environment' ][ 'title' ], '-', true ) . datestamp_token();
+                            $dump_filename = str_clean( $execution_step_config[ 'environment' ][ 'title' ], '-', true ) . datestamp_token();
                             cache_set( $cache_namespace, $dump_filename );
                         }
                         $replace_str = $dump_filename;
@@ -108,6 +109,10 @@ function command_tokens_replace( $execution_step_config )
                         if ( !empty( $execution_step_config[ 'custom_tokens_values_mapping' ]))
                             $replace_str = $execution_step_config[ 'custom_tokens_values_mapping' ][ $token_namespace ];
                         
+                        //      debug
+                        else
+                            krumo( "Warning : a token '$token_namespace' seems to have no corresponding value !" );
+                        
                         break;
                 }
                 
@@ -115,6 +120,10 @@ function command_tokens_replace( $execution_step_config )
                 $command_str = str_replace( $token[ 'match' ], $replace_str, $command_str );
             }
         }
+        
+        //      debug
+        krumo( 'command_tokens_replace() - $command_str' );
+        krumo( $command_str );
         
         return $command_str;
     }
@@ -130,6 +139,9 @@ function command_tokens_replace( $execution_step_config )
  *  @example [token_namespace]
  *  @example [token_namespace:qsdqsd123]
  *  
+ *  input : cd [folder_svn] && svn add . --force && svn commit . -m "[commit_message]"
+ *  input : cd [folder:project root]
+ *  
  *  @return Array: array( 'token_namespace' => array( 0 => array( 'value' => '', 'match' => '[type_token]' )))
  *  @return Array: array( 'token_namespace' => array( 0 => array( 'value' => 'qsdqsd123', 'match' => '[type_token:qsdqsd123]' )))
  */
@@ -139,17 +151,26 @@ function simple_tokens_extract( $str )
     if ( !empty( $str ))
     {
         $matches = array();
-        $feedback = preg_match_all( '`\[([^:]+):?([^\]]+)?\]`i', $str, $matches, PREG_SET_ORDER );
+        
+        //$feedback = preg_match_all( '`\[([^\]]+)\]`Ui', $str, $matches, PREG_SET_ORDER );
+        
+        //      Note : non-capturing parenthesis are written (?: )
+        $feedback = preg_match_all( '`\[([^\:\]]+)(?::([^\]]+))?\]`Ui', $str, $matches, PREG_SET_ORDER );
         
         //      debug
+        //krumo( '$matches' );
         //krumo( $matches );
         
         if ( $feedback && !empty( $matches ))
+        {
             foreach( $matches as $i => $match )
+            {
                 $return[ $match[ 1 ]][] = array(
                     'value' => $match[ 2 ],
                     'match' => $match[ 0 ]
                 );
+            }
+        }
     }
     return $return;
 }

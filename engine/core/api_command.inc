@@ -65,6 +65,10 @@ function prepare_batch_commands( $batch )
         $id_server_previous_command = $step[ 'environment' ][ 'id_server' ];
     }
     
+    //      debug
+    //krumo( 'prepare_batch_commands() - $execution_step_config :' );
+    //krumo( $execution_step_config );
+    
     //      d) Store into corresponding thread
     return db_update(
         'thread',
