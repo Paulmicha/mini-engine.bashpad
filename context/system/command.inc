@@ -159,9 +159,10 @@ function _command_form_validate( &$submit_handler_params )
     //      debug
     //krumo( $_POST );
     
-    //      Quick sanitization
+    //      Sanitization seems to add HTMLENTITIES, and we can edit Bash commands...
+    //      so, no "sanitization"
     $posted = $_POST;
-    form_recursive_sanitization( $posted );
+    //form_recursive_sanitization( $posted );
     
     //      Save sanitized values for render_form()
     $return[ 'sanitized_values' ] = $posted;

@@ -198,7 +198,7 @@ function batch_standby_phase( $batch )
     }
 
     //      Warning
-    else if ( !empty( $_REQUEST[ 'poormans-submit-flag' ]))
+    else if ( empty( $_REQUEST[ 'batch_'. $id_batch .'_init_requested' ]) && !empty( $_REQUEST[ 'poormans-submit-flag' ]))
         $html .= alert( "You need to tick the checkbox 'Everything looks good : do it' to begin execution phase.", 'warning' );
 
     //      debug

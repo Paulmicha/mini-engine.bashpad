@@ -28,6 +28,7 @@ function render_form( $form_html_content, $submit_handler = null, $options = arr
         
         //      Setting this to 'return callback result' means :
         //      Get the callback return value from render_form()
+        //      @evol 2013/09/20 13:39:57 - possibility to implement custom "hooks" (~events)
         'when_posted' => 'return callback result',
     );
     
@@ -87,7 +88,7 @@ function render_form( $form_html_content, $submit_handler = null, $options = arr
         if ( $when_posted == 'return callback result' )
             return $submit_handler( $submit_handler_params );
         
-        //      Allow just calling it
+        //      Allow just calling it (without the immadiate return)
         $submit_handler( $submit_handler_params );
         
         //      Redirect (untested @todo 2013/07/10 19:57:04)

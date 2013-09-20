@@ -14,9 +14,10 @@
  *  @see engine/core/api_commands.inc
  *  @see prepare_batch_commands()
  */
-function command_tokens_replace( $execution_step_config )
+function command_tokens_replace( $execution_step_config, $step_number = 0 )
 {
     //      debug
+    //krumo( 'command_tokens_replace() - $execution_step_config' );
     //krumo( $execution_step_config );
     
     //      Get all tokens
@@ -35,6 +36,13 @@ function command_tokens_replace( $execution_step_config )
             {
                 $replace_str = '';
                 
+                //      Allow making any token "static" with a prefix (constant value for the entire batch process, across all steps)
+                //      @evol 2013/09/20 13:29:50 - think about it, maybe it only makes sense for things like datestamps,
+                //      so let's use custom tokens until we refine this feature.
+                //$token_is_static = false;
+                //if ( substr( $token_namespace, 0, 7 ) == 'static_' )
+                //    $token_is_static = true;
+                
                 switch( $token_namespace )
                 {
                     case 'folder' :
@@ -47,10 +55,16 @@ function command_tokens_replace( $execution_step_config )
                             continue;
                         
                         //      When there's a value, it's a tag title
+                        //      (or a tag ID if it's a numeric value)
                         if ( !empty( $token[ 'value' ]))
                         {
+                            //      Support numeric values (tag ID)
+                            if ( is_numeric( $token[ 'value' ]))
+                                $id_tag = $token[ 'value' ];
+                            
                             //      Get the id from tag title (case insensitive)
-                            $id_tag = get_tag_by_title( $token[ 'value' ]);
+                            else
+                                $id_tag = get_tag_by_title( $token[ 'value' ]);
                             
                             //      Get the last folder in this environment that has this tag
                             if ( !empty( $id_tag ))
@@ -109,9 +123,9 @@ function command_tokens_replace( $execution_step_config )
                         if ( !empty( $execution_step_config[ 'custom_tokens_values_mapping' ]))
                             $replace_str = $execution_step_config[ 'custom_tokens_values_mapping' ][ $token_namespace ];
                         
-                        //      debug
+                        //      Abnormal situation - minimal feedback
                         else
-                            krumo( "Warning : a token '$token_namespace' seems to have no corresponding value !" );
+                            print alert( "Warning : custom token '$token_namespace' seems to have an empty value", 'warning' );
                         
                         break;
                 }
@@ -122,8 +136,8 @@ function command_tokens_replace( $execution_step_config )
         }
         
         //      debug
-        krumo( 'command_tokens_replace() - $command_str' );
-        krumo( $command_str );
+        //krumo( 'command_tokens_replace() - $command_str' );
+        //krumo( $command_str );
         
         return $command_str;
     }

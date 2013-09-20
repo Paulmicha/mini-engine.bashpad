@@ -22,16 +22,25 @@ function prepare_batch_commands( $batch )
 {
     $id_batch = $batch[ 'id_batch' ];
     
+    //      debug
+    //krumo( 'prepare_batch_commands() - $_REQUEST' );
+    //krumo( $_REQUEST );
+    
     //      a) Configuration form submission handler
     //      Custom tokens values mapping
     $execution_steps_config = array();
     if ( !empty( $_REQUEST[ 'batch_'. $id_batch .'_init_requested' ]))
-        foreach( $_REQUEST as $key => $custom_value )
+        foreach( $_REQUEST as $name => $custom_value )
             if ( substr( $name, 0, 12 ) == 'custom-token' )
-            {
-                $token_namespace = str_replace( 'custom-token-', '', $name );
-                $execution_steps_config[ $step_number ][ 'custom_tokens_values_mapping' ][ $token_namespace ] = $custom_value;
-            }
+                foreach( $custom_value as $step_number => $value )
+                {
+                    $token_namespace = str_replace( 'custom-token-', '', $name );
+                    $execution_steps_config[ $step_number ][ 'custom_tokens_values_mapping' ][ $token_namespace ] = $value;
+                }
+    
+    //      debug
+    //krumo( 'prepare_batch_commands() - $execution_step_config :' );
+    //krumo( $execution_steps_config );
     
     //      b) Process tokens
     $grouped_step_number = 0;
@@ -43,7 +52,7 @@ function prepare_batch_commands( $batch )
         $execution_steps_config[ $step_number ][ 'id_thread' ] = $batch[ 'id_thread' ];
         
         //      Copy entire steps' contents to allow "auto-matches" in tokens
-        $execution_steps_config[ $step_number ] = $step;
+        $execution_steps_config[ $step_number ] += $step;
         $execution_steps_config[ $step_number ][ 'rendered_command' ] = command_tokens_replace( $execution_steps_config[ $step_number ]);
         
         //      Failsafe
@@ -66,8 +75,8 @@ function prepare_batch_commands( $batch )
     }
     
     //      debug
-    //krumo( 'prepare_batch_commands() - $execution_step_config :' );
-    //krumo( $execution_step_config );
+    //krumo( 'prepare_batch_commands() - $grouped_rendered_commands :' );
+    //krumo( $grouped_rendered_commands );
     
     //      d) Store into corresponding thread
     return db_update(
