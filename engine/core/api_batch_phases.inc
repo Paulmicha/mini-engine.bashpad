@@ -51,7 +51,7 @@ function batch_init_phase( $batch )
         else
             return alert( "Error : can't prepare batch <code>$id_batch</code> for execution. That's all I know.", 'error' );
     }
-
+    
     //      State display
     //$html .= "<p class='text-center muted'>Batch is in setup.</p>";
 
@@ -84,7 +84,7 @@ function batch_init_phase( $batch )
                 $step_form_content_html;
         }
     }
-
+    
     //      Render custom tokens configuration form (if applicable)
     if ( !empty( $form_html ))
     {
@@ -120,6 +120,7 @@ function batch_init_phase( $batch )
 
             //      Next phase
             $state_is_set = set_batch_state( $batch, 'standby' );
+            
             if ( $state_is_set )
                 return batch_render( $id_batch );
             else
@@ -128,7 +129,7 @@ function batch_init_phase( $batch )
         else
             $html .= alert( "Error : can't prepare batch <code>$id_batch</code> for execution. That's all I know.", 'error' );
     }
-
+    
     return $html;
 }
 

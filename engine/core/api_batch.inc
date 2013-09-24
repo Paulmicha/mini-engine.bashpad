@@ -30,6 +30,10 @@ function batch_render( $id_batch, $options = array())
     $html = '';
     $batch = get_batch( $id_batch );
     
+    //      debug
+    $state = get_batch_state( $batch );
+    print "<pre>batch_render( $id_batch ) - state A = $state</pre>";
+    
     //      Failsafe : Batch must have steps
     if ( empty( $batch[ 'steps' ]))
         return alert( "No execution steps were found in this batch - there's nothing to do here, " ) .
@@ -47,13 +51,18 @@ function batch_render( $id_batch, $options = array())
         release_batch_lock( $id_batch );
         
         //      Reset batch state
-        $state = 'init';
-        //$state_is_set = set_batch_state( $id_batch, $state );
+        $state = 'reset';
         $state_is_set = set_batch_state( $batch, $state );
         
         //      Failsafe
         if ( !$state_is_set )
-            return alert( "Could not set batch <code>$id_batch</code> in state 'init' while trying to steal the lock.", 'error' );
+            return alert( "Could not set batch <code>$id_batch</code> in state 'reset' while trying to steal the lock.", 'error' );
+        
+        //      When successfully stolen the lock, if we must get rid of $_REQUEST[ 'steal' ],
+        //      we could redirect
+        //      update 2013/09/24 14:07:32 - handled as a proper "state" instead (reset)
+        //else
+        //    header( "Location: ". get_current_url( array( 'no_vars' => true )));
     }
     else if ( batch_is_locked_by_someone_else( $id_batch, $options ))
     {
@@ -109,12 +118,18 @@ function batch_render( $id_batch, $options = array())
         $batch[ 'id_thread' ] = $id_thread;
     }
     
+    //      debug
+    //$state = get_batch_state( $batch );
+    //print "<pre>batch_render( $id_batch ) - state B = $state</pre>";
+    
+    
     
     //------------------------------------------------------------
     //      State
     
+    //      update 2013/09/24 14:02:29 - need to handle lock stealing (added state 'reset')
     $state = get_batch_state( $batch );
-    if ( empty( $state ) || $state == 'over' )
+    if ( empty( $state ) || $state == 'over' || $state == 'reset' )
     {
         $state = 'init';
         $state_is_set = set_batch_state( $batch, $state );
@@ -124,11 +139,43 @@ function batch_render( $id_batch, $options = array())
             return alert( "Could not set batch <code>$id_batch</code> back to state 'init' to start it over.", 'error' );
     }
     
+    //      debug
+    //$state = get_batch_state( $batch );
+    //print "<pre>batch_render( $id_batch ) - state C = $state</pre>";
+    
+    //      Failsafe : potential infinite recursion when failure to set next state
+    static $previous_state;
+    static $previous_state_count = 0;
+    if ( empty( $previous_state ))
+        $previous_state = $state;
+    else if ( $previous_state == $state )
+    {
+        $previous_state_count++;
+        if ( $previous_state_count > 2 )
+        {
+            $html .= alert( "Potential infinite recursion averted", 'error' );
+            $html .= "<h2>Details</h2>";
+            //$html .= "<p>Count : $previous_state_count </p>";
+            $html .= "<p>State : $previous_state </p>";
+            $html .= "<p>StackTrace : </p>";
+            $html .= kpr( debug_backtrace());
+            return $html;
+        }
+    }
+    
+    //      debug
+    //$state = get_batch_state( $batch );
+    //print "<pre>batch_render( $id_batch ) - state D = $state</pre>";
+    
     //      Contextual rendering
     //      @see engine/core/api_batch_phases.inc
     $phase_state_handler = 'batch_'. $state .'_phase';
     if ( function_exists( $phase_state_handler ))
         $html .= $phase_state_handler( $batch );
+    
+    //      debug
+    //$state = get_batch_state( $batch );
+    //print "<pre>batch_render( $id_batch ) - state E = $state</pre>";
     
     //      Special state : the LAST step must only be set AFTER the above "dispatch" of state-dependent processes
     if ( $state == 'done' )
@@ -315,9 +362,13 @@ function batch_is_locked_by_someone_else( $id_batch, $options = array())
         return false;
     
     //      Otherwise check batch state : a batch is only considered 'free' when state is either 'over' or empty
+    //      update 2013/09/24 14:05:11 - need to handle batch stealing state
     $state = get_batch_state( $id_batch );
-    if ( empty( $state ) || $state == 'over' )
+    if ( empty( $state ) || $state == 'over' || $state == 'reset' )
         return false;
+    
+    //      debug
+    print "<pre>batch_is_locked_by_someone_else() - state = $state</pre>";
     
     return true;
 }

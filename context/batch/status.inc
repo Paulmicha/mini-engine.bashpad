@@ -21,14 +21,14 @@ $content .= render_pager_query_table( "SELECT * FROM `thread` WHERE `state` IN (
     ),
     'table_options' => array(
         'header' => array(
-            "ID Thread",
+            "IDs",
             "Time",
             "Batch",
             "Tags",
             "Steps",
-            "Servers",
-            "Environments",
+            "Servers & Environments",
             "State",
+            "Owner",
         ),
     ),
 ));
@@ -64,11 +64,18 @@ function _preprocess_archive( $results )
                     "</code>";
             }
         
+        //      Prepare 'owner' col.
+        $launched_by = cache_get( "batch_lock_". $r[ 'id_batch' ]);
+        if ( empty( $launched_by ))
+            $launched_by = "someone else.";
+        else
+            $launched_by = " <code> $launched_by </code> ";
+        
         //      Assemble columns
         $lines_arr[] = array(
             
             //      ID Thread
-            $r[ 'id_thread' ],
+            "batch : <code>". $r[ 'id_batch' ] ."</code><br>thread : <code>". $r[ 'id_thread' ] ."</code>",
             
             //      Time
             datestamp_format( $r[ 'datestamp' ]),
@@ -82,14 +89,14 @@ function _preprocess_archive( $results )
             //      Steps
             count( $r[ 'data' ][ 'execution_steps_config' ]),
             
-            //      Servers
-            join( ', ', $servers_arr ),
-            
-            //      Environments
-            join( ', ', $environments_arr ),
+            //      Servers & Environments
+            join( ', ', $servers_arr ) .'; '. join( ', ', $environments_arr ),
             
             //      State
             $r[ 'state' ],
+            
+            //      Owner
+            $launched_by,
         );
     }
     
