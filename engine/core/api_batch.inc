@@ -31,8 +31,8 @@ function batch_render( $id_batch, $options = array())
     $batch = get_batch( $id_batch );
     
     //      debug
-    $state = get_batch_state( $batch );
-    print "<pre>batch_render( $id_batch ) - state A = $state</pre>";
+    //$state = get_batch_state( $batch );
+    //print "<pre>batch_render( $id_batch ) - state A = $state</pre>";
     
     //      Failsafe : Batch must have steps
     if ( empty( $batch[ 'steps' ]))
@@ -94,8 +94,6 @@ function batch_render( $id_batch, $options = array())
     //------------------------------------------------------------
     //      Thread
     
-    //      Side note : the word "thread" is used for its meaning of "tying pieces together"
-    //      @see http://www.wordreference.com/enfr/thread
     $thread_over_check = '';
     if ( !empty( $batch[ 'id_thread' ]))
         $thread_over_check = db_popfetch( "SELECT `state` FROM `thread` WHERE `id_thread` = ?", array( $batch[ 'id_thread' ]));
@@ -134,6 +132,12 @@ function batch_render( $id_batch, $options = array())
         $state = 'init';
         $state_is_set = set_batch_state( $batch, $state );
         
+        //      debug
+        //$state = get_batch_state( $batch );
+        //print "<pre>batch_render( $id_batch ) - state C = $state</pre>";
+        //print kpr( $batch, 1 );
+        //print "<pre>state_is_set = $state_is_set</pre>";
+        
         //      Failsafe
         if ( !$state_is_set )
             return alert( "Could not set batch <code>$id_batch</code> back to state 'init' to start it over.", 'error' );
@@ -141,7 +145,12 @@ function batch_render( $id_batch, $options = array())
     
     //      debug
     //$state = get_batch_state( $batch );
-    //print "<pre>batch_render( $id_batch ) - state C = $state</pre>";
+    //print "<pre>batch_render( $id_batch ) - state D = $state</pre>";
+    
+    //      Failsafe - at this point, we must have a state
+    $state = get_batch_state( $batch );
+    if ( empty( $state ))
+        return alert( "Empty state : cannot happen at this point. That's all I know.", 'error' );
     
     //      Failsafe : potential infinite recursion when failure to set next state
     static $previous_state;
@@ -155,7 +164,6 @@ function batch_render( $id_batch, $options = array())
         {
             $html .= alert( "Potential infinite recursion averted", 'error' );
             $html .= "<h2>Details</h2>";
-            //$html .= "<p>Count : $previous_state_count </p>";
             $html .= "<p>State : $previous_state </p>";
             $html .= "<p>StackTrace : </p>";
             $html .= kpr( debug_backtrace());
@@ -165,7 +173,7 @@ function batch_render( $id_batch, $options = array())
     
     //      debug
     //$state = get_batch_state( $batch );
-    //print "<pre>batch_render( $id_batch ) - state D = $state</pre>";
+    //print "<pre>batch_render( $id_batch ) - state E = $state</pre>";
     
     //      Contextual rendering
     //      @see engine/core/api_batch_phases.inc
@@ -175,7 +183,7 @@ function batch_render( $id_batch, $options = array())
     
     //      debug
     //$state = get_batch_state( $batch );
-    //print "<pre>batch_render( $id_batch ) - state E = $state</pre>";
+    //print "<pre>batch_render( $id_batch ) - state F = $state</pre>";
     
     //      Special state : the LAST step must only be set AFTER the above "dispatch" of state-dependent processes
     if ( $state == 'done' )
