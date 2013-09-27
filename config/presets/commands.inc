@@ -21,7 +21,8 @@ if ( !empty( $files_arr ))
         $command[ 'datestamp' ] = datestamp();
         
         //      Serialize data
-        $command[ 'data' ] = safe_serialize( $command[ 'data' ]);
+        if ( !empty( $command[ 'data' ]))
+            $command[ 'data' ] = safe_serialize( $command[ 'data' ]);
         
         //      Prepare tags (if any)
         //      -> need to unset the key 'tags' for DB insertion,

@@ -404,7 +404,7 @@ function insert_or_update( $table, $values, $options = array())
     
     //      Option 'unique_field_value' is optional if it exists inside 'values'
     if ( empty( $unique_field_value ))
-        $unique_field_value = $values[ $unique_field_name ];
+        $unique_field_value = @$values[ $unique_field_name ];
     
     //      Can't continue without a unique field value
     //      unless we have a custom duplicate check query
@@ -435,11 +435,14 @@ function insert_or_update( $table, $values, $options = array())
     //      Update
     if ( !empty( $check ))
     {
-        $id = $check[ 0 ][ $primary_key_name ];
-        return db_update( $table, $values, array(
-            'id' => $id,
-            'primary_key_name' => $primary_key_name,
-        ));
+        $id = @$check[ 0 ][ $primary_key_name ];
+        if ( !empty( $id ))
+        {
+            return db_update( $table, $values, array(
+                'id' => $id,
+                'primary_key_name' => $primary_key_name,
+            ));
+        }
     }
     
     //      Insert
@@ -478,7 +481,7 @@ function insert_if_no_existing_record( $table, $values, $options = array())
     
     //      Option 'unique_field_value' is optional if it exists inside 'values'
     if ( empty( $unique_field_value ))
-        $unique_field_value = $values[ $unique_field_name ];
+        $unique_field_value = @$values[ $unique_field_name ];
     
     //      Can't continue without a unique field value
     //      unless we have a custom duplicate check query
@@ -507,7 +510,7 @@ function insert_if_no_existing_record( $table, $values, $options = array())
     //print '<pre>check :</pre>';
     //krumo( $check );
     
-    if ( !empty( $check ))
+    if ( !empty( $check[ 0 ][ $primary_key_name ]))
         $id = $check[ 0 ][ $primary_key_name ];
     else
         $id = db_insert( $table, $values );

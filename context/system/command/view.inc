@@ -58,7 +58,7 @@ if ( !empty( $command_data[ 'data' ]))
                 '<code>['. $e[ 'namespace' ] .']</code>',
                 $mapping_cfg[ $e[ 'configuration' ]],
                 $e[ 'default_value' ],
-                $e[ 'options' ],
+                @$e[ 'options' ],
             );
         }
         
