@@ -30,7 +30,7 @@ function arg( $i )
                 return $request_arr[ $i ];
             
             default:
-                return $request_arr[ $i ];
+                return @$request_arr[ $i ];
         }
     }
     return null;
@@ -55,7 +55,7 @@ function url( $path, $options = array())
     if ( $options[ 'absolute' ])
     {
         $url = 'http';
-        if ( $_SERVER[ "HTTPS" ] == "on" ) {
+        if ( @$_SERVER[ "HTTPS" ] == "on" ) {
             $url .= "s";
         }
         $url .= "://";
@@ -124,7 +124,7 @@ function get_current_url( $options = array())
     if ( $options[ 'absolute' ])
     {
         $url = 'http';
-        if ( $_SERVER[ "HTTPS" ] == "on" ) {
+        if ( @$_SERVER[ "HTTPS" ] == "on" ) {
             $url .= "s";
         }
         $url .= "://";
@@ -154,7 +154,7 @@ function get_current_path( $options = array())
         return base_path();
     
     //      The rest
-    if ( $options[ 'with_base_path' ])
+    if ( @$options[ 'with_base_path' ])
         return url( $_REQUEST[ 'q' ]);
     else
         return $_REQUEST[ 'q' ];

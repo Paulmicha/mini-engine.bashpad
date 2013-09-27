@@ -14,8 +14,8 @@
  */
 
 //      Same script to handle all sorts of operations
-$sql_operation = check_plain( arg( 2 ));
-$head_page_title = "SQL operations";
+$setup_operation = check_plain( arg( 2 ));
+$head_page_title = "Setup operations";
 
 //      Whitelist of available operations
 $operations_whitelist = array(
@@ -24,7 +24,7 @@ $operations_whitelist = array(
     'load-configuration',
 );
 
-if ( in_array( $sql_operation, $operations_whitelist ))
+if ( in_array( $setup_operation, $operations_whitelist ))
 {
     
     
@@ -35,11 +35,11 @@ if ( in_array( $sql_operation, $operations_whitelist ))
     if ( empty( $_GET[ 'yes' ]))
     {
         //      Description
-        switch( $sql_operation )
+        switch( $setup_operation )
         {
             case 'install' :
                 $head_page_title = "<i class='icon-download-alt'></i> Installation";
-                $content .= "<p>Queries inside files named <code>install.sql</code> in <code>engine/core/sql</code> and <code>context/sql</code> will be executed. </p>";
+                $content .= "<p>Queries inside files named <code>install.sql</code> in <code>config/sql</code> will be executed. </p>";
                 $content .= "<p><i class='icon-long-arrow-right icon-large'></i> Core SQL Tables will be created (if they don't exist yet).</p>";
                 $content .= "<p>";
                 $content .= l( "<i class='icon-download-alt'></i>&nbsp;Yes, do it", get_current_path() . "?yes=do-it", array( 'attributes' => array( 'class' => 'btn btn-large btn-primary' )));
@@ -48,7 +48,7 @@ if ( in_array( $sql_operation, $operations_whitelist ))
             
             case 'uninstall' :
                 $head_page_title = "<i class='icon-trash'></i> Drop DB tables";
-                $content .= "<p>Queries inside files named <code>uninstall.sql</code> in <code>engine/core/sql</code> and <code>context/sql</code> will be executed. </p>";
+                $content .= "<p>Queries inside files named <code>uninstall.sql</code> in <code>config/sql</code> will be executed. </p>";
                 $content .= "<p><i class='icon-long-arrow-right icon-large'></i> Core SQL Tables will all be <strong>DROPPED</strong>.</p>";
                 $content .= "<p>";
                 $content .= l( "<i class='icon-trash'></i>&nbsp;Yes, do it", get_current_path() . "?yes=do-it", array( 'attributes' => array( 'class' => 'btn btn-large btn-danger' )));
@@ -57,8 +57,8 @@ if ( in_array( $sql_operation, $operations_whitelist ))
             
             case 'load-configuration' :
                 $head_page_title = "<i class='icon-upload'></i> Load configuration from files";
-                $content .= "<p>All <code>*.inc</code> files in <code>engine/core/config</code> and <code>context/config</code> will be included.<br>They should handle operations such as loading some default configuration into the database.</p>";
-                $content .= "<p>Note : all your custom operations must not make duplicates, so that they can be launched again without compromizing existing data.</p>";
+                $content .= "<p>All <code>*.inc</code> files in <code>config/presets</code> will be included.<br>They should handle operations such as loading some default configuration into the database.</p>";
+                $content .= "<p>Note : all these custom operations must not produce duplicates, so that they can be launched again without compromizing existing data.</p>";
                 $content .= "<p><i class='icon-long-arrow-right icon-large'></i> Core default <strong>tags</strong> and <strong>commands</strong> will be created.</p>";
                 $content .= "<p>";
                 $content .= l( "<i class='icon-upload'></i>&nbsp;Yes, do it", get_current_path() . "?yes=do-it", array( 'attributes' => array( 'class' => 'btn btn-large btn-primary' )));
@@ -75,11 +75,11 @@ if ( in_array( $sql_operation, $operations_whitelist ))
     
     elseif ( $_GET[ 'yes' ] == 'do-it' )
     {
-        switch( $sql_operation )
+        switch( $setup_operation )
         {
             case 'load-configuration' :
                 $head_page_title = "<i class='icon-upload'></i> Loading configuration";
-                $files_arr = list_files( array( 'engine/core/config', 'context/config' ), array( 'mask' => "`.+\.inc`i" ));
+                $files_arr = list_files( 'config/presets', array( 'mask' => "`.+\.inc`i" ));
                 
                 if ( !empty( $files_arr ))
                 {
@@ -98,10 +98,10 @@ if ( in_array( $sql_operation, $operations_whitelist ))
             
             case 'install' :
             case 'uninstall' :
-                $head_page_title = ucfirst( $sql_operation ) ." SQL tables";
+                $head_page_title = ucfirst( $setup_operation ) ." SQL tables";
                 
-                //      Load all SQL files that are named like "$sql_operation.sql"
-                $files_arr = list_files( array( 'engine/core/sql', 'context/sql' ), array( 'mask' => "`^$sql_operation\.sql`i" ));
+                //      Load all SQL files that are named like "$setup_operation.sql"
+                $files_arr = list_files( 'config/sql', array( 'mask' => "`^$setup_operation\.sql`i" ));
                 if ( !empty( $files_arr ))
                 {
                     foreach( $files_arr as $f )

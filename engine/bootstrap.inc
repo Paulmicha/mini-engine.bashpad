@@ -6,7 +6,7 @@
  */
 
 //      Setup
-include 'settings.inc';
+include 'config/settings.inc';
 
 //      Engine
 include 'vendors.inc';

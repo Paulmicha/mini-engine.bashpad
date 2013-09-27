@@ -111,8 +111,9 @@ function view_db_table( $table, $options = array())
     $field_list = array();
     if ( empty( $fields ))
         $fields = db_table_get_columns( $table );
-    foreach( $fields as $i => $field )
-        $field_list[ $i ] = $field[ 'Field' ];
+    if ( !empty( $fields ))
+        foreach( $fields as $i => $field )
+            $field_list[ $i ] = $field[ 'Field' ];
     
     //      Query
     $table = check_plain( $table );

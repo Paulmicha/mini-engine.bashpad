@@ -74,7 +74,7 @@ str_clean( "Accents éàçùÉÀÇÙ%^$£€î test", '_' );
 EOT;
 $result_html = 'Result :<br />';
 $result_html .= '<code>';
-$result_html .= str_clean( "Accents éàçùÉÀÇÙ%^$£€î test", '_' );
+$result_html .= str_clean( 'Accents éàçùÉÀÇÙ%^$£€î test', '_' );
 $result_html .= '</code>';
 $content .= grid( array(
     array( view_source( $code ), $result_html ),

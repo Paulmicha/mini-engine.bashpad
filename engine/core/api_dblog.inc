@@ -23,7 +23,6 @@ function linked_dblog( $id, $table, $message, $options = array())
 
 /**
  *  DBLog
- *  @see http://api.drupal.org/api/drupal/includes%21bootstrap.inc/function/dblog/7
  */
 function dblog( $type, $message, $options = array())
 {
@@ -36,45 +35,36 @@ function dblog( $type, $message, $options = array())
     );
     extract( $options );
     
-    if ( !$in_error_state )
-    {
-        $in_error_state = TRUE;
+    //      Prepare the fields to be logged
+    $log_entry = array(
+        'type' => $type,
+        'message' => $message,
+        'severity' => $severity,
+        'request_uri' => request_uri(),
+        'referer' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '',
+        'hostname' => ip_address(),
         
-        //      Prepare the fields to be logged
-        $log_entry = array(
-            'type' => $type,
-            'message' => $message,
-            'severity' => $severity,
-            'user' => $user,
-            'uid' => $user_uid,
-            'request_uri' => request_uri(),
-            'referer' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '',
-            'hostname' => ip_address(),
-            
-            //      Request time isn't accurate for long processes, use time() instead.
-            'timestamp' => time(),
-            
-            //      Custom mini-engine format
-            'datestamp' => datestamp(),
-        );
+        //      Request time isn't accurate for long processes, use time() instead.
+        'timestamp' => time(),
         
-        if ( !empty( $data ))
-            $log_entry[ 'data' ] = $data;
-        
-        return db_insert( 'dblog', array(
-            'type' => substr($log_entry['type'], 0, 64),
-            'message' => $log_entry['message'],
-            'data' => safe_serialize($log_entry['data']),
-            'severity' => $log_entry['severity'],
-            'location' => $log_entry['request_uri'],
-            'referer' => $log_entry['referer'],
-            'hostname' => substr($log_entry['hostname'], 0, 128),
-            'timestamp' => $log_entry['timestamp'],
-            'datestamp' => $log_entry['datestamp'],
-        ));
-    }
+        //      Custom mini-engine format
+        'datestamp' => datestamp(),
+    );
     
-    return false;
+    if ( !empty( $data ))
+        $log_entry[ 'data' ] = $data;
+    
+    return db_insert( 'dblog', array(
+        'type' => substr($log_entry['type'], 0, 64),
+        'message' => $log_entry['message'],
+        'data' => @safe_serialize($log_entry['data']),
+        'severity' => $log_entry['severity'],
+        'location' => $log_entry['request_uri'],
+        'referer' => $log_entry['referer'],
+        'hostname' => substr($log_entry['hostname'], 0, 128),
+        'timestamp' => $log_entry['timestamp'],
+        'datestamp' => $log_entry['datestamp'],
+    ));
 }
 
 

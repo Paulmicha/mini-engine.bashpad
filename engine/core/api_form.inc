@@ -673,7 +673,7 @@ function select_raw( $label, $options_arr, $options = array())
     
     //      Multiselects must have their 'name' with brackets
     //      Note : no need to worry about strpos() operator for this condition (it won't ever return 0)
-    if ( $options[ 'multiple' ] == 'multiple' && !strpos( $options[ 'name' ], '[]' ))
+    if ( @$options[ 'multiple' ] == 'multiple' && !strpos( $options[ 'name' ], '[]' ))
         $options[ 'name' ] .= '[]';
     
     //      Options html
@@ -941,8 +941,8 @@ function input_text( $label, $options = array())
         $input = input( $input_attributes );
     else
         $input = input_text_pended( array(
-            'append' => $append,
-            'prepend' => $prepend,
+            'append' => @$append,
+            'prepend' => @$prepend,
             'input_attributes' => array( 'class' => '' ) + $input_attributes,
         ));
     

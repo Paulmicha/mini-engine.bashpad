@@ -408,14 +408,14 @@ function insert_or_update( $table, $values, $options = array())
     
     //      Can't continue without a unique field value
     //      unless we have a custom duplicate check query
-    if ( !$detect_duplicate_query && empty( $values[ $unique_field_name ]))
+    if ( !@$detect_duplicate_query && empty( $values[ $unique_field_name ]))
         return false;
     
     $unique_field_value = addcslashes( $unique_field_value, '"' );
     
     //      Looking for existing records
     //      Make the query to detect existing entries overridable
-    if ( !$detect_duplicate_query )
+    if ( !@$detect_duplicate_query )
     {
         if ( is_numeric( $unique_field_value ))
             $check = db_fetchall( "SELECT `$primary_key_name` FROM `$table` WHERE `$unique_field_name` = $unique_field_value" );
@@ -482,14 +482,14 @@ function insert_if_no_existing_record( $table, $values, $options = array())
     
     //      Can't continue without a unique field value
     //      unless we have a custom duplicate check query
-    if ( !$detect_duplicate_query && empty( $values[ $unique_field_name ]))
+    if ( !@$detect_duplicate_query && empty( $values[ $unique_field_name ]))
         return false;
     
     $unique_field_value = addcslashes( $unique_field_value, '"' );
     
     //      Looking for existing records
     //      Make the query to detect existing entries overridable
-    if ( !$detect_duplicate_query )
+    if ( !@$detect_duplicate_query )
     {
         if ( is_numeric( $unique_field_value ))
             $check = db_fetchall( "SELECT `$primary_key_name` FROM `$table` WHERE `$unique_field_name` = $unique_field_value" );

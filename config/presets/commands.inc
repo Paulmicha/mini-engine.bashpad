@@ -6,9 +6,9 @@
  */
 
 //      Set default commands
-//      Fetch all php files in 'engine/core/config/bash'
+//      Fetch all php files in 'config/bash'
 //      They must contain a single variable $command containing an array of bash commands data
-$files_arr = list_files( 'engine/core/config/bash', array( 'mask' => "`.+\.php`i" ));
+$files_arr = list_files( 'config/presets/commands', array( 'mask' => "`.+\.php`i" ));
 if ( !empty( $files_arr ))
 {
     foreach( $files_arr as $f )
@@ -68,7 +68,7 @@ if ( !empty( $files_arr ))
     }
 }
 else
-    $content .= alert( "No commands files were found in <code>engine/core/config/bash</code> -> cannot generate default commands.", 'warning' );
+    $content .= alert( "No commands files were found in <code>config/bash</code> -> cannot generate default commands.", 'warning' );
 
 //      Feedback
 $content .= "<hr>";

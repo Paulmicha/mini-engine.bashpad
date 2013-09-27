@@ -3,8 +3,8 @@
 $command = array(
     
     'title' => "Symfony2 install",
-    'description' => "Symfony2 install",
-    'command' => "php composer.phar create-project symfony/framework-standard-edition [folder:project root] [version]",
+    'description' => "With composer.",
+    'command' => "composer create-project symfony/framework-standard-edition [folder:project root] [version]",
     'tags' => array( "Symfony", "Initialization" ),
     
     'data' => array(

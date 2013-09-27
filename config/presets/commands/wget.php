@@ -3,7 +3,7 @@
 $command = array(
     
     'title' => "Wget",
-    'description' => "Use absolute paths for ",
+    'description' => "Use absolute paths for dirs",
     'command' => "cd [destination_folder] && wget [source] [wget_options]",
     
     'data' => array(
