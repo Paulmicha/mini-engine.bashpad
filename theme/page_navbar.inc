@@ -140,17 +140,18 @@
                     </ul>
                 </div>
                 
+                <ul class="nav pull-right">
+                    <li><small>You are <code><?php print ip_address(); ?></code></small></li>
                 <?php
                 //      Utility reload link when data has been posted
                 //      (and we don't want to re-post, which happens when we hit brower refresh)
                 if ( !empty( $_POST )) {
                 ?>
-                <ul class="nav pull-right">
-                    <li><?php print reload_link( '<small>Recharger sans re-Poster</small>' ); ?></li>
-                </ul>
+                    <li><?php print reload_link( '<small>Reload without re-posting</small>' ); ?></li>
                 <?php
                 }
                 ?>
+                </ul>
                 
             </div>
         </div>

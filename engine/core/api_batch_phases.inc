@@ -30,7 +30,23 @@ function batch_init_phase( $batch )
     //          d) Preparing commands configuration form submission data for execution (store into 'thread' data)
     $html = '';
     $id_batch = $batch[ 'id_batch' ];
-
+    
+    //      Cancel must also be handled at this phase
+    if ( !empty( $_GET[ 'cancel-batch' ]) && $_GET[ 'cancel-batch' ] == $id_batch )
+    {
+        $state_is_set = set_batch_state( $batch, 'over' );
+        if ( $state_is_set )
+        {
+            //      Release Lock
+            release_batch_lock( $id_batch );
+            
+            //      Feedback
+            return alert( "Batch <code>$id_batch</code> successfully cancelled.", 'success' );
+        }
+        else
+            return alert( "Could not set batch <code>$id_batch</code> in state 'over' when trying to cancel batch <code>$id_batch</code>", 'error' );
+    }
+    
     //      Check if we submitted any data from commands configuration
     //      -> Prepare commands configuration form submission data for execution (store into 'thread' data),
     //      then go straight to recap (validation phase)
@@ -101,7 +117,7 @@ function batch_init_phase( $batch )
                         'class' => 'btn btn-large btn-primary',
                     ))
                     .'&nbsp;&nbsp;&nbsp;&nbsp;'.
-                    l( "Cancel", 'batch', array( 'attributes' => array( 'class' => 'btn btn-small btn-danger' )))
+                    l( "Cancel", get_current_path() . "?cancel-batch=$id_batch", array( 'attributes' => array( 'class' => 'btn btn-small btn-danger' )))
             ),
         ));
     }
