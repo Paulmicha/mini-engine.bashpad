@@ -483,7 +483,7 @@ else if ( is_numeric( $arg3 ))
                 
                 //      We reuse the 'creation' submit handler -> send 'id_entity' as param
                 //      to differenciate usage contexts
-                'submit_handler_params' => array( 'id_entity' => $entity_data[ 'id_entity' ]),
+                'submit_handler_params' => array( 'id_entity' => @$entity_data[ 'id_entity' ]),
                 
                 'form_attributes' => array(
                     'actions' => input( array(

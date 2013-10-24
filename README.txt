@@ -1,23 +1,17 @@
 
 Mini-engine
-(Here be dragons)
+(unstable)
 
-This is a legacy minimalist RAD Php application,
-which was designed exclusively to execute small batch processes.
+This project is a minimalist small Bash commands store and 'launch pad'.
 
-It still has its uses : namely to store & execute Bash commands (with tokens),
-on a configurable list of servers and environments.
+It's currently built on top of a legacy minimalist RAD Php app from scratch,
+which was originally designed for automating small repetitive tasks (such as data preparation for migrations).
+It should be rebuild in modern PHP - for ex. using Symfony 2 components, but its current state can be seen as
+a museum of Php snippets put together (thus, here be dragons).
 
-I've used it over the years for repetitive tasks surrounding various PHP projects.
-It was never meant to be Object-Oriented, and it can be seen as a "good" source of antipatterns - if there is such a thing,
-but it could be an interesting exercise to rebuild it in "modern" PHP, using things like Symfony 2 or Laravel for example.
-
-So basically, this is a "museum" of various Php snippets put together.
-
-WARNING : this is not meant to be publicly accessible over the web, it's supposed to be run on LAN,
-because it can connect to other servers through SSH in order to execute Bash commands.
-That's why there's an access restriction by default in "index.php" based on IP address,
-which only allows IP address starting with "192.168".
+WARNING : this is probably full of massive security breaches, as it was never meant to be publicly accessible over the web.
+The reason is simply because it can connect to other servers through SSH in order to execute Bash commands, so I'd never run it 'outdoors'.
+That's why there's an access restriction by default in "index.php" based on IP address, which only allows IP address starting with "192.168".
 
 ---
 
