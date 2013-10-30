@@ -8,13 +8,13 @@
 print grid( array(
     array(
         
-        "<h1>$head_page_title</h1>
-<p>This project is a minimalist small Bash commands store and 'launch pad'.</p>
-<p>It's currently built on top of a legacy minimalist RAD Php app from scratch,
-which was originally designed for automating small repetitive tasks (such as data preparation for migrations).<br>
-It should be rebuild in modern PHP - for ex. using Symfony 2 components, but its current state can be seen as a museum of Php snippets put together (<em>Here be dragons</em>).</p>
+        "<h1>About</h1>
+<p>This project is a minimalist Bash commands <strong><em>store</em></strong> and <strong><em>launch pad</em></strong>.</p>
+<p>It's currently built on top of a custom Php app from scratch,
+which was originally designed for automating repetitive tasks (such as data preparation for migrations).<br>
+It should be rebuild in modern PHP - for ex. using Symfony 2 components, but its current state can be seen as a <em>museum</em> of Php snippets put together (hence <em>Here be dragons</em>).</p>
 <p><strong><i class='icon-warning-sign'></i> WARNING</strong> : this is probably full of massive security breaches, as it was never meant to be publicly accessible over the web.<br>
-The reason is simply because it can connect to other servers through SSH in order to execute Bash commands, so I'd never run it 'outdoors'.</p>",
+The reason is mainly because the underlying old code base wasn't built for it, and because it can connect to other servers through SSH in order to execute Bash commands... In short, <strong>NEVER run this 'outdoors'</strong>.</p>",
         
         "<h2>Quick start</h2>
 <ol>

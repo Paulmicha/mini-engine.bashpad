@@ -2,16 +2,13 @@
 Mini-engine
 (unstable)
 
-This project is a minimalist small Bash commands store and 'launch pad'.
+This project is a minimalist Bash commands store and launch pad.
 
-It's currently built on top of a legacy minimalist RAD Php app from scratch,
-which was originally designed for automating small repetitive tasks (such as data preparation for migrations).
-It should be rebuild in modern PHP - for ex. using Symfony 2 components, but its current state can be seen as
-a museum of Php snippets put together (thus, here be dragons).
+It's currently built on top of a custom Php app from scratch, which was originally designed for automating repetitive tasks (such as data preparation for migrations).
+It should be rebuild in modern PHP - for ex. using Symfony 2 components, but its current state can be seen as a museum of Php snippets put together (hence Here be dragons).
 
-WARNING : this is probably full of massive security breaches, as it was never meant to be publicly accessible over the web.
-The reason is simply because it can connect to other servers through SSH in order to execute Bash commands, so I'd never run it 'outdoors'.
-That's why there's an access restriction by default in "index.php" based on IP address, which only allows IP address starting with "192.168".
+ WARNING : this is probably full of massive security breaches, as it was never meant to be publicly accessible over the web.
+The reason is mainly because the underlying old code base wasn't built for it, and because it can connect to other servers through SSH in order to execute Bash commands... In short, NEVER run this 'outdoors'.
 
 ---
 
