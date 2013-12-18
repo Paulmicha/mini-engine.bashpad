@@ -558,7 +558,7 @@ function guid( $input, $entity_type, $fields_to_concat_arr = array(), $separator
     
     //      Polymorphism : argument can be array or an id
     if ( is_numeric( $input )) {
-        $entity_data_arr = db_fetch( 'SELECT * FROM '. $entity_type )
+        $entity_data_arr = db_fetch( 'SELECT * FROM '. $entity_type );
     }
     else if ( is_array( $input )) {
         $entity_data_arr = $input;
