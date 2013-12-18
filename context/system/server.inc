@@ -326,6 +326,7 @@ function _environment_form_validate( &$submit_handler_params )
         //      Test if existing
         if ( $submit_handler_params[ 'is_new' ])
         {
+            //      @todo 2013/12/18 22:10:57 - add "per server" in check
             $existing_test = db_fetch( 'SELECT * FROM environment WHERE `namespace` LIKE ?', array( $posted[ 'namespace' ]));
             if ( !empty( $existing_test[ 'hostname' ]))
                 $return[ 'errors' ] = alert( "It seems this <code>namespace</code> is already taken on that server : ". $existing_test[ 'hostname' ], 'warning' );
@@ -382,7 +383,7 @@ function _environment_form_validate( &$submit_handler_params )
                 {
                     foreach( $multivalues as $group => $value )
                     {
-                        $folder_num = intval( str_replace( 'multigroup-', '', $group ));
+                        $folder_num = trim( str_replace( 'multigroup-', '', $group ));
                         if ( !empty( $value ))
                         {
                             //      Values for 'tag' DB table (for folders)

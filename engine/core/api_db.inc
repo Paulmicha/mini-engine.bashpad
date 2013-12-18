@@ -538,3 +538,46 @@ function mandatory_values_check( $values, $mandatory_fields )
 }
 
 
+
+/**
+ *  GUID
+ *  
+ *  Returns a string, representing a unique identifier for this entity type
+ *  (NOT dependant on SQL row id)
+ */
+function guid( $input, $entity_type, $fields_to_concat_arr = array(), $separator = ',' )
+{
+    $guid = '';
+    $entity_data_arr = array();
+    $parts_arr = array();
+    
+    //      Failsafe
+    if ( empty( $input ) || empty( $entity_type )) {
+        return $guid;
+    }
+    
+    //      Polymorphism : argument can be array or an id
+    if ( is_numeric( $input )) {
+        $entity_data_arr = db_fetch( 'SELECT * FROM '. $entity_type )
+    }
+    else if ( is_array( $input )) {
+        $entity_data_arr = $input;
+    }
+    
+    //      Begin GUID generation
+    if ( !empty( $entity_data_arr ) && !empty( $fields_to_concat_arr ))
+    {
+        foreach( $fields_to_concat_arr as $field )
+        {
+            if ( !empty( $entity_data_arr[ $field ])) {
+                $parts_arr[] = trim( $entity_data_arr[ $field ]);
+            }
+        }
+        
+        $guid = join( $separator, $parts_arr );
+    }
+    
+    return $guid;
+}
+
+

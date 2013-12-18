@@ -3,12 +3,14 @@
 /**
  *  @file
  *  Default commands
+ *  
+ *  @todo 2013/12/18 23:22:46 - new folder structure for @evol 2013/12/18 23:11:56 (import / export feature)
  */
 
 //      Set default commands
 //      Fetch all php files in 'config/bash'
 //      They must contain a single variable $command containing an array of bash commands data
-$files_arr = list_files( 'config/presets/commands', array( 'mask' => "`.+\.php`i" ));
+$files_arr = list_files( 'config/presets/default/commands', array( 'mask' => "`.+\.php`i" ));
 if ( !empty( $files_arr ))
 {
     foreach( $files_arr as $f )

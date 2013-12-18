@@ -39,7 +39,7 @@ if ( in_array( $setup_operation, $operations_whitelist ))
         {
             case 'install' :
                 $head_page_title = "<i class='icon-download-alt'></i> Installation";
-                $content .= "<p>Queries inside files named <code>install.sql</code> in <code>config/sql</code> will be executed. </p>";
+                $content .= "<p>Queries inside files named <code>install.sql</code> in <code>config/schema</code> will be executed. </p>";
                 $content .= "<p><i class='icon-long-arrow-right icon-large'></i> Core SQL Tables will be created (if they don't exist yet).</p>";
                 $content .= "<p>";
                 $content .= l( "<i class='icon-download-alt'></i>&nbsp;Yes, do it", get_current_path() . "?yes=do-it", array( 'attributes' => array( 'class' => 'btn btn-large btn-primary' )));
@@ -48,7 +48,7 @@ if ( in_array( $setup_operation, $operations_whitelist ))
             
             case 'uninstall' :
                 $head_page_title = "<i class='icon-trash'></i> Drop DB tables";
-                $content .= "<p>Queries inside files named <code>uninstall.sql</code> in <code>config/sql</code> will be executed. </p>";
+                $content .= "<p>Queries inside files named <code>uninstall.sql</code> in <code>config/schema</code> will be executed. </p>";
                 $content .= "<p><i class='icon-long-arrow-right icon-large'></i> Core SQL Tables will all be <strong>DROPPED</strong>.</p>";
                 $content .= "<p>";
                 $content .= l( "<i class='icon-trash'></i>&nbsp;Yes, do it", get_current_path() . "?yes=do-it", array( 'attributes' => array( 'class' => 'btn btn-large btn-danger' )));
@@ -56,13 +56,25 @@ if ( in_array( $setup_operation, $operations_whitelist ))
                 break;
             
             case 'load-configuration' :
+                
+                //      @evol 2013/12/18 23:11:56 - I'd like to take the time for a proper import / export feature :
+                //          - would require write access in 'config/presets/custom'
+                //          - path naming convention : 'config/presets/custom/2013/12/18/001/ENTITY_TYPE.php' (for example)
+                //          - [in progress] streamline the config load process with GUIDs
+                //          - [planned] display a form to select which config to restore
+                //          - [planned] mini ORM ("natural" consequence of GUIDs + exportability)
+                
                 $head_page_title = "<i class='icon-upload'></i> Load configuration from files";
                 $content .= "<p>All <code>*.inc</code> files in <code>config/presets</code> will be included.<br>They should handle operations such as loading some default configuration into the database.</p>";
                 $content .= "<p>Note : all these custom operations must not produce duplicates, so that they can be launched again without compromizing existing data.</p>";
+                
                 $content .= "<p><i class='icon-long-arrow-right icon-large'></i> Core default <strong>tags</strong> and <strong>commands</strong> will be created.</p>";
+                $content .= "<p><i class='icon-long-arrow-right icon-large'></i> Sample <strong>server</strong> with a sample <strong>environment</strong> will be created.</p>";
+                
                 $content .= "<p>";
                 $content .= l( "<i class='icon-upload'></i>&nbsp;Yes, do it", get_current_path() . "?yes=do-it", array( 'attributes' => array( 'class' => 'btn btn-large btn-primary' )));
                 $content .= "</p>";
+                
                 break;
         }
     }
@@ -101,7 +113,7 @@ if ( in_array( $setup_operation, $operations_whitelist ))
                 $head_page_title = ucfirst( $setup_operation ) ." SQL tables";
                 
                 //      Load all SQL files that are named like "$setup_operation.sql"
-                $files_arr = list_files( 'config/sql', array( 'mask' => "`^$setup_operation\.sql`i" ));
+                $files_arr = list_files( 'config/schema', array( 'mask' => "`^$setup_operation\.sql`i" ));
                 if ( !empty( $files_arr ))
                 {
                     foreach( $files_arr as $f )

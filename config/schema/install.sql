@@ -75,6 +75,7 @@ CREATE TABLE IF NOT EXISTS `batch_step` (
 CREATE TABLE IF NOT EXISTS `command` (
     `id_command` BIGINT unsigned NOT NULL AUTO_INCREMENT,
     `id_thread` BIGINT unsigned NOT NULL,
+    `guid` VARCHAR(128) COLLATE utf8_unicode_ci,
     `title` VARCHAR(255) COLLATE utf8_unicode_ci,
     `description` TEXT COLLATE utf8_unicode_ci,
     `command` TEXT COLLATE utf8_unicode_ci,
@@ -87,6 +88,7 @@ CREATE TABLE IF NOT EXISTS `command` (
 CREATE TABLE IF NOT EXISTS `folder` (
     `id_folder` BIGINT unsigned NOT NULL AUTO_INCREMENT,
     `id_environment` BIGINT unsigned NOT NULL,
+    `guid` VARCHAR(128) COLLATE utf8_unicode_ci,
     `path` TEXT COLLATE utf8_unicode_ci,
     `owner_group` VARCHAR(64) COLLATE utf8_unicode_ci,
     `permissions` VARCHAR(32) COLLATE utf8_unicode_ci,
@@ -97,6 +99,7 @@ CREATE TABLE IF NOT EXISTS `folder` (
 CREATE TABLE IF NOT EXISTS `environment` (
     `id_environment` BIGINT unsigned NOT NULL AUTO_INCREMENT,
     `id_server` BIGINT unsigned NOT NULL,
+    `guid` VARCHAR(128) COLLATE utf8_unicode_ci,
     `namespace` VARCHAR(255) COLLATE utf8_unicode_ci,
     `title` VARCHAR(255) COLLATE utf8_unicode_ci,
     `url` TEXT COLLATE utf8_unicode_ci,
@@ -108,6 +111,7 @@ CREATE TABLE IF NOT EXISTS `environment` (
 
 CREATE TABLE IF NOT EXISTS `server` (
     `id_server` BIGINT unsigned NOT NULL AUTO_INCREMENT,
+    `guid` VARCHAR(128) COLLATE utf8_unicode_ci,
     `title` VARCHAR(255) COLLATE utf8_unicode_ci,
     `hostname` VARCHAR(255) COLLATE utf8_unicode_ci,
     `description` TEXT COLLATE utf8_unicode_ci,

@@ -6,6 +6,11 @@
  *  Meant for custom appli-specific stuff
  */
 
+//      Global helpers, that are specific to this implementation (table-specific)
+//      I put them here because I thought they didn't really belong in "engine" dir
+include '_specific_helpers.inc';
+
+
 //      Custom navbar items
 //      -> Simple example :
 //$navbar_items .= menu_item( "Hello menu item", "menu/item", '<i class="icon-remove"></i>' );

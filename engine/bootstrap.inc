@@ -9,9 +9,9 @@
 include 'config/settings.inc';
 
 //      Engine
-include 'vendors.inc';
-include 'core/api.inc';
-include 'core/helpers.inc';
+include 'engine/vendors.inc';
+include 'engine/core/api.inc';
+include 'engine/core/helpers.inc';
 
 //      Global context (always included)
 include 'context/global.inc';
@@ -27,10 +27,10 @@ include 'context/global.inc';
 
 //      Content
 if ( !$unauthorized )
-    include 'core/http_request_engine.inc';
+    include 'engine/core/http_request_engine.inc';
 
 //      Render request result
-include 'core/theme_rendering.inc';
+include 'engine/core/theme_rendering.inc';
 
 //      Performance measure
 if ( $debug[ 'exec_time' ])
