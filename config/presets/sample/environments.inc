@@ -1,35 +1,11 @@
 <?php
 
 /**
- *  Example server definition (with its environments)
- *  This kind of preset allows to quickly restore a "clean" mini-engine, with custom server configurations in place
+ *  @file
+ *  Sample environment
  *  
- *  @todo 2013/12/18 23:22:46 - new folder structure for @evol 2013/12/18 23:11:56 (import / export feature)
+ *  @requires Sample server import in config/presets/sample/server.inc
  */
-
-$server = array(
-    
-    //      Note : we need a GUID to handle import/update without creating duplicates
-    //      Proposition : concatenation of hostname + ssh-username
-    //'id_server' => 1,
-    'guid' => '192.168.8.8,ssh-username',
-    
-    'title' => "Server Name",
-    'description' => "This kind of preset allows to quickly restore a \"clean\" mini-engine, with custom server configurations in place",
-    'hostname' => '192.168.123.123',
-    'data' => array(
-        'ssh' => array(
-            'u' => 'ssh-username',
-            'p' => 'ssh-password',
-            
-            //      Optional
-            //'k' => 'ssh-private-key',
-            //'port' => 'ssh-port',
-        ),
-    ),
-);
-
-
 
 //      Here is an example of the data expected for a functional environment (usually corresponding to a project) :
 /*
@@ -47,14 +23,15 @@ $environments = array(
     array(
         
         //      Note : we need a GUID to handle import/update without creating duplicates
-        //      Proposition : concatenation of server id + namespace
+        //      Proposition : concatenation of server GUID + namespace
         //'id_environment' => 1,
-        'guid' => '1,project-name/www',
+        //      @see below
+        //'guid' => '192.168.123.123,ssh-username,project-name/www',
         
         //      Hard value
-        //      @todo 2013/12/17 14:16:51 - write function to get IDs from GUIDs (per entity type)
+        //      @todo 2013/12/17 14:16:51 - anticipate export feature : write function to get IDs from GUIDs (per entity type) ?
         //      -> ex :
-        //      $server_id = guid_to_id( 'server', array( 'hostname', 'ssh-username' ));
+        //      $server_id = guid_to_id( 'server', array( '192.168.123.123', 'ssh-username' ));
         //      A bit long to do : would need a mapping utility to "reverse-engineer" the GUID (from database).
         //      That utility would store per entity type how the concatenation was made,
         //      and could only work if the separator can be 'exploded'
@@ -75,12 +52,8 @@ $environments = array(
         //      Optional
         'description' => "My project instance description.",
         
+        //      Misc. examples
         'data' => array(
-            
-            //      @evol 2013/12/17 14:32:01
-            //'repository-url'
-            //'repository-branch'
-            
             'credentials' => array(
                 array(
                     'type' => 'mysql',
@@ -97,10 +70,30 @@ $environments = array(
                     'password' => 'example_psql_pass',
                     'prefix' => 'example_prefix',
                 ),
+                array(
+                    'type' => 'git',
+                    'url' => 'https://github.com/Paulmicha/Mini-engine.git',
+                    'username' => 'example_git_login',
+                    'password' => 'example_git_pass',
+                    //'branch' => 'master',
+                    //'tag' => '1.0',
+                ),
             ),
         ),
     ),
 );
 
+//      Prepare for DB insertion
+//      @evol 2013/12/20 00:12:27 - automatic handling of preprocess to read / write from / to DB
+//      @see [planned] mini-ORM
+$environments[ 0 ][ 'guid' ] = guid( $environments[ 0 ], array( 'parts_arr' => array( '192.168.123.123,ssh-username', $environments[ 0 ][ 'namespace' ])));
+$environments[ 0 ][ 'data' ] = safe_serialize( $environments[ 0 ][ 'data' ]);
+
+//      Write to DB
+$id = insert_or_update( 'environment', $environments[ 0 ], array( 'unique_field_name' => 'guid' ));
+
+//      Feedback
+$content .= "<hr>";
+$content .= alert( "Sample environment processed - id_environment : <code>[$id]</code>" );
 
 

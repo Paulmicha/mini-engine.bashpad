@@ -126,6 +126,10 @@ function _batch_form_content()
             'func' => 'input_text',
             'args' => array( "Step Title" ),
         ),
+        array(
+            'func' => 'select',
+            'args' => array( "Environment", $envs_options_arr, array( 'select_attributes' => array( 'preserve_numeric_keys' => true ))),
+        ),
         
         "<p>&nbsp;</p>",
         //"<hr>",
@@ -138,14 +142,14 @@ function _batch_form_content()
         "<ul class='nav nav-tabs'>
             <li class='active'><a href='#left-tab--ssh--multigroup-0' data-toggle='tab'><i class='icon-cogs'></i>&nbsp;SSH command</a></li>
             <li><a href='#left-tab--sftp--multigroup-0' data-toggle='tab'><i class='icon-exchange'></i>&nbsp;SFTP file transfert</a></li>
+            <li><a href='#left-tab--raw--multigroup-0' data-toggle='tab'><i class='icon-ambulance'></i>&nbsp;Raw Bash input</a></li>
             
             <!--
             //      @evol 2013/08/27 13:31:45 - we could use more, for example :
             //      Setting custom Bash raw input,
             //      Specific interfaces, such as Drupal installation (distribution, presets / lists of modules, etc.), or Symfony (lists of Bundles, etc.)
-            -->
             <li><a href='#left-tab--presets--multigroup-0' data-toggle='tab'><i class='icon-rocket'></i>&nbsp;Specific presets</a></li>
-            <li><a href='#left-tab--raw--multigroup-0' data-toggle='tab'><i class='icon-ambulance'></i>&nbsp;Raw Bash input</a></li>
+            -->
             
         </ul>",
         
@@ -154,12 +158,8 @@ function _batch_form_content()
         
         //      Left tabs - Tab Content : Options to execute SSH Command
         "<div class='tab-pane active' id='left-tab--ssh--multigroup-0'>",
-        "<p>Select an SSH command :</p>",
+        "<p>Select a stored SSH command :</p>",
         
-        array(
-            'func' => 'select',
-            'args' => array( "Environment", $envs_options_arr, array( 'select_attributes' => array( 'preserve_numeric_keys' => true ))),
-        ),
         array(
             'func' => 'input_text',
             'args' => array( "Command", array( 'input_attributes' => array(
@@ -191,11 +191,11 @@ function _batch_form_content()
         "</div>",
         
         //      Left tabs - Tab Content : Specific presets
-        "<div class='tab-pane' id='left-tab--presets--multigroup-0'>",
-        "<p>Specific presets :</p>",
-        "<p>@todo 2013/08/27 13:56:09</p>",
-        "<p>Specific interfaces, such as Drupal installation (distribution, presets / lists of modules, etc.), or Symfony (lists of Bundles, etc.)</p>",
-        "</div>",
+        //"<div class='tab-pane' id='left-tab--presets--multigroup-0'>",
+        //"<p>Specific presets :</p>",
+        //"<p>@todo 2013/08/27 13:56:09</p>",
+        //"<p>Specific interfaces, such as Drupal installation (distribution, presets / lists of modules, etc.), or Symfony (lists of Bundles, etc.)</p>",
+        //"</div>",
         
         //      Left tabs - Tab Content : Raw Bash input
         "<div class='tab-pane' id='left-tab--raw--multigroup-0'>",

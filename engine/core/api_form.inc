@@ -1426,3 +1426,103 @@ function fieldset( $legend, $html_content, $options = array())
 }
 
 
+
+//--------------------------------------------------------------------------------------------------
+//      File selector
+
+
+/**
+ *  Simple file selector
+ */
+function file_selector( $path, $options = array())
+{
+    $html = '';
+    
+    //      Overridable defaults
+    //      @see list_files() in engine/core/helpers_file.inc
+    $options += array(
+        'tree' => true,
+        'multiple' => true,
+    );
+    extract( $options );
+    
+    $files = list_files( $path, $options );
+    $html .= fieldset( 'Select file'. ( $multiple ? 's' : '' ), file_selector_recursive_builder( $files, $multiple ));
+    
+    return $html;
+}
+
+
+
+/**
+ *  Simple file selector
+ *  Recursive helper
+ */
+function file_selector_recursive_builder( $files, $multiple, $parent_dirname = '' )
+{
+    $html = '';
+    
+    if ( !empty( $files ))
+    {
+        //      It's a file
+        if ( is_object( $files ))
+        {
+            $attr = array(
+                'name' => 'files[]',
+                'value' => safe_serialize( $files ),
+            );
+            
+            if ( $multiple ) {
+                $html .= input_checkbox( $files->filename, $attr );
+            }
+            else {
+                $html .= input_radio( $files->filename, $attr );
+            }
+        }
+        
+        //      It's a folder
+        else if ( is_array( $files ))
+        {
+            foreach( $files as $dir_name => $dir_content_arr )
+            {
+                if ( !empty( $dir_content_arr ))
+                {
+                    $html .= '<li>';
+                    
+                    //      If child isn't array, don't show label
+                    if ( is_array( $dir_content_arr ))
+                    {
+                        $html .= '<strong>';
+                        
+                        if ( !empty( $parent_dirname )) {
+                            $dir_name = "$parent_dirname/$dir_name";
+                        }
+                        
+                        $html .= $dir_name;
+                        $html .= '&nbsp;<i class="icon-folder-open"></i>';
+                        $html .= '</strong>';
+                    }
+                    
+                    $html .= file_selector_recursive_builder( $dir_content_arr, $multiple, $dir_name );
+                    
+                    $html .= '</li>';
+                }
+            }
+            
+            if ( !empty( $html ))
+            {
+                //      CSS Class for level 0
+                if ( empty( $parent_dirname )) {
+                    $html = "<ul class='file-selector-tree'>$html</ul>";
+                }
+                else {
+                    $html = "<ul>$html</ul>";
+                }
+            }
+        }
+    }
+    
+    return $html;
+}
+
+

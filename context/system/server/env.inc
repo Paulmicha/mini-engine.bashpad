@@ -62,7 +62,8 @@ if ( empty( $arg5 ))
         "Tags" => view_tags( $tags_env ),
         "description" => $environment_data[ 'description' ],
     );
-    $environment_html .= dl( $env_data_arr );
+    
+    @$environment_html .= dl( $env_data_arr );
     
     //      Credentials
     if ( !empty( $environment_data[ 'data' ][ 'credentials' ]))
@@ -105,10 +106,10 @@ elseif ( $arg5 == 'edit' )
         foreach( $environment_data[ 'data' ][ 'credentials' ] as $i => $c )
         {
             $credentials_mapping[ 'multifield-credentials-type-of-credentials' ][ 'multigroup-'. $i ] = $c[ 'type' ];
-            $credentials_mapping[ 'multifield-credentials-db-name' ][ 'multigroup-'. $i ] = $c[ 'db_name' ];
-            $credentials_mapping[ 'multifield-credentials-port' ][ 'multigroup-'. $i ] = $c[ 'port' ];
+            $credentials_mapping[ 'multifield-credentials-db-name' ][ 'multigroup-'. $i ] = @$c[ 'db_name' ];
+            $credentials_mapping[ 'multifield-credentials-port' ][ 'multigroup-'. $i ] = @$c[ 'port' ];
             $credentials_mapping[ 'multifield-credentials-username' ][ 'multigroup-'. $i ] = $c[ 'username' ];
-            $credentials_mapping[ 'multifield-credentials-password' ][ 'multigroup-'. $i ] = $c[ 'password' ];
+            $credentials_mapping[ 'multifield-credentials-password' ][ 'multigroup-'. $i ] = @$c[ 'password' ];
         }
     
     //      Multigroup : Folders mapping preparation

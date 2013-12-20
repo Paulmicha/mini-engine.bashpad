@@ -37,6 +37,13 @@ td .chzn-container{margin-bottom:0;}
 
 /*      Vertical tabs in "batch/add" form : height is not enough for "chosen" dropdowns
 */
-.batch-add-form .tab-content { min-height:250px; }
+.batch-add-form .tab-pane { min-height:350px; }
+
+
+/*      Form - Component - File selector "tree"
+*/
+.file-selector-tree { margin: 0; }
+.file-selector-tree,
+.file-selector-tree ul { list-style:none; }
 
 

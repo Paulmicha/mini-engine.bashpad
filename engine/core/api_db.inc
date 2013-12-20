@@ -545,19 +545,30 @@ function mandatory_values_check( $values, $mandatory_fields )
  *  Returns a string, representing a unique identifier for this entity type
  *  (NOT dependant on SQL row id)
  */
-function guid( $input, $entity_type, $fields_to_concat_arr = array(), $separator = ',' )
+function guid( $input, $options = array())
 {
     $guid = '';
-    $entity_data_arr = array();
-    $parts_arr = array();
+    
+    //      Several ways to get GUID :
+    //      from direct concatenation, to fetching values in DB
+    //      @evol 2013/12/19 23:50:41 - missing mapping 'store', to automatically get $fields_to_concat_arr from $entity_type
+    //      @see [planned] mini-ORM
+    $options += array(
+        'parts_arr' => array(),
+        'fields_to_concat_arr' => array(),
+        'entity_data_arr' => array(),
+        'entity_type' => null,
+        'separator' => ',',
+    );
+    extract( $options );
     
     //      Failsafe
-    if ( empty( $input ) || empty( $entity_type )) {
+    if ( empty( $input )) {
         return $guid;
     }
     
     //      Polymorphism : argument can be array or an id
-    if ( is_numeric( $input )) {
+    if ( is_numeric( $input ) && !empty( $entity_type )) {
         $entity_data_arr = db_fetch( 'SELECT * FROM '. $entity_type );
     }
     else if ( is_array( $input )) {
@@ -573,7 +584,9 @@ function guid( $input, $entity_type, $fields_to_concat_arr = array(), $separator
                 $parts_arr[] = trim( $entity_data_arr[ $field ]);
             }
         }
-        
+    }
+    
+    if ( !empty( $parts_arr )) {
         $guid = join( $separator, $parts_arr );
     }
     
