@@ -10,11 +10,8 @@ print grid( array(
         
         "<h1>About</h1>
 <p>This project is a minimalist Bash commands <strong><em>store</em></strong> and <strong><em>launch pad</em></strong>.</p>
-<p>It's currently built on top of a custom Php app from scratch,
-which was originally designed for automating repetitive tasks (such as data preparation for migrations).<br>
-It should be rebuild in modern PHP - for ex. using Symfony 2 components, but its current state can be seen as a <em>museum</em> of Php snippets put together (hence <em>Here be dragons</em>).</p>
-<p><strong><i class='icon-warning-sign'></i> WARNING</strong> : this is probably full of massive security breaches, as it was never meant to be publicly accessible over the web.<br>
-The reason is mainly because the underlying old code base wasn't built for it, and because it can connect to other servers through SSH in order to execute Bash commands... In short, <strong>NEVER run this 'outdoors'</strong>.</p>",
+<p>It's currently built on top of a custom Php app from scratch, which was originally designed for automating repetitive tasks (such as data preparation for migrations). It should be rebuilt in modern PHP - for ex. using Symfony 2 components, and its current state can be seen as my personal <em>museum</em> of Php snippets put together (hence <em>Here be dragons</em>).</p>
+<p><strong><i class='icon-warning-sign'></i> WARNING</strong> : this application will contain extremely sensitive & unobfuscated data, and it was never meant to be publicly accessible over the web (because it can connect to other servers through SSH in order to execute Bash commands). It is probably unsecure, because the underlying old code base wasn't built for it : we only use it in LAN for speeding up repetitive tasks on our development environments, and I would strongly advise <strong>not</strong> to host it anywhere accessible online.</p>",
         
         "<h2>Quick start</h2>
 <ol>
@@ -28,7 +25,7 @@ The reason is mainly because the underlying old code base wasn't built for it, a
     <li>Pick and launch your Batch(es) in ". l( 'batch', 'batch' ) .";</li>
     <li>Review execution logs (std out) in ". l( 'batch/archives', 'batch/archives' ) .".</li>
 </ol>
-<p>Also, you'll want to quickly hack something, so have a look at the snippets in the <code>System</code> menu to reuse available 'helpers'.
+<p>To quickly hack something without rewriting existing functionalities, have a look at the snippets in the <code>System</code> menu to reuse available 'helpers'.
 Examples :</p>
 <ul class='inline'>
     ". menu_item( "URL / Routing", "system/test/routing", '<i class="icon-random"></i>' ) ."
@@ -47,14 +44,6 @@ Examples :</p>
     ". menu_item( "CRUD", "system/test/crud", '<i class="icon-rocket"></i>' ) ."
     ". menu_item( "SSH / SFTP", "system/test/phpseclib", '<i class="icon-lock"></i>' ) ."
 </ul>
-<!--
-<ul>
-    <li><i class=\"icon-hand-up icon-large\"></i> have a look at the snippets in the <code>System</code> menu to reuse available 'helpers'.</li>
-    <li>Pick a path to start with &ndash; e.g. for ". l( "/test", "test" ) ." you need to create <code>context/test.inc</code>.<br>In this file, set these 2 variables, like : <code>\$head_page_title = 'My page title';</code> and <code>\$content .= \"Hello world\";</code>.<br>
-        Once this is done, ". l( "have a look at the result", 'test' ) .".</li>
-    <li>You may provide \"Navbar\" items in <code>context/global.inc</code></li>
-</ul>
--->
 "
     ),
 ));
@@ -63,4 +52,4 @@ Examples :</p>
 <hr>
 <h2>Simplified Schema</h2>
 <p>Illustrating briefly the database structure, and generally, the underlying organization of this "mini-engine".</p>
-<div style="text-align:center"><img src="<?php print $base_path; ?>theme/img/mini-engine-schema-v07.png" alt="schéma des entités telles qu'attendues par Drupal" /></div>
+<div style="text-align:center"><img src="<?php print $base_path; ?>theme/img/mini-engine-schema-v07.png" alt="Mini-engine : Simplified Entities Schema" /></div>

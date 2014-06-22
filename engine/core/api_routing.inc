@@ -10,6 +10,68 @@
 
 
 /**
+ *  Note : this is now set in config files
+ *  The same "base path" must be set in .htaccess file (line 13) for "RewriteBase"
+ *  
+ *  @examples
+ *      If you run this application in http://www.my-example.com/, then leave this "base path" at "/"
+ *      If in http://localhost/mini-engine, then use "/mini-engine/"
+ *      If in http://192.168.1.2/mini-engine/www, then use "/mini-engine/www/"
+ *      etc.
+ */
+function base_path()
+{
+    //      MUST start AND end with "/"
+    //      @see also .htaccess line 13
+    return $GLOBALS[ 'base_path' ];
+}
+
+
+
+/**
+ *  Request is $_GET[ 'q' ], which is rewritten "à la Drupal"
+ *  
+ *  @example : when URL is http://www.example.com/this/is-my/path?test=1
+ *      -> returns array( 'this', 'is-my', 'path' );
+ *  
+ *  @example : when URL is http://www.example.com/rest/thiséà&*%ù/..//0/is-my/path#test
+ *      -> returns array( 'thisea-u', '0', 'is-my', 'path' );
+ */
+function get_request_arr()
+{
+    $req_arr = array();
+    
+    if ( !empty( $_GET[ 'q' ]))
+    {
+        $req_arr = explode( '/', $_GET[ 'q' ]);
+        
+        //      Always force only alphanumeric lowercase and "-" as allowed characters in URL "fragments"
+        //array_walk( $req_arr, 'str_clean' );
+        foreach( $req_arr as $i => $val ) {
+            $req_arr[ $i ] = str_clean( $val );
+        }
+        
+        //      Remove all NULL, FALSE and Empty Strings but leaves 0 (zero) values
+        $req_arr = array_filter( $req_arr, 'strlen' );
+        
+        //      Remove "-" entries
+        $req_arr = array_filter( $req_arr, '_is_not_hyphen' );
+    }
+    
+    return $req_arr;
+}
+
+
+/**
+ *  Array filter callback
+ */
+function _is_not_hyphen( $var ) {
+    return ( $var != '-' );
+}
+
+
+
+/**
  *  Utility : get URL argument "à la Drupal"
  *  
  *  Guarantees that calling "arg( 1 )" always returns
@@ -19,21 +81,36 @@
  */
 function arg( $i )
 {
-    if ( !empty( $_REQUEST[ 'q' ]))
+    $request_arr = get_request_arr();
+    
+    if ( !empty( $request_arr ))
     {
-        $request_arr = explode( '/', $_REQUEST[ 'q' ]);
         switch ( $request_arr[ 0 ])
         {
             case 'rest':
             case 'iframe':
                 array_shift( $request_arr );
-                return $request_arr[ $i ];
+                return @$request_arr[ $i ];
             
             default:
                 return @$request_arr[ $i ];
         }
     }
+    
     return null;
+}
+
+
+
+/**
+ *  404
+ */
+function send_404()
+{
+    header( $_SERVER[ "SERVER_PROTOCOL" ] ." 404 Not Found" );
+    header( "Status: 404 Not Found" );
+    $_SERVER[ 'REDIRECT_STATUS' ] = 404;
+    $GLOBALS[ 'content_template' ] = $GLOBALS[ 'theme_path' ] .'/404.tpl.php';
 }
 
 
@@ -150,14 +227,14 @@ function get_current_url( $options = array())
 function get_current_path( $options = array())
 {
     //      Home
-    if ( !isset( $_REQUEST[ 'q' ]) || empty( $_REQUEST[ 'q' ]))
+    if ( !isset( $_GET[ 'q' ]) || empty( $_GET[ 'q' ]))
         return base_path();
     
     //      The rest
     if ( @$options[ 'with_base_path' ])
-        return url( $_REQUEST[ 'q' ]);
+        return url( $_GET[ 'q' ]);
     else
-        return $_REQUEST[ 'q' ];
+        return $_GET[ 'q' ];
 }
 
 
@@ -256,7 +333,7 @@ function reload_link( $label = 'reload' )
             $current_url .= "?". http_build_query( $_GET );
     }
     
-    return "<a href='". url( $current_url ) ."'><i class='icon-repeat'></i>&nbsp;$label </a>";
+    return "<a href='". url( $current_url ) ."'><i class='icon-repeat'></i>&nbsp;$label</a>";
 }
 
 

@@ -2,140 +2,94 @@
 
 /**
  *  @file
- *  Mini Engine Settings
- */
-
-
-//--------------------------------------------------------------------------------------
-//      PHP settings
-
-
-//error_reporting( 0 );
-error_reporting( E_ALL );
-//error_reporting( E_ERROR | E_WARNING | E_PARSE | E_COMPILE_ERROR );
-
-//		Fix IE sessions inside iframes
-//      @see http://stackoverflow.com/questions/5257983/what-is-headerp3p-cp-cao-psa-our
-header( 'P3P: CP="CAO PSA OUR"' );
-header( 'Content-Type: text/html; charset=utf-8' );
-session_start();
-mb_internal_encoding( "UTF-8" );
-
-//setlocale( LC_ALL, 'fr_FR' );
-setlocale( LC_ALL, 'en_EN' );
-
-//      Hardcore setting
-set_time_limit( 0 );
-
-
-
-//--------------------------------------------------------------------------------------
-//      Database settings
-
-
-/**
- *  DB settings 'getter' function
- */
-function db_get_credentials()
-{
-    //      Replace those with your own DB settings
-    return array(
-        'db_name' => "mini_engine_www",
-        'db_user' => "bob",
-        'db_pass' => "bobspassword",
-    );
-}
-
-
-
-//--------------------------------------------------------------------------------------
-//      Base Folder
-
-
-/**
- *  Replace this string with your base path
- *  Note : base_path() MUST start AND end with "/"
+ *  Custom Settings
  *  
- *  The same "base path" must be set in .htaccess file (line 13) for "RewriteBase"
- *  
- *  @examples
- *      If you run this application in http://www.my-example.com/, then leave this "base path" at "/"
- *      If in http://localhost/mini-engine, then use "/mini-engine/"
- *      If in http://192.168.1.2/mini-engine/www, then use "/mini-engine/www/"
- *      etc.
+ *  This is pure Global Scope Mayhem, as promised :P
  */
-function base_path()
-{
-    //      MUST start AND end with "/"
-    //      @see also .htaccess line 13
-    return "/";
-    //return "/mini-engine/www/";
-}
+
+
+//      Everything depends on this
+//      MUST start AND end with "/"
+//      @see .htaccess @ line 13
+//      Examples :
+//          If you run this application in http://www.example.com/, then leave this "base path" at "/"
+//          If in http://localhost/mini-engine, then use "/mini-engine/"
+//          If in http://192.168.xxx.xxx/mini-engine/www, then use "/mini-engine/www/"
+//          etc.
+$base_path = '/';
+//$base_path = '/mini-engine/';
+//$base_path = '/mini-engine/www/';
 
 
 
-//--------------------------------------------------------------------------------------
-//      Mini engine settings (global scope "reserved" vars)
+//------------------------------------------
+//      Features
 
 
-$content = "";
-$content_before = "";
-$content_markup = "";
-$content_after = "";
-$footer_extra_js = "";
-$request_arr = array();
-$context_handlers_path = "context";
-$http_s = "http://";
-if ( @$_SERVER[ 'HTTPS' ] == "on" ) {
-    $http_s = "https://";
-}
-$navbar_items = '';
+$enable_debug = true;
+$enable_db = true;
+$enable_dblog = true;
+$enable_cache = true;
+$enable_tag = true;
+$enable_token = true;
+$enable_datatable = true;
+$enable_entity = true;
+$enable_ssh = true;
+//$enable_session = true;
+$enable_notification = true;
+//$enable_date = true;
+//$enable_file = true;
+//$enable_log = true;
+$enable_form = true;
+$enable_form_theming = true;
+$enable_form_file_selector = true;
+$enable_form_multigroup = true;
+//$enable_simple_htmldom = true;
+$enable_system_routes = true;
 
-//      Theming-related
-$base_path = base_path();
-$theme_path = "theme";
-$content_include = "index";
-$content_template_type = "page";
-$content_template = $theme_path ."/index.tpl.php";
-$template_file = $theme_path ."/page.tpl.php";
 
-//      Default page content (home)
-$body_id = '';
-$head_extra_markup = '';
-$body_extra_css_classes = '';
-$head_page_title = "Mini-engine";
-$short_page_title = "Mini-engine";
-$unauthorized = false;
 
-//      Log level
-$log = array(
-    'db' => 0,
+//------------------------------------------
+//      DB settings
+
+
+$db_settings[ 'default' ] = array(
+    'db_name' => "***",
+    'db_user' => "***",
+    'db_pass' => "***",
 );
 
 
 
-//--------------------------------------------------------------------------------------
+//------------------------------------------
 //      Debug
 
 
-//      Types of debug
-$debug = array(
-    
-    //      PDO queries exceptions
-    'error' => 0,
-    //'error' => 1,
-    
-    //      Included files (theming)
-    'routing' => 0,
-    //'routing' => 1,
-    
-    //      Execution time (at the bottom of every page)
-    //'exec_time' => 0,
-    'exec_time' => 1,
-    
-    //      SSH commands killswitch
-    'prevent_ssh_exec' => 0,
-    //'prevent_ssh_exec' => 1,
-);
+$debug[ 'error' ] = 1;
+//$debug[ 'installation' ] = 1;
+//$debug[ 'routing' ] = 1;
+$debug[ 'exec_time' ] = 1;
+//$debug[ 'fake_ssh_exec' ] = 1;
 
+
+
+//------------------------------------------
+//      Content Defaults
+
+
+$lang = 'en';
+$site_name = "Site name";
+$head_page_title = "Head title";
+$short_page_title = "Page title";
+$meta_description = "Short description";
+
+
+
+//------------------------------------------
+//      Misc
+
+
+//      Hardcore setting
+//set_time_limit( 0 );
+    
 

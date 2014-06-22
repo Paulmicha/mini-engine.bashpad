@@ -6,16 +6,13 @@
  */
 
 ?><!DOCTYPE html>
-<html class="no-js">
+<html lang="<?php print $lang; ?>" class="no-js">
 <head>
-    <title><?php print strip_tags( $head_page_title ); ?></title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width">
+    <?php include 'meta.inc'; ?>
     <?php include 'assets_head.inc'; ?>
     <?php print $head_extra_markup; ?>
 </head>
-<body class="<?php print $body_extra_css_classes; ?>" id="<?php print $body_id; ?>">
+<body<?php if ( !empty( $body_extra_css_classes )) print " class='$body_extra_css_classes'"; if ( !empty( $body_id )) print " id='$body_id'"; ?>>
     
     <!-- navbar -->
     <?php include 'page_navbar.inc'; ?>
@@ -28,6 +25,10 @@
         <?php print $content_after; ?>
     </div>
     <!-- /content -->
+    
+    <!-- footer -->
+    <?php include 'page_footer.inc'; ?>
+    <!-- /footer -->
     
     <!-- scripts -->
     <?php include 'assets_bottom.inc'; ?>

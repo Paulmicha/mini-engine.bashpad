@@ -24,9 +24,12 @@ $whiltelist = array(
 
 //      Only allow local IP addresses (beginning with '192.168')
 //      or the ones "whitelisted" above
-if ( substr( $_SERVER[ 'REMOTE_ADDR' ], 0, 7 ) != "192.168" && !in_array( $_SERVER[ 'REMOTE_ADDR' ], $whiltelist ))
+if ( substr( $_SERVER[ 'REMOTE_ADDR' ], 0, 7 ) != "192.168"
+    && !in_array( $_SERVER[ 'REMOTE_ADDR' ], $whiltelist )) {
     header( "HTTP/1.0 404 Not Found" );
-else
+}
+else {
     include 'engine/bootstrap.inc';
+}
 
 

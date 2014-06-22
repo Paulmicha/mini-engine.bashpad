@@ -7,22 +7,40 @@
 
 
 /**
- *  Singleton PDO instance
+ *  DB settings 'getter' function
+ */
+function db_get_credentials( $db = 'default' )
+{
+    //      Default driver : mysql
+    if ( empty( $GLOBALS[ 'db_settings' ][ $db ][ 'db_driver' ])) {
+        $GLOBALS[ 'db_settings' ][ $db ][ 'db_driver' ] = 'mysql';
+    }
+    
+    //      Default host : localhost
+    if ( empty( $GLOBALS[ 'db_settings' ][ $db ][ 'db_host' ])) {
+        $GLOBALS[ 'db_settings' ][ $db ][ 'db_host' ] = 'localhost';
+    }
+    
+    return $GLOBALS[ 'db_settings' ][ $db ];
+}
+
+
+
+/**
+ *  Static PDO DB Connection
  */
 function db_pdo()
 {
-    //      @evol 16:50 21/04/2012 - easily possible to work with several databases, with :
-    //$GLOBALS[ 'db_active' ]
-    static $db;
-    if ( !$db )
+    static $pdo;
+    if ( !$pdo[ $GLOBALS[ 'db_active' ]])
     {
-        extract( db_get_credentials());
-        $db = new PDO( 'mysql:host=localhost;dbname='. $db_name, $db_user, $db_pass );
-        $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
-        $db->setAttribute( PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true );
-        $db->exec( 'SET CHARACTER SET utf8' );
+        extract( db_get_credentials( $GLOBALS[ 'db_active' ]));
+        $pdo[ $GLOBALS[ 'db_active' ]] = new PDO( $db_driver .':host='. $db_host .';dbname='. $db_name, $db_user, $db_pass );
+        $pdo[ $GLOBALS[ 'db_active' ]]->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+        $pdo[ $GLOBALS[ 'db_active' ]]->setAttribute( PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true );
+        $pdo[ $GLOBALS[ 'db_active' ]]->exec( 'SET CHARACTER SET utf8' );
     }
-    return $db;
+    return $pdo[ $GLOBALS[ 'db_active' ]];
 }
 
 
@@ -535,62 +553,6 @@ function mandatory_values_check( $values, $mandatory_fields )
             return false;
     }
     return true;
-}
-
-
-
-/**
- *  GUID
- *  
- *  Returns a string, representing a unique identifier for this entity type
- *  (NOT dependant on SQL row id)
- */
-function guid( $input, $options = array())
-{
-    $guid = '';
-    
-    //      Several ways to get GUID :
-    //      from direct concatenation, to fetching values in DB
-    //      @evol 2013/12/19 23:50:41 - missing mapping 'store', to automatically get $fields_to_concat_arr from $entity_type
-    //      @see [planned] mini-ORM
-    $options += array(
-        'parts_arr' => array(),
-        'fields_to_concat_arr' => array(),
-        'entity_data_arr' => array(),
-        'entity_type' => null,
-        'separator' => ',',
-    );
-    extract( $options );
-    
-    //      Failsafe
-    if ( empty( $input )) {
-        return $guid;
-    }
-    
-    //      Polymorphism : argument can be array or an id
-    if ( is_numeric( $input ) && !empty( $entity_type )) {
-        $entity_data_arr = db_fetch( 'SELECT * FROM '. $entity_type );
-    }
-    else if ( is_array( $input )) {
-        $entity_data_arr = $input;
-    }
-    
-    //      Begin GUID generation
-    if ( !empty( $entity_data_arr ) && !empty( $fields_to_concat_arr ))
-    {
-        foreach( $fields_to_concat_arr as $field )
-        {
-            if ( !empty( $entity_data_arr[ $field ])) {
-                $parts_arr[] = trim( $entity_data_arr[ $field ]);
-            }
-        }
-    }
-    
-    if ( !empty( $parts_arr )) {
-        $guid = join( $separator, $parts_arr );
-    }
-    
-    return $guid;
 }
 
 

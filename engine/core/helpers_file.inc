@@ -91,6 +91,7 @@ function list_files( $path, $options = array())
                     {
                         //$file_data->extension = $splFileInfo->getExtension(); //  PHP version >= 5.3.6
                         $file_data->path = $splFileInfo->getPath();
+                        $file_data->fullpath = $file_data->path .'/'. $file_data->filename;
                         
                         //      Folder is the relative path of this element from the "base" path
                         //      Handle starting slash
@@ -102,7 +103,7 @@ function list_files( $path, $options = array())
                             $file_data->folder = substr( $file_data->folder, 1 );
                         
                         $file_data->realpath = $splFileInfo->getRealPath();
-                        $file_data->size = human_filesize( $file_data->path .'/'. $filename );
+                        $file_data->size = human_filesize( $file_data->fullpath );
                         $file_data->bsize = $splFileInfo->getSize();
                         $file_data->depth = $ritit->getDepth();
                     }

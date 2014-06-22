@@ -8,10 +8,7 @@
 ?><!DOCTYPE html>
 <html class="no-js">
 <head>
-    <title><?php print $head_page_title; ?></title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width">
+    <?php include 'meta.inc'; ?>
     <?php include 'assets_head.inc'; ?>
     <?php print $head_extra_markup; ?>
 </head>

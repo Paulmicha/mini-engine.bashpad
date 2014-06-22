@@ -5,16 +5,24 @@
  *  Mini Engine Bootstrap
  */
 
-//      Setup
+//      Config
+include 'engine/core/config/default_settings.inc';
 include 'config/settings.inc';
+include 'engine/core/config/php_runtime_settings.inc';
 
 //      Engine
 include 'engine/vendors.inc';
-include 'engine/core/api.inc';
 include 'engine/core/helpers.inc';
+include 'engine/core/api.inc';
 
-//      Global context (always included)
-include 'context/global.inc';
+//      Optional core system routes
+//      (mostly self-documenting pages and tests, DB log entries, etc.)
+if ( $enable_system_routes ) {
+    include 'engine/core/system_routing.inc';
+}
+
+//      Global context handler (always included)
+include 'routing/global.inc';
 
 //      debug
 //print '<pre> $_SESSION = ';
@@ -26,20 +34,21 @@ include 'context/global.inc';
 //die( 'test' );
 
 //      Content
-if ( !$unauthorized )
+if ( !$unauthorized ) {
     include 'engine/core/http_request_engine.inc';
+}
+
+//      Debug : adding execution time in output
+if ( $enable_debug && $debug[ 'exec_time' ])
+{
+    $content .= '<div class="container" style="padding:30px 0;">';
+    $content .= '<small style="color:#AAA">';
+    $content .= get_system_exec_time();
+    $content .= '</small>';
+    $content .= '</div>';
+}
 
 //      Render request result
 include 'engine/core/theme_rendering.inc';
-
-//      Performance measure
-if ( $debug[ 'exec_time' ])
-{
-    print '<div class="container" style="padding:30px 0;">';
-    print '<small style="color:#AAA">';
-    print get_system_exec_time();
-    print '</small>';
-    print '</div>';
-}
 
 

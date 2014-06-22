@@ -2,7 +2,7 @@
 
 /**
  *  @file
- *  Helpers - theming: Twitter Bootstrap
+ *  Helpers - theming: Twitter Bootstrap 2.x
  */
 
 
@@ -104,7 +104,7 @@ function menu_item( $title, $path, $prefix = '', $options = array())
  *  Definition lists
  *  @param $items Array : items with keys as "terms" (<dt>) of definition list
  */
-function dl( $items, $options = array())
+function dli( $items, $options = array())
 {
     //      Overridable defaults
     $options += array(

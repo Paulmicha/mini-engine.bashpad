@@ -2,26 +2,31 @@
 
 /**
  *  @file
- *  Mini HTTP request engine (from scratch)
+ *  Mini HTTP request engine (routing from scratch)
  *  
- *  Defines context based on URL,
- *  Includes context-specific process code,
- *  Handles theming based on context-specific templates.
+ *  Defines route based on URL,
+ *  Includes route-specific process code,
+ *  Handles theming based on route-specific templates.
  *  
- *  @example    http://www.url.com?q=section/param/test
- *              rewritten : http://www.url.com/section/param/test
- *              context-specific process files looked for (all files found are loaded):
- *              => context/section_param_test.inc
- *              => context/section_param.inc
- *              => context/section.inc
+ *  NB: Characters allowed in URLs (before '?') are :
+ *      alphanumeric lowercase
+ *      slashes: /
+ *      hyphen: -
+ *  
+ *  @example    http://www.example.com?q=section/param/test
+ *              rewritten : http://www.example.com/section/param/test
+ *              routing-specific process files looked for (all files found are loaded):
+ *              => routing/section_param_test.inc
+ *              => routing/section_param.inc
+ *              => routing/section.inc
  *              template files looked for (only the most specific - the first match - is used) :
  *              => page.tpl.php + section-param-test.tpl.php
  *              => page.tpl.php + section-param.tpl.php
  *              => page.tpl.php + section.tpl.php
  *              => page.tpl.php + default.tpl.php (when nothing else matches)
  *
- *  @example    http://www.url.com?q=rest/request-name/param/test
- *              rewritten : http://www.url.com/rest/request-name/param/test
+ *  @example    http://www.example.com?q=rest/request-name/param/test
+ *              rewritten : http://www.example.com/rest/request-name/param/test
  *              template files looked for (only the most specific - the first match - is used) :
  *              => rest.tpl.php + rest-request-name-param-test.tpl.php
  *              => rest.tpl.php + rest-request-name-param.tpl.php
@@ -31,8 +36,8 @@
  *              => rest.tpl.php + request-name.tpl.php
  *              => rest.tpl.php + raw.tpl.php (when nothing else matches)
  *
- *  @example    http://www.url.com?q=iframe/section/param/test
- *              rewritten : http://www.url.com/iframe/section/param/test
+ *  @example    http://www.example.com?q=iframe/section/param/test
+ *              rewritten : http://www.example.com/iframe/section/param/test
  *              template files looked for (only the most specific - the first match - is used) :
  *              => iframe.tpl.php + iframe-section-param-test.tpl.php
  *              => iframe.tpl.php + iframe-section-param.tpl.php
@@ -45,20 +50,33 @@
 
 
 //      Homepage
-if ( !$_REQUEST || empty( $_REQUEST ))
+$arg0 = arg( 0 );
+if ( empty( $arg0 ))
 {
-    $context_handler_file = $context_handlers_path .'/'. $content_include .".inc";
-    if ( file_exists( $context_handler_file )) {
-        include $context_handler_file;
+    $routing_handler_file = $routing_handlers_path .'/'. $content_include .".inc";
+    
+    if ( file_exists( $routing_handler_file ))
+    {
+        include $routing_handler_file;
+        
+        //      debug
+        if ( !empty( $debug[ 'routing' ]))
+        {
+            print '<pre>';
+            print "$routing_handler_file loaded.";
+            print '</pre>';
+        }
     }
 }
 
 //      First valid request type found is selected
-else if ( !empty( $_REQUEST[ 'q' ]))
+else
 {
-    //      Handle naming suggestions for files à la Drupal so that the most specific can be used first
-    //$request_arr = array_filter( explode( '/', $_REQUEST[ 'q' ]));
-    $request_arr = explode( '/', $_REQUEST[ 'q' ]);
+    //      404 handler
+    $is_404 = true;
+    
+    //      Handle candidates so that the most specific can be used first
+    $request_arr = get_request_arr();
     
     //      Include context-specific process code
     $context_handlers_arr = $request_arr;
@@ -68,29 +86,30 @@ else if ( !empty( $_REQUEST[ 'q' ]))
     foreach( $context_handlers_arr as $i => $ch )
     {
         if ( !empty( $prev_ch ))
-            $context_handler_file = $prev_ch ."_". $ch .".inc";
+            $routing_handler_file = $prev_ch ."_". $ch .".inc";
         else
-            $context_handler_file = $context_handlers_path .'/'. $ch .".inc";
-        $prev_ch = str_replace( '.inc', '', $context_handler_file );
+            $routing_handler_file = $routing_handlers_path .'/'. $ch .".inc";
+        $prev_ch = str_replace( '.inc', '', $routing_handler_file );
         
-        if ( file_exists( $context_handler_file ))
+        if ( file_exists( $routing_handler_file ))
         {
-            include $context_handler_file;
+            include $routing_handler_file;
+            $is_404 = false;
             
             //      debug
-            if ( $GLOBALS[ 'debug' ] && $GLOBALS[ 'debug' ][ 'routing' ])
+            if ( !empty( $debug[ 'routing' ]))
             {
                 print '<pre>';
-                print "$context_handler_file loaded.";
+                print "$routing_handler_file loaded.";
                 print '</pre>';
             }
         }
         
         //      debug
-        else if ( $GLOBALS[ 'debug' ] && $GLOBALS[ 'debug' ][ 'routing' ])
+        else if ( !empty( $debug[ 'routing' ]))
         {
             print '<pre>';
-            print "($context_handler_file not found)";
+            print "($routing_handler_file not found)";
             print '</pre>';
         }
     }
@@ -104,29 +123,30 @@ else if ( !empty( $_REQUEST[ 'q' ]))
         foreach( $stemmed_context_handlers_arr as $i => $ch )
         {
             if ( !empty( $prev_ch ))
-                $context_handler_file = $prev_ch ."_". $ch .".inc";
+                $routing_handler_file = $prev_ch ."_". $ch .".inc";
             else
-                $context_handler_file = $context_handlers_path .'/'. $ch .".inc";
-            $prev_ch = str_replace( '.inc', '', $context_handler_file );
+                $routing_handler_file = $routing_handlers_path .'/'. $ch .".inc";
+            $prev_ch = str_replace( '.inc', '', $routing_handler_file );
             
-            if ( file_exists( $context_handler_file ))
+            if ( file_exists( $routing_handler_file ))
             {
-                include $context_handler_file;
+                include $routing_handler_file;
+                $is_404 = false;
                 
                 //      debug
-                if ( $GLOBALS[ 'debug' ] && $GLOBALS[ 'debug' ][ 'routing' ])
+                if ( !empty( $debug[ 'routing' ]))
                 {
                     print '<pre>';
-                    print "$context_handler_file loaded.";
+                    print "$routing_handler_file loaded.";
                     print '</pre>';
                 }
             }
             
             //      debug
-            else if ( $GLOBALS[ 'debug' ] && $GLOBALS[ 'debug' ][ 'routing' ])
+            else if ( !empty( $debug[ 'routing' ]))
             {
                 print '<pre>';
-                print "($context_handler_file not found)";
+                print "($routing_handler_file not found)";
                 print '</pre>';
             }
         }
@@ -141,9 +161,10 @@ else if ( !empty( $_REQUEST[ 'q' ]))
         if ( file_exists( $tpl_suggestion ))
         {
             $content_template = $tpl_suggestion;
+            $is_404 = false;
             
             //      debug
-            if ( $GLOBALS[ 'debug' ] && $GLOBALS[ 'debug' ][ 'routing' ])
+            if ( !empty( $debug[ 'routing' ]))
             {
                 print '<pre>';
                 print "$tpl_suggestion CHECKS";
@@ -158,7 +179,7 @@ else if ( !empty( $_REQUEST[ 'q' ]))
         }
         
         //      debug
-        if ( $GLOBALS[ 'debug' ] && $GLOBALS[ 'debug' ][ 'routing' ])
+        if ( !empty( $debug[ 'routing' ]))
         {
             print '<pre>';
             print "($tpl_suggestion not found)";
@@ -199,6 +220,7 @@ else if ( !empty( $_REQUEST[ 'q' ]))
             if ( file_exists( $tpl_suggestion ))
             {
                 $content_template = $tpl_suggestion;
+                $is_404 = false;
                 break;
             }
             array_pop( $tpl_suggestions_arr );
@@ -210,8 +232,13 @@ else if ( !empty( $_REQUEST[ 'q' ]))
             $content_template = $theme_path .'/raw.tpl.php';
     }
     
+    //      404 handler
+    if ( $is_404 ) {
+        send_404();
+    }
+    
     //      modif 2013/03/21 15:14:42 - si on arrive sur l'index alors que $_REQUEST n'est pas vide, on prend le default s'il existe
-    if ( $content_template == $theme_path .'/index.tpl.php' && file_exists( $theme_path .'/default.tpl.php' ))
+    elseif ( $content_template == $theme_path .'/index.tpl.php' && file_exists( $theme_path .'/default.tpl.php' ))
         $content_template = $theme_path .'/default.tpl.php';
 }
 

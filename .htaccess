@@ -1,6 +1,7 @@
 
 ##
-#   MiniEngine .htaccess based on HTML5 Boilerplate + Drupal
+#   MiniEngine .htaccess
+#   (based on HTML5 Boilerplate + Drupal)
 #
 
 #   Custom URL rewriting
@@ -10,7 +11,14 @@
     RewriteEngine On
     
     #   Adjust this to your setup
+    #   Must correspond to config/settings.inc setup
+    #   Examples :
+    #       If you run this application in http://www.example.com/, then leave this "base path" at "/"
+    #       If in http://localhost/mini-engine, then use "/mini-engine"
+    #       If in http://192.168.xxx.xxx/mini-engine/www, then use "/mini-engine/www"
     RewriteBase /
+    #RewriteBase /mini-engine
+    #RewriteBase /mini-engine/www
     
     #   Rewrite URLs of the form '/x' to the form '/index.php?q=x'.
     RewriteCond %{REQUEST_FILENAME} !-f

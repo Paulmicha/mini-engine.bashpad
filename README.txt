@@ -1,14 +1,12 @@
 
 Mini-engine
-(unstable)
+(quasi-finished)
 
 This project is a minimalist Bash commands store and launch pad.
 
-It's currently built on top of a custom Php app from scratch, which was originally designed for automating repetitive tasks (such as data preparation for migrations).
-It should be rebuild in modern PHP - for ex. using Symfony 2 components, but its current state can be seen as a museum of Php snippets put together (hence Here be dragons).
+It's currently built on top of a custom Php app from scratch, which was originally designed for automating repetitive tasks (such as data preparation for migrations). It should be rebuilt in modern PHP - for ex. using Symfony 2 components, and its current state can be seen as my personal museum of Php snippets put together (hence Here be dragons).
 
- WARNING : this is probably full of massive security breaches, as it was never meant to be publicly accessible over the web.
-The reason is mainly because the underlying old code base wasn't built for it, and because it can connect to other servers through SSH in order to execute Bash commands... In short, NEVER run this 'outdoors'.
+WARNING : this application will contain extremely sensitive & unobfuscated data, and it was never meant to be publicly accessible over the web (because it can connect to other servers through SSH in order to execute Bash commands). It is probably unsecure, because the underlying old code base wasn't built for it : we only use it in LAN for speeding up repetitive tasks on our development environments, and I would strongly advise not to host it anywhere accessible online.
 
 ---
 
@@ -27,5 +25,4 @@ Third-party Bundled projects Credits :
 
 @license GPL v2
 @author Paulmicha
-
 
