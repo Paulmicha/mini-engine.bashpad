@@ -16,9 +16,8 @@
     #       If you run this application in http://www.example.com/, then leave this "base path" at "/"
     #       If in http://localhost/mini-engine, then use "/mini-engine"
     #       If in http://192.168.xxx.xxx/mini-engine/www, then use "/mini-engine/www"
-    RewriteBase /
-    #RewriteBase /mini-engine
-    #RewriteBase /mini-engine/www
+    #RewriteBase /
+    RewriteBase /mini-engine/v1.0.0-alpha/
     
     #   Rewrite URLs of the form '/x' to the form '/index.php?q=x'.
     RewriteCond %{REQUEST_FILENAME} !-f

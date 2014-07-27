@@ -7,7 +7,7 @@
 
 //      Bounce
 if ( $unauthorized ) {
-    print "<p class='error'> Error: invalid session </p>";
+    print "<p class='error'> Error: unauthorized </p>";
 }
 else {
     print $content_markup;

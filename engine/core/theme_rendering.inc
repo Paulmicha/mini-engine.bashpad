@@ -2,54 +2,54 @@
 
 /**
  *  @file
- *  Theming rendering process
+ *  Templates rendering process
+ *  @see http_request_engine.inc
  */
 
+//      Debug : adding execution time in output
+//      (requires content templates printing $content)
+if ( $enable_debug && $debug[ 'exec_time' ])
+{
+    $content .= '<div class="container">';
+    $content .= '<small>';
+    $content .= get_system_exec_time();
+    $content .= '</small>';
+    $content .= '</div>';
+}
+
 //      debug content_template
-if ( $GLOBALS[ 'debug' ] && $GLOBALS[ 'debug' ][ 'routing' ])
+if ( $debug[ 'tpl' ])
 {
     print '<pre>';
-    print "content_template = $content_template";
+    print "\$content_tpl = $content_tpl";
     print '</pre>';
 }
 
 //      Content
-//try
-//{
-    ob_start();
-    include( $content_template );
-    $content_markup .= ob_get_contents();
-    ob_end_clean();
-//}
-//catch( Exception $e ) {
-//    $content_markup .= '<pre class="error">'. $e .'</pre>';
-//}
+ob_start();
+include( $content_tpl );
+$content_markup .= ob_get_contents();
+ob_end_clean();
 
-//      Container
-if ( file_exists( $theme_path .'/'. $content_template_type .'.tpl.php' )) {
-    $template_file = $theme_path .'/'. $content_template_type .'.tpl.php';
+//      Container (outer wrap)
+if ( file_exists( $theme_path .'/'. $content_tpl_type .'.tpl.php' )) {
+    $container_tpl = $theme_path .'/'. $content_tpl_type .'.tpl.php';
 }
 
 //      debug template_file
-if ( $GLOBALS[ 'debug' ] && $GLOBALS[ 'debug' ][ 'routing' ])
+if ( $debug[ 'tpl' ])
 {
     print '<pre>';
-    print "template_file = $template_file";
+    print "\$container_tpl = $container_tpl";
     print '</pre>';
 }
 
-//try
-//{
-    ob_start();
-    include( $template_file );
-    $output = ob_get_contents();
-    ob_end_clean();
-//}
-//catch( Exception $e ) {
-//    $content_markup .= '<pre class="error">'. $e .'</pre>';
-//}
+ob_start();
+include( $container_tpl );
+$final_output = ob_get_contents();
+ob_end_clean();
 
 //      Final output
-print $output;
+print $final_output;
 
 

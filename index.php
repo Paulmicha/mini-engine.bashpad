@@ -2,9 +2,14 @@
 
 /**
  *	@file
- *	Quick php mini-engine from scratch index file
+ *	Mini-engine
  */
 
+//      See comments below for IP-based access restriction
+include 'engine/bootstrap.inc';
+
+
+/*
 //      Strict IP-based access control
 //      (uncomment this to see your IP)
 //print '<pre>';
@@ -31,5 +36,5 @@ if ( substr( $_SERVER[ 'REMOTE_ADDR' ], 0, 7 ) != "192.168"
 else {
     include 'engine/bootstrap.inc';
 }
-
+*/
 
