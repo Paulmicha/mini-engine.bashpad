@@ -3,15 +3,13 @@
 /**
  *  @file
  *  Mini Engine default settings
+ *  (global scope "reserved" vars)
  *  
  *  This is pure Global Scope Mayhem, as promised :P
  */
 
 
-//--------------------------------------------------------------------------------------
 //      Base path
-
-
 //      MUST start AND end with "/"
 //      @see .htaccess @ line 13
 //      Examples :
@@ -22,46 +20,61 @@
 $base_path = "/";
 
 
+//      Extensions
+$extensions = array();
 
-//--------------------------------------------------------------------------------------
-//      Mini engine settings (global scope "reserved" vars)
+//      @todo 2014/07/28 07:54:51 - to complete
+$extensions[ 'entity' ] = array(
+    'enabled' => false,
+    'require' => array( 'db' ),
+    'settings' => array(
+        'lookup_paths' => array( 'config/entities', 'engine/extensions/entities' ),
+    ),
+);
 
-
-$content = "";
-$content_before = "";
-$content_markup = "";
-$content_after = "";
-$footer_extra_js = "";
+//      Routing globals
 $request_arr = array();
-$routing_handlers_path = "routing";//       dir to scan for routing handlers
-$http_s = "http://";
-if ( @$_SERVER[ 'HTTPS' ] == "on" ) {
-    $http_s = "https://";
-}
-$navbar_items = '';
-
-//      Routing & Theming-related
 $routing_max_depth = 9;
-$theme_path = "theme";//       dir to scan for template files & assets
+$routing_handlers_path = "routing";//       dir to scan for routing handlers
 $routing_handler_filename = "index";
+
+
+//      Template globals
+$theme_path = "theme";//       dir to scan for template files & assets
 $content_tpl_type = "page";
 $container_tpl = $theme_path ."/page.tpl.php";
 $content_tpl = $theme_path ."/index.tpl.php";
 $content_tpl_extensions_arr = array( '.tpl.php', '.html' );//       extensions to use as content tpl
 
-//      Default page content (home)
 $body_id = '';
 $head_extra_markup = '';
 $body_extra_css_classes = '';
 
-$lang = 'en';
-$locale = 'en_EN';
-$timezone = 'UTC';//        ex: 'Europe/Paris', etc.
+
+//      Content globals
+$content = "";
+$content_before = "";
+$content_markup = "";
+$content_after = "";
+
+$navbar_items = '';
+$footer_extra_js = "";
 
 $site_name = "Mini-engine";
 $head_page_title = "Mini-engine";
 $page_title = "Mini-engine";
 $meta_description = "Mini-engine";
+
+
+//      Misc. globals
+$lang = 'en';
+$locale = 'en_EN';
+$timezone = 'UTC';//        ex: 'Europe/Paris', etc.
+
+$http_s = "http://";
+if ( @$_SERVER[ 'HTTPS' ] == "on" ) {
+    $http_s = "https://";
+}
 
 
 

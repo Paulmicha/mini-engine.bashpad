@@ -2,7 +2,7 @@
 
 /**
  *  @file
- *  UI - menu-related
+ *  UI - nav-related
  *  @todo 2014/07/27 23:29:55 - refacto in progress (patterns / components)
  */
 

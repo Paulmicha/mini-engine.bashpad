@@ -8,7 +8,7 @@
  */
 
 
-//      Everything depends on this
+//      Base path
 //      MUST start AND end with "/"
 //      @see .htaccess @ line 13
 //      Examples :
@@ -19,6 +19,15 @@
 //$base_path = '/';
 $base_path = '/mini-engine/v1.0.0-alpha/';
 
+
+
+//------------------------------------------
+//      Extensions
+//      Uncomment to enable (& configure)
+//      @todo 2014/07/28 07:38:32 - in progress
+
+
+//$extensions[ 'entity' ][ 'enabled' ] = true;
 
 
 //------------------------------------------

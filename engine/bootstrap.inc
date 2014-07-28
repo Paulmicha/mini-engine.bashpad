@@ -14,12 +14,14 @@ include 'engine/core/config/php_runtime_settings.inc';
 include 'engine/vendor/vendors.inc';
 include 'engine/core/core.inc';
 
-//      Global context handler (always included)
+//      "Any request" handler
 include 'routing/_global.inc';
 
-//      Request handling
-include 'engine/core/http_request_engine.inc';
+//      Router
+//      Matches current HTTP request with corresponding "handlers",
+//      & includes those context-specific files matched.
+include 'engine/core/router.inc';
 
-//      Rendering templates
-include 'engine/core/theme_rendering.inc';
+//      "Render" templates
+include 'engine/core/render.inc';
 
