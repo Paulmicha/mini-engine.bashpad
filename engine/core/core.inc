@@ -5,9 +5,9 @@
  *  Core APIs
  */
 
-if ( $enable_debug ) {
-    include 'engine/core/_debug.inc';
-}
+//if ( $enable_debug ) {
+include 'engine/core/_debug.inc';
+//}
 
 include 'engine/core/_routing.inc';
 
@@ -19,7 +19,5 @@ include 'engine/core/_tokens.inc';
 include 'engine/core/_file.inc';
 
 include 'engine/core/_ui.inc';
-include 'engine/core/_ui.nav.inc';
-
-include 'engine/core/_extensions.inc';
+include 'engine/core/_ui_nav.inc';
 

@@ -26,6 +26,7 @@ project-root-dir/
 │   ├── core/
 │   │   ├── router.inc
 │   │   ├── render.inc
+│   │   ├── extensions.inc
 │   │   └── ...
 │   ├── extensions/
 │   ├── vendor/

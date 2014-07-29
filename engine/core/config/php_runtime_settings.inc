@@ -5,7 +5,17 @@
  *  Mini Engine - PHP runtime settings
  */
 
+//		Fix IE sessions inside iframes
+//      @see http://stackoverflow.com/questions/5257983/what-is-headerp3p-cp-cao-psa-our
+if ( arg( 0 ) == 'iframe' ) {
+    header( 'P3P: CP="CAO PSA OUR"' );
+}
+
 header( 'Content-Type: text/html; charset=utf-8' );
+
+if ( !empty( $extensions[ 'session' ][ 'enabled' ])) {
+    session_start();
+}
 
 //      Display PHP Errors
 if ( $enable_debug ) {

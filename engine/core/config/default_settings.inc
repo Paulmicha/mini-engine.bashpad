@@ -20,17 +20,10 @@
 $base_path = "/";
 
 
-//      Extensions
-$extensions = array();
+//      Extensions settings
+//      (moved to their own separate file)
+include 'default_extensions_settings.inc';
 
-//      @todo 2014/07/28 07:54:51 - to complete
-$extensions[ 'entity' ] = array(
-    'enabled' => false,
-    'require' => array( 'db' ),
-    'settings' => array(
-        'lookup_paths' => array( 'config/entities', 'engine/extensions/entities' ),
-    ),
-);
 
 //      Routing globals
 $request_arr = array();
@@ -46,8 +39,9 @@ $container_tpl = $theme_path ."/page.tpl.php";
 $content_tpl = $theme_path ."/index.tpl.php";
 $content_tpl_extensions_arr = array( '.tpl.php', '.html' );//       extensions to use as content tpl
 
-$body_id = '';
 $head_extra_markup = '';
+$footer_extra_js = '';
+$body_id = '';
 $body_extra_css_classes = '';
 
 
@@ -58,7 +52,6 @@ $content_markup = "";
 $content_after = "";
 
 $navbar_items = '';
-$footer_extra_js = "";
 
 $site_name = "Mini-engine";
 $head_page_title = "Mini-engine";

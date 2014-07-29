@@ -27,7 +27,9 @@ $base_path = '/mini-engine/v1.0.0-alpha/';
 //      @todo 2014/07/28 07:38:32 - in progress
 
 
-//$extensions[ 'entity' ][ 'enabled' ] = true;
+$extensions[ 'entity' ][ 'enabled' ] = true;
+$extensions[ 'theme_bootstrap' ][ 'enabled' ] = true;
+
 
 
 //------------------------------------------
@@ -36,6 +38,7 @@ $base_path = '/mini-engine/v1.0.0-alpha/';
 
 $enable_debug = true;
 
+//$debug[ 'extensions' ] = 1;
 //$debug[ 'routing' ] = 1;
 //$debug[ 'tpl' ] = 1;
 //$debug[ 'req' ] = 1;

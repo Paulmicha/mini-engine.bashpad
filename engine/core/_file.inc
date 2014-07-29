@@ -41,6 +41,9 @@ function list_files( $path, $options = array())
         'files_only' => true,
         'dirs_only' => false,
         'sort_callback' => 'sort_files_list',
+        
+        //      debug
+        'warn_if_path_not_found' => false,
     );
     extract( $options );
     
@@ -56,7 +59,17 @@ function list_files( $path, $options = array())
     else if ( !empty( $path ))
     {
         if ( !file_exists( $path ))
-            return alert( "Directory <code>$path</code> does not exist, or is inaccessible.", 'warning' );
+        {
+            if ( $warn_if_path_not_found )
+            {
+                if ( function_exists( 'alert' )) {
+                    return alert( "Directory <code>$path</code> does not exist, or is inaccessible.", 'warning' );
+                }
+                return "Directory <code>$path</code> does not exist, or is inaccessible.";
+            }
+            
+            return array();
+        }
          
         $ritit = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $path ), $order );
         foreach ( $ritit as $splFileInfo )

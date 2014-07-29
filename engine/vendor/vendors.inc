@@ -6,7 +6,8 @@
  */
 
 //      @todo 2014/07/28 07:36:59 - why aren't vendor assets loaded ?
-if ( $enable_debug ) {
+//if ( $enable_debug ) {
     //require "engine/vendor/krumo/class.krumo.php";
-    require "krumo/class.krumo.php";
-}
+    //include 'krumo/class.krumo.php';
+    include 'engine/vendor/krumo/class.krumo.php';
+//}

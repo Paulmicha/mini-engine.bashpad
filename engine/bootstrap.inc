@@ -5,14 +5,17 @@
  *  Mini Engine Bootstrap
  */
 
-//      Config
-include 'engine/core/config/default_settings.inc';
-include 'config/settings.inc';
-include 'engine/core/config/php_runtime_settings.inc';
-
 //      Engine
 include 'engine/vendor/vendors.inc';
 include 'engine/core/core.inc';
+
+//      Config
+include 'engine/core/config/default_settings.inc';
+include 'config/settings.inc';
+
+//      Extensions & runtime settings
+include 'engine/core/extensions.inc';
+include 'engine/core/config/php_runtime_settings.inc';
 
 //      "Any request" handler
 include 'routing/_global.inc';
