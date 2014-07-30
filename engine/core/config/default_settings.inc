@@ -8,6 +8,8 @@
  *  This is pure Global Scope Mayhem, as promised :P
  */
 
+$mini_engine_version = "1.0.0";
+
 
 //      Base path
 //      MUST start AND end with "/"
@@ -22,7 +24,12 @@ $base_path = "/";
 
 //      Extensions settings
 //      (moved to their own separate file)
-include 'default_extensions_settings.inc';
+$extensions = array(
+    '#settings' => array(
+        'lookup_paths' => array( 'engine/extensions', 'config/extensions' ),
+    ),
+);
+include 'engine/extensions/config/default_settings.inc';
 
 
 //      Routing globals

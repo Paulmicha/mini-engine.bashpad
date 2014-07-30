@@ -27,8 +27,10 @@ $base_path = '/mini-engine/v1.0.0-alpha/';
 //      @todo 2014/07/28 07:38:32 - in progress
 
 
-$extensions[ 'entity' ][ 'enabled' ] = true;
-$extensions[ 'theme_bootstrap' ][ 'enabled' ] = true;
+$extensions[ 'system_ui' ][ 'enabled' ] = true;
+//$extensions[ 'theme_jquery' ][ 'enabled' ] = true;
+//$extensions[ 'theme_bootstrap' ][ 'enabled' ] = true;
+//$extensions[ 'entity' ][ 'enabled' ] = true;
 
 
 

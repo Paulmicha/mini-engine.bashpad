@@ -21,7 +21,7 @@ if ( !empty( $extensions ))
                 foreach( $files_to_include as $f )
                 {
                     //      debug
-                    if ( !empty( $GLOBALS[ 'debug' ][ 'extensions' ]))
+                    if ( !empty( $debug[ 'extensions' ]))
                     {
                         echo '<br/>including : <code>';
                         echo $f->fullpath;
@@ -41,8 +41,11 @@ if ( !empty( $extensions ))
  *  "Autoload" extension files
  *  (Recursive)
  */
-function extension_include( $ext_name )
+function extension_include( $ext_name, $is_dependency = false )
 {
+    global $debug;
+    global $extensions;
+    
     //      Optimze for potential cross-dependencies
     static $once_arr;
     if ( !is_array( $once_arr )) {
@@ -53,23 +56,32 @@ function extension_include( $ext_name )
     }
     $once_arr[ $ext_name ] = true;
     
+    //      debug
+    if ( !empty( $debug[ 'extensions' ]))
+    {
+        echo $is_dependency ? '<br/> └ dependency : <code>' : '<br/>requested : <code>';
+        echo $ext_name;
+        echo '</code>';
+    }
+    
     //      Naming convention : will include any "namespace.inc" & "namespace_subname.inc" files
-    $files_to_include = list_files( $GLOBALS[ 'extensions' ][ '#settings' ][ 'lookup_paths' ], array(
-        'mask' => '`^'. $ext_name .'\.inc|^'. $ext_name .'_.+\.inc$`i',
+    $files_to_include = list_files( $extensions[ '#settings' ][ 'lookup_paths' ], array(
+        'mask' => '`^'. $ext_name .'\.inc$|^'. $ext_name .'_.+\.inc$`i',
+        'max_depth' => 1,
     ));
     
     //      Auto "resolve" dependencies
-    if ( !empty( $GLOBALS[ 'extensions' ][ $ext_name ][ 'require' ]))
+    if ( !empty( $extensions[ $ext_name ][ 'require' ]))
     {
-        foreach( $GLOBALS[ 'extensions' ][ $ext_name ][ 'require' ] as $dep )
+        foreach( $extensions[ $ext_name ][ 'require' ] as $dep )
         {
-            $GLOBALS[ 'extensions' ][ $dep ][ 'enabled' ] = true;
-            $dependencies_arr = extension_include( $dep );
+            $extensions[ $dep ][ 'enabled' ] = true;
+            $dependencies_arr = extension_include( $dep, true );
             
             if ( !empty( $dependencies_arr ))
             {
                 foreach( $dependencies_arr as $f ) {
-                    array_push( $files_to_include, $f );
+                    $is_dependency ? array_push( $files_to_include, $f ) : array_unshift( $files_to_include, $f );
                 }
             }
         }

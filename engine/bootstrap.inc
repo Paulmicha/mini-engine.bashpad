@@ -3,18 +3,21 @@
 /**
  *  @file
  *  Mini Engine Bootstrap
+ *  ("front controller")
  */
 
 //      Engine
 include 'engine/vendor/vendors.inc';
 include 'engine/core/core.inc';
 
-//      Config
+//      Settings
 include 'engine/core/config/default_settings.inc';
 include 'config/settings.inc';
 
-//      Extensions & runtime settings
+//      Extensions
 include 'engine/core/extensions.inc';
+
+//      Php settings
 include 'engine/core/config/php_runtime_settings.inc';
 
 //      "Any request" handler
