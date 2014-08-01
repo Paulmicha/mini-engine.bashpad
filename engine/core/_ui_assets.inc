@@ -29,7 +29,7 @@ function add_css( $css, $options = array())
         $css = '<style'. attributes( $attributes ) .'>'. $css .'</style>';
     }
     
-    $spaces[ 'head' ] .= $css;
+    $spaces[ $in ] .= $css;
 }
 
 
