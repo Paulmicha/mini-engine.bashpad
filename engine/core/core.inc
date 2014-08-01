@@ -20,4 +20,5 @@ include 'engine/core/_file.inc';
 
 include 'engine/core/_ui.inc';
 include 'engine/core/_ui_nav.inc';
+include 'engine/core/_ui_assets.inc';
 

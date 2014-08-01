@@ -7,7 +7,7 @@
  */
 
 //      Init
-$head_page_title = "Testing navbar";
+$metadata[ 'head_page_title' ] = "Testing navbar";
 
 //      Explanation
 $content .= "<h3>The result of these snippets is visible in the navbar <i class='icon-arrow-up'></i></h3>";

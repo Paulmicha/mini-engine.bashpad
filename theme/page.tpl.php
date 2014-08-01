@@ -6,37 +6,26 @@
  */
 
 ?><!DOCTYPE html>
-<html lang="<?php print $lang; ?>" class="no-js">
+<html<?php print attributes( $body_attr ); ?>>
 <head>
     <?php include 'theme/_meta.inc'; ?>
     <?php include 'theme/_assets_head.inc'; ?>
-    <?php print $head_extra_markup; ?>
+    <?php print $spaces[ 'head' ]; ?>
 </head>
-<body<?php
-if ( !empty( $body_extra_css_classes )) {
-    print " class='$body_extra_css_classes'";
-}
-if ( !empty( $body_id )) {
-    print " id='$body_id'";
-}
-?>>
+<body<?php print attributes( $body_attr ); ?>>
     
-    <?php include 'theme/_page_navbar.inc'; ?>
+    <?php print $spaces[ 'page_top' ]; ?>
     
+    <?php if ( !empty( $content_rendered )) { ?>
     <!-- content -->
     <div class="container" id="content">
-        <?php print $content_before; ?>
-        <?php print $content_markup; ?>
-        <?php print $content_after; ?>
+        <?php print $content_rendered; ?>
     </div>
     <!-- /content -->
+    <?php }//  end if ( !empty( $content_rendered )) ?>
     
-    <?php include 'theme/_page_footer.inc'; ?>
-    
-    <!-- scripts -->
     <?php include 'theme/_assets_bottom.inc'; ?>
-    <?php print $footer_extra_js; ?>
-    <!-- /scripts -->
+    <?php print $spaces[ 'page_bottom' ]; ?>
     
 </body>
 </html>

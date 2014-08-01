@@ -10,21 +10,21 @@
 <head>
     <?php include 'theme/_meta.inc'; ?>
     <?php include 'theme/_assets_head.inc'; ?>
-    <?php print $head_extra_markup; ?>
+    <?php print $spaces[ 'head' ]; ?>
 </head>
-<body class="<?php print $body_extra_css_classes; ?>" id="<?php print $body_id; ?>">
+<body<?php print attributes( $body_attr ); ?>>
     
     <!-- content -->
     <div class="container" id="content">
         <?php print $content_before; ?>
-        <?php print $content_markup; ?>
+        <?php print $content_rendered; ?>
         <?php print $content_after; ?>
     </div>
     <!-- /content -->
     
     <!-- scripts -->
     <?php include 'theme/_assets_bottom.inc'; ?>
-    <?php print $footer_extra_js; ?>
+    <?php print $spaces[ 'page_bottom' ]; ?>
     <!-- /scripts -->
     
 </body>

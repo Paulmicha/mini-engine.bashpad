@@ -5,7 +5,7 @@
  *  System UI - navbar
  */
 
-$navbar_items .= '
+$navbar_items = '
     <li class="dropdown'. ( path_is_in_base_route( 'system' ) ? ' active' : '' ) .'">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown"> System <b class="caret"></b></a>
         <ul class="dropdown-menu">
@@ -60,6 +60,12 @@ $navbar_items .= '
         </ul>
     </li>
 '; 
+
+
+//      Place at the top of pages
+$spaces[ 'page_top' ] .= render_tpl( 'theme/_components/navbar.tpl.php' );
+
+
 
 //      @todo 2014/07/30 07:11:11
 /*

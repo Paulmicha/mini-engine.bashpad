@@ -7,7 +7,7 @@
  */
 
 //      Init
-$head_page_title = "Utilities";
+$metadata[ 'head_page_title' ] = "Utilities";
 
 
 //--------------------------------------------------------------------

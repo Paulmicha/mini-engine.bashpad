@@ -7,7 +7,7 @@
  */
 
 //      Init
-$head_page_title = "URL / Routing";
+$metadata[ 'head_page_title' ] = "URL / Routing";
 $content .= "<p>@see <code>engine/core/api_routing.inc</code></p>";
 
 //      arg

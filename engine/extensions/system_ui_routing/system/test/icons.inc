@@ -7,7 +7,7 @@
  */
 
 //      Init
-$head_page_title = "Font Awesome Icons cheatsheet";
+$metadata[ 'head_page_title' ] = "Font Awesome Icons cheatsheet";
 
 //      Icons cheat sheet
 //      @see http://fortawesome.github.io/Font-Awesome/cheatsheet/

@@ -5,7 +5,7 @@
  *  Mini Engine - PHP runtime settings
  */
 
-//		Fix IE sessions inside iframes
+//		Support old IE sessions inside iframes
 //      @see http://stackoverflow.com/questions/5257983/what-is-headerp3p-cp-cao-psa-our
 if ( arg( 0 ) == 'iframe' ) {
     header( 'P3P: CP="CAO PSA OUR"' );
@@ -29,6 +29,6 @@ else {
 mb_internal_encoding( "UTF-8" );
 
 //      Date & time settings
-setlocale( LC_ALL, $locale );
-date_default_timezone_set( $timezone );
+setlocale( LC_ALL, $metadata[ 'locale' ] );
+date_default_timezone_set( $metadata[ 'timezone' ] );
 

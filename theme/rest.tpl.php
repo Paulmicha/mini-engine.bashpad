@@ -10,7 +10,7 @@ if ( $unauthorized ) {
     print "<p class='error'> Error: unauthorized </p>";
 }
 else {
-    print $content_markup;
-    print $footer_extra_js;
+    print $content_rendered;
+    print $spaces[ 'page_bottom' ];
 }
 

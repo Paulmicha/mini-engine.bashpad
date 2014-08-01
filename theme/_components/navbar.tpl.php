@@ -2,7 +2,8 @@
 
 /**
  *  @file
- *  Template Fragment - Pages Navbar
+ *  Navbar template
+ *  @require Bootstrap-2.3.2
  */
 
 ?>

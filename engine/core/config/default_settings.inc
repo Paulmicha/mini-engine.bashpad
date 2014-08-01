@@ -22,7 +22,7 @@ $mini_engine_version = "1.0.0";
 $base_path = "/";
 
 
-//      Extensions settings
+//      Extensions global
 //      (moved to their own separate file)
 $extensions = array(
     '#settings' => array(
@@ -34,42 +34,51 @@ include 'engine/extensions/config/default_settings.inc';
 
 //      Routing globals
 $request_arr = array();
-$routing_max_depth = 9;
-$routing_handlers_path = "routing";//       dir to scan for routing handlers
-$routing_handler_filename = "index";
+$routing_max_depth = 9;//           max number of parts (default deepest URL ex: http://example.com/up/to/nine/elements/separated/by/slashes/by/default)
+$routing_path = "routing";//        default dir to scan for routing handlers
+$routing_filename = "index";
 
 
 //      Template globals
-$theme_path = "theme";//       dir to scan for template files & assets
-$content_tpl_type = "page";
-$container_tpl = $theme_path ."/page.tpl.php";
-$content_tpl = $theme_path ."/index.tpl.php";
-$content_tpl_extensions_arr = array( '.tpl.php', '.html' );//       extensions to use as content tpl
-
-$head_extra_markup = '';
-$footer_extra_js = '';
-$body_id = '';
-$body_extra_css_classes = '';
+$theme_path = "theme";//            dir to scan for template files & assets
+$base_tpl = "page";
+$container_tpl = "$theme_path/$base_tpl.tpl.php";
+$content_tpl = "$theme_path/index.tpl.php";
+$content_tpl_extensions_arr = array( '.tpl.php', '.html' );//       file extensions allowed for use as content tpl
 
 
 //      Content globals
+$page_title = "Welcome home";
 $content = "";
-$content_before = "";
-$content_markup = "";
-$content_after = "";
+$content_rendered = "";
 
-$navbar_items = '';
 
-$site_name = "Mini-engine";
-$head_page_title = "Mini-engine";
-$page_title = "Mini-engine";
-$meta_description = "Mini-engine";
+//      Spaces :
+//      Contains HTML markup for use in tpl files.
+//      (bridges templates & content ~ expresses what goes where)
+//      @example theme/page.tpl.php
+$spaces = array();
+$spaces[ 'head' ] = '';
+$spaces[ 'page_top' ] = '';
+$spaces[ 'page_bottom' ] = '';
+
+
+//      Metadata global
+$metadata = array();
+$metadata[ 'site_name' ] = "Mini-engine";
+$metadata[ 'head_page_title' ] = $page_title .' — '. $metadata[ 'site_name' ];
+$metadata[ 'description' ] = "Mini-engine";
+$metadata[ 'lang' ] = 'en';
+$metadata[ 'locale' ] = 'en_EN';
+$metadata[ 'timezone' ] = 'UTC';//        ex: 'Europe/Paris', etc.
 
 
 //      Misc. globals
-$lang = 'en';
-$locale = 'en_EN';
-$timezone = 'UTC';//        ex: 'Europe/Paris', etc.
+$html_attr = array(
+    'lang' => $metadata[ 'lang' ],
+    'class' => 'no-js',
+);
+$body_attr = array();
 
 $http_s = "http://";
 if ( @$_SERVER[ 'HTTPS' ] == "on" ) {
@@ -77,11 +86,7 @@ if ( @$_SERVER[ 'HTTPS' ] == "on" ) {
 }
 
 
-
-//--------------------------------------------------------------------------------------
 //      Debug
-
-
 $enable_debug = false;//  NB: enables krumo & php error reporting
 
 //      Types of debug

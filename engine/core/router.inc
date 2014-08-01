@@ -19,7 +19,7 @@
  *  
  *  Dirs (relative to project dir) are configurable in settings, or even on-the-fly.
  *  The examples below use the defaults :
- *      $routing_handlers_path = 'routing'
+ *      $routing_path = 'routing'
  *      $theme_path = 'theme'
  *  
  *  There are 2 types of templates : "outer wrapper", and "content" templates.
@@ -72,7 +72,7 @@ $arg1 = arg( 1 );
 //      Homepage
 if ( empty( $arg0 ))
 {
-    $routing_handler_file = $routing_handlers_path .'/'. $routing_handler_filename .".inc";
+    $routing_handler_file = $routing_path .'/'. $routing_filename .".inc";
     
     if ( file_exists( $routing_handler_file ))
     {
@@ -127,7 +127,7 @@ else
             $routing_handler_file = $prev_ch ."/". $ch .".inc";
         }
         else {
-            $routing_handler_file = $routing_handlers_path .'/'. $ch .".inc";
+            $routing_handler_file = $routing_path .'/'. $ch .".inc";
         }
         
         $prev_ch = str_replace( '.inc', '', $routing_handler_file );
@@ -168,7 +168,7 @@ else
                 $routing_handler_file = $prev_ch ."_". $ch .".inc";
             }
             else {
-                $routing_handler_file = $routing_handlers_path .'/'. $ch .".inc";
+                $routing_handler_file = $routing_path .'/'. $ch .".inc";
             }
             
             $prev_ch = str_replace( '.inc', '', $routing_handler_file );
@@ -257,7 +257,7 @@ else
     switch ( $request_arr[ 0 ])
     {
         case 'rest':
-            $content_tpl_type = 'rest';
+            $base_tpl = 'rest';
             if ( !$most_specific_tpl_suggestion_matched ) {
                 $run_2nd_pass = true;
             }
@@ -265,7 +265,7 @@ else
         break;
         
         case 'iframe':
-            $content_tpl_type = 'iframe';
+            $base_tpl = 'iframe';
             if ( !$most_specific_tpl_suggestion_matched ) {
                 $run_2nd_pass = true;
             }

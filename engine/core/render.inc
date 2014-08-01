@@ -3,7 +3,7 @@
 /**
  *  @file
  *  Templates rendering process
- *  @see route.inc
+ *  @see engine/core/router.inc
  */
 
 //      Debug : adding execution time in output
@@ -17,7 +17,7 @@ if ( $enable_debug && $debug[ 'exec_time' ])
     $content .= '</div>';
 }
 
-//      debug content_template
+//      debug
 if ( $debug[ 'tpl' ])
 {
     print '<pre>';
@@ -26,17 +26,14 @@ if ( $debug[ 'tpl' ])
 }
 
 //      Content
-ob_start();
-include( $content_tpl );
-$content_markup .= ob_get_contents();
-ob_end_clean();
+$content_rendered .= render_tpl( $content_tpl );
 
 //      Container (outer wrap)
-if ( file_exists( $theme_path .'/'. $content_tpl_type .'.tpl.php' )) {
-    $container_tpl = $theme_path .'/'. $content_tpl_type .'.tpl.php';
+if ( file_exists( $theme_path .'/'. $base_tpl .'.tpl.php' )) {
+    $container_tpl = $theme_path .'/'. $base_tpl .'.tpl.php';
 }
 
-//      debug template_file
+//      debug
 if ( $debug[ 'tpl' ])
 {
     print '<pre>';
@@ -44,12 +41,7 @@ if ( $debug[ 'tpl' ])
     print '</pre>';
 }
 
-ob_start();
-include( $container_tpl );
-$final_output = ob_get_contents();
-ob_end_clean();
-
 //      Final output
-print $final_output;
+print render_tpl( $container_tpl );
 
 

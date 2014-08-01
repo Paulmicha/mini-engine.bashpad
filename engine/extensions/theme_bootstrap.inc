@@ -42,7 +42,7 @@ if ( $extensions[ 'theme_bootstrap' ][ 'settings' ][ 'v' ] < '3.0.0' )
 {
     //      Font-awesome 3.x
     add_css( 'theme/_assets/vendor/font-awesome/3.2.1/css/font-awesome.min.css' );
-    $head_extra_markup .= '
+    $spaces[ 'head' ] .= '
     <!--[if lt IE 8]>
     <link rel="stylesheet" href="'. url( 'theme/_assets/vendor/font-awesome/3.2.1/css/font-awesome.min.css' ) .'">
     <![endif]-->

@@ -17,7 +17,8 @@
 //          If in http://192.168.xxx.xxx/mini-engine/www, then use "/mini-engine/www/"
 //          etc.
 //$base_path = '/';
-$base_path = '/mini-engine/v1.0.0-alpha/';
+//$base_path = '/mini-engine/v1.0.0-alpha/';
+$base_path = '/mini-engine/bashpad-0.0.1/';
 
 
 
@@ -35,6 +36,20 @@ $extensions[ 'system_ui' ][ 'enabled' ] = true;
 
 
 //------------------------------------------
+//      Content Defaults
+
+
+//$page_title = "Hello world";
+//$metadata[ 'site_name' ] = "My Project";
+//$metadata[ 'head_page_title' ] = $page_title .' — '. $metadata[ 'site_name' ];
+$metadata[ 'description' ] = "Description of my project";
+//$metadata[ 'lang' ] = 'en';
+//$metadata[ 'locale' ] = 'en_EN';
+//$metadata[ 'timezone' ] = 'UTC';
+
+
+
+//------------------------------------------
 //      Debug
 
 
@@ -45,20 +60,5 @@ $enable_debug = true;
 //$debug[ 'tpl' ] = 1;
 //$debug[ 'req' ] = 1;
 //$debug[ 'exec_time' ] = 1;
-
-
-
-//------------------------------------------
-//      Content Defaults
-
-
-$lang = 'en';
-$locale = 'en_EN';
-$timezone = 'UTC';
-
-$site_name = "Mini Engine";
-$head_page_title = "Mini Engine";
-$page_title = "Mini Engine";
-$meta_description = "Description of Mini-Engine";
 
 
