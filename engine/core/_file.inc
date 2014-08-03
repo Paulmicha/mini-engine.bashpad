@@ -23,6 +23,7 @@ function human_filesize( $filepath, $decimals = 2 )
 /**
  *  Build dirs & files tree
  *  @see http://php.net/manual/fr/class.recursiveiteratoriterator.php
+ *  (Recursive)
  */
 function list_files( $path, $options = array())
 {
@@ -37,15 +38,38 @@ function list_files( $path, $options = array())
         'max_items' => 9999,
         
         //      Note : the following params are not effective when using 'tree'
-        'max_depth' => 999,
+        'max_depth' => 99,
         'files_only' => true,
         'dirs_only' => false,
         'sort_callback' => 'sort_files_list',
+        
+        //      Cache
+        'cache' => true,
         
         //      debug
         'warn_if_path_not_found' => false,
     );
     extract( $options );
+    
+    
+    //      Check file cache
+    //      (only when $path is not an array)
+    $cache_id = '';
+    if ( $cache && !empty( $path ) && !is_array( $path ))
+    {
+        $unique_id = $path .','. $mask;
+        $files_only ? $unique_id .= ',files_only' : '';
+        $dirs_only ? $unique_id .= ',dirs_only' : '';
+        $exclusions_diff = array_diff( $exclusions, array( '.', '..' ));
+        !empty( $exclusions_diff ) ? $unique_id .= ',exclude['. join( ',', $exclusions_diff ) .']' : '';
+        
+        $files_arr = filecache_get( $unique_id );
+        
+        if ( isset( $files_arr )) {
+            return $files_arr;
+        }
+    }
+    
     
     $files_arr = array();
     $item_count = 0;
@@ -149,6 +173,11 @@ function list_files( $path, $options = array())
                 //      Increment for testing max nb of items
                 $item_count++;
             }
+        }
+        
+        //      Save cache
+        if ( $cache && !empty( $unique_id )) {
+            filecache_set( $unique_id, $files_arr );
         }
     }
     
