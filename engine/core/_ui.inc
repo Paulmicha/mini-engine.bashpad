@@ -36,8 +36,6 @@ function attributes( $attributes )
  */
 function render_tpl( $tpl_filepath, $options = array())
 {
-    $markup = '';
-    
     //      Fugly global scope mayhem :3
     //      (to access any global var from within any tpl to render)
     extract( $GLOBALS );
@@ -50,8 +48,8 @@ function render_tpl( $tpl_filepath, $options = array())
     
     //      Using output buffer
     ob_start();
-    include( $tpl_filepath );
-    $markup .= ob_get_contents();
+    include $tpl_filepath;
+    $markup = ob_get_contents();
     ob_end_clean();
     
     //      Allow (optional) prefix and/or suffix insertion

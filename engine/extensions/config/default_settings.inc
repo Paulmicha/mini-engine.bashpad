@@ -11,6 +11,7 @@ $extensions[ 'system_ui' ] = array(
     'enabled' => false,
     //'allowed_paths' => '',
     'require' => array( 'theme_bootstrap' ),
+    'weight' => 1,//  determins file include order (defaults to 0)
 );
 
 //      Entities

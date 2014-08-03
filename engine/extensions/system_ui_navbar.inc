@@ -5,6 +5,7 @@
  *  System UI - navbar
  */
 
+//      New global var
 $navbar_items = '
     <li class="dropdown'. ( path_is_in_base_route( 'system' ) ? ' active' : '' ) .'">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown"> System <b class="caret"></b></a>
@@ -59,11 +60,21 @@ $navbar_items = '
             
         </ul>
     </li>
-'; 
+';
 
 
-//      Place at the top of pages
-$spaces[ 'page_top' ] .= render_tpl( 'theme/_components/navbar.tpl.php' );
+
+/**
+ *  Implement hook_preprocess_render()
+ */ 
+function system_ui_preprocess_render( &$vars )
+{
+    global $spaces;
+    
+    //      Place at the top of pages
+    $spaces[ 'page_top' ] .= render_tpl( 'theme/_components/navbar.tpl.php' );
+}
+
 
 
 

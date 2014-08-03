@@ -6,6 +6,14 @@
  *  @see engine/core/router.inc
  */
 
+//      debug
+if ( $debug[ 'tpl' ])
+{
+    print '<pre>';
+    print "\$content_tpl = $content_tpl";
+    print '</pre>';
+}
+
 //      Debug : adding execution time in output
 //      (requires content templates printing $content)
 if ( $enable_debug && $debug[ 'exec_time' ])
@@ -17,13 +25,8 @@ if ( $enable_debug && $debug[ 'exec_time' ])
     $content .= '</div>';
 }
 
-//      debug
-if ( $debug[ 'tpl' ])
-{
-    print '<pre>';
-    print "\$content_tpl = $content_tpl";
-    print '</pre>';
-}
+//      Last chance to alter content before rendering
+hook( 'preprocess_render' );
 
 //      Content
 $content_rendered .= render_tpl( $content_tpl );
