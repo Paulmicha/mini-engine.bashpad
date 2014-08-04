@@ -23,13 +23,12 @@ $base_path = "/";
 
 
 //      Extensions global
-//      (moved to their own separate file)
 $extensions = array(
     '#settings' => array(
         'lookup_paths' => array( 'engine/extensions', 'config/extensions' ),
     ),
 );
-include 'engine/extensions/config/default_settings.inc';
+extensions_list();//                extensions default config - discovers & includes files such as engine/extensions/config/system_ui.default_settings.inc
 
 
 //      Routing globals
@@ -99,6 +98,10 @@ $debug = array(
     //'tpl' => 1,
     'req' => 0,
     //'req' => 1,
+    
+    //      Database API (PDO exceptions)
+    'pdo' => 0,
+    //'pdo' => 1,
     
     //      Execution time (at the bottom of every page)
     'exec_time' => 0,

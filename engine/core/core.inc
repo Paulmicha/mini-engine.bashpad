@@ -7,10 +7,11 @@
 
 include 'engine/core/_debug.inc';
 
+include 'engine/core/_hook.inc';
+include 'engine/core/_extensions.inc';
 include 'engine/core/_routing.inc';
 include 'engine/core/_file.inc';
 include 'engine/core/_filecache.inc';
-include 'engine/core/_hook.inc';
 
 include 'engine/core/_str.inc';
 include 'engine/core/_array.inc';

@@ -29,27 +29,32 @@ function list_files( $path, $options = array())
 {
     //      Overridable defaults
     $options += array(
-        //'order' => RecursiveIteratorIterator::LEAVES_ONLY, //  (default)
-        //'order' => RecursiveIteratorIterator::SELF_FIRST,
         'order' => RecursiveIteratorIterator::CHILD_FIRST,
-        'mask' => '',
-        'exclusions' => array( '.', '..' ),
-        'tree' => false,
-        'max_items' => 9999,
         
-        //      Note : the following params are not effective when using 'tree'
-        'max_depth' => 99,
+        'mask' => '',//                         Regex to filter filenames &/or folder names
+        'exclusions' => array( '.', '..' ),
+        'tree' => false,//                      Recursive array reproducing "real" folder structures
+        'max_items' => 9999,//                  Overload safety limit
+        
+        //      Note : the following params are not active when using 'tree'
+        'max_depth' => 99,//                    By default, will look into up to 99 nested folders
         'files_only' => true,
         'dirs_only' => false,
-        'sort_callback' => 'sort_files_list',
+        'sort_callback' => 'sort_files_list',// Sorts by filename by default, but allow to specify custom sorting callback for uasort()
         
         //      Cache
         'cache' => true,
         
         //      debug
         'warn_if_path_not_found' => false,
+        
+        //      Safety : prevents listing outside of project dir
+        'limit_to_project_dir' => true,
     );
     extract( $options );
+    
+    $item_count = 0;
+    $files_arr = array();
     
     
     //      Check file cache
@@ -71,9 +76,6 @@ function list_files( $path, $options = array())
     }
     
     
-    $files_arr = array();
-    $item_count = 0;
-    
     //      Support mutliple paths
     if ( is_array( $path ))
         foreach( $path as $p )
@@ -82,19 +84,24 @@ function list_files( $path, $options = array())
     //      Normal, single-path process
     else if ( !empty( $path ))
     {
-        if ( !file_exists( $path ))
-        {
-            if ( $warn_if_path_not_found )
-            {
-                if ( function_exists( 'alert' )) {
-                    return alert( "Directory <code>$path</code> does not exist, or is inaccessible.", 'warning' );
-                }
-                return "Directory <code>$path</code> does not exist, or is inaccessible.";
-            }
-            
+        //      Lookup dir not found
+        if ( !file_exists( $path )) {
             return array();
         }
-         
+        
+        //      Prevents listing outside of project dir
+        if ( $limit_to_project_dir )
+        {
+            $project_realpath = realpath( dirname(__FILE__) .'/../../' );
+            $requested_realpath = realpath( $path );
+            
+            if ( strpos( $requested_realpath, $project_realpath ) !== 0 ) {
+                return array();
+            }
+        }
+        
+        
+        //      Begin file and/or folder search
         $ritit = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $path ), $order );
         foreach ( $ritit as $splFileInfo )
         {
@@ -119,9 +126,6 @@ function list_files( $path, $options = array())
                     continue;
                 else
                 {
-                    //$current = array( $filename );
-                    
-                    //      update 2013/03/21 15:44:57 - get more data for files
                     $file_data = new stdClass();
                     $file_data->filename = $filename;
                     try
@@ -132,7 +136,6 @@ function list_files( $path, $options = array())
                         
                         //      Folder is the relative path of this element from the "base" path
                         //      Handle starting slash
-                        //$file_data->folder = substr( str_replace( $path, '', $file_data->path ), 1 );
                         $file_data->folder = str_replace( $path, '', $file_data->path );
                         if ( substr( $file_data->folder, 0, 2 ) == "./" )
                             $file_data->folder = substr( $file_data->folder, 2 );
@@ -166,9 +169,9 @@ function list_files( $path, $options = array())
                     $files_arr = array_merge_recursive( $files_arr, $current );
                     
                 }
-                else
+                else {
                     $files_arr[] = end( $current );
-                    //$files_arr[ $filename ] = end( $current );
+                }
                 
                 //      Increment for testing max nb of items
                 $item_count++;

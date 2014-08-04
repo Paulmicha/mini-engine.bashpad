@@ -15,7 +15,7 @@ include 'engine/core/config/default_settings.inc';
 include 'config/settings.inc';
 
 //      Extensions
-include 'engine/core/extensions.inc';
+include 'engine/core/extend.inc';
 
 //      Php settings
 include 'engine/core/config/php_runtime_settings.inc';
