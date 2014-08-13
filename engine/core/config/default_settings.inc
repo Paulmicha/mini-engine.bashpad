@@ -65,7 +65,7 @@ $spaces[ 'page_bottom' ] = '';
 //      Metadata global
 $metadata = array();
 $metadata[ 'site_name' ] = "Mini-engine";
-$metadata[ 'head_page_title' ] = $page_title .' — '. $metadata[ 'site_name' ];
+//$metadata[ 'head_page_title' ] = $page_title .' — '. $metadata[ 'site_name' ];
 $metadata[ 'description' ] = "Mini-engine";
 $metadata[ 'lang' ] = 'en';
 $metadata[ 'locale' ] = 'en_EN';

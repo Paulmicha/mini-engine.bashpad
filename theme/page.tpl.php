@@ -6,7 +6,7 @@
  */
 
 ?><!DOCTYPE html>
-<html<?php print attributes( $body_attr ); ?>>
+<html<?php print attributes( $html_attr ); ?>>
 <head>
     <?php include 'theme/_meta.inc'; ?>
     <?php include 'theme/_assets_head.inc'; ?>

@@ -5,12 +5,11 @@
  *  Template Fragment - Meta
  */
 
-//      Prevent html for messy dynamic values
-$metadata[ 'head_page_title' ] = strip_tags( $metadata[ 'head_page_title' ] );
-$metadata[ 'description' ] = strip_tags( $metadata[ 'description' ] );
-
 //      Other meta values
 $current_url = get_current_url();
+if ( empty( $metadata[ 'head_page_title' ])) {
+    $metadata[ 'head_page_title' ] = $page_title .' — '. $metadata[ 'site_name' ];
+}
 
 //      Opengraph
 if ( empty( $og_description ))
@@ -25,7 +24,6 @@ if ( empty( $twitter_description ))
     $twitter_description = $metadata[ 'description' ];
 //if ( empty( $twitter_image ))
 //    $twitter_image = url( "theme/img/logo.png", array( 'absolute' => true ));
-
 
 ?>
     <meta charset="utf-8">

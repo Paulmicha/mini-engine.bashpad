@@ -18,7 +18,7 @@
     #       If in http://192.168.xxx.xxx/mini-engine/www, then use "/mini-engine/www"
     #RewriteBase /
     #RewriteBase /mini-engine/1.0.0-alpha/
-    RewriteBase /mini-engine/bashpad-0.0.1/
+    RewriteBase /mini-engine/bashpad-0.0.2/
     
     #   Rewrite URLs of the form '/x' to the form '/index.php?q=x'.
     RewriteCond %{REQUEST_FILENAME} !-f

@@ -60,7 +60,7 @@ function extension_get_files( $ext_name, $is_dependency = false )
     //      Naming convention : will include any "namespace.inc" & "namespace_subname.inc" files
     $files_to_include = list_files( $extensions[ '#settings' ][ 'lookup_paths' ], array(
         'mask' => '`^'. $ext_name .'\.inc$|^'. $ext_name .'_.+\.inc$`i',
-        'max_depth' => 1,
+        'max_depth' => 0,
     ));
     
     //      Auto "resolve" dependencies

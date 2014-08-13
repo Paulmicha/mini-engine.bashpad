@@ -3,7 +3,7 @@
 /**
  *  @file
  *  System UI helpers
- *  theming: Bootstrap
+ *  HTML theming helpers based on Bootstrap 2.3.2
  */
 
 

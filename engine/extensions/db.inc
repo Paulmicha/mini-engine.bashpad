@@ -7,56 +7,21 @@
 
 
 /**
- *  DB settings 'getter' function
- */
-function db_get_credentials( $db = 'default' )
-{
-    //      Default driver : mysql
-    if ( empty( $GLOBALS[ 'db_settings' ][ $db ][ 'db_driver' ])) {
-        $GLOBALS[ 'db_settings' ][ $db ][ 'db_driver' ] = 'mysql';
-    }
-    
-    //      Default host : localhost
-    if ( empty( $GLOBALS[ 'db_settings' ][ $db ][ 'db_host' ])) {
-        $GLOBALS[ 'db_settings' ][ $db ][ 'db_host' ] = 'localhost';
-    }
-    
-    return $GLOBALS[ 'db_settings' ][ $db ];
-}
-
-
-
-/**
- *  Static PDO DB Connection
- */
-function db_pdo()
-{
-    static $pdo;
-    if ( !$pdo[ $GLOBALS[ 'db_active' ]])
-    {
-        extract( db_get_credentials( $GLOBALS[ 'db_active' ]));
-        $pdo[ $GLOBALS[ 'db_active' ]] = new PDO( $db_driver .':host='. $db_host .';dbname='. $db_name, $db_user, $db_pass );
-        $pdo[ $GLOBALS[ 'db_active' ]]->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
-        $pdo[ $GLOBALS[ 'db_active' ]]->setAttribute( PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true );
-        $pdo[ $GLOBALS[ 'db_active' ]]->exec( 'SET CHARACTER SET utf8' );
-    }
-    return $pdo[ $GLOBALS[ 'db_active' ]];
-}
-
-
-
-/**
  *  Raw PDO query execution
  *  @see db_insert()
  */
-function db_query( $query, $parameters = array(), $parameters_are_named = false )
+function db_query( $query, $parameters = array())
 {
     $db = db_pdo();
+    
+    global $extensions;
+    $db_config = get_db_config( $extensions[ 'db' ][ 'active' ]);
+    
     try
     {
         if ( !empty( $parameters ))
         {
-            if ( $parameters_are_named )
+            if ( $db_config[ 'pdo_named_params' ])
             {
                 //      Example with named parameters :
                 //$sql = 'SELECT name, colour, calories FROM fruit WHERE calories < :calories AND colour = :colour';
@@ -93,6 +58,7 @@ function db_query( $query, $parameters = array(), $parameters_are_named = false 
     catch( Exception $e )
     {
         //      Allow debug error
+        //      @todo refacto error handling
         if ( $GLOBALS[ 'debug' ] && $GLOBALS[ 'debug' ][ 'error' ])
             print '<pre><code class="sql">'. $e ."\n"."Query : ". $query .'</code></pre>';
         
@@ -109,13 +75,13 @@ function db_query( $query, $parameters = array(), $parameters_are_named = false 
  *  Basic PDO helper
  *  Get just the first key from the first result
  */
-function db_popfetch( $query, $parameters = array(), $parameters_are_named = false )
+function db_popfetch( $query, $parameters = array() )
 {
-    $res = db_fetch( $query, $parameters, $parameters_are_named );
-    if ( $res && is_array( $res ))
+    $res = db_fetch( $query, $parameters );
+    if ( $res && is_array( $res )) {
         return array_shift( $res );
-    else
-        return false;
+    }
+    return false;
 }
 
 
@@ -124,12 +90,16 @@ function db_popfetch( $query, $parameters = array(), $parameters_are_named = fal
  *  Basic PDO helper
  *  Get just the first result
  */
-function db_fetch( $query, $parameters = array(), $parameters_are_named = false )
+function db_fetch( $query, $parameters = array())
 {
     $db = db_pdo();
+    
+    global $extensions;
+    $db_config = get_db_config( $extensions[ 'db' ][ 'active' ]);
+    
     try
     {
-        if ( $parameters_are_named )
+        if ( $db_config[ 'pdo_named_params' ])
         {
             $exec_query = $db->prepare( $query, array( PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY ));
             $exec_query->execute( $parameters );
@@ -144,6 +114,7 @@ function db_fetch( $query, $parameters = array(), $parameters_are_named = false 
     catch( Exception $e )
     {
         //      Allow debug error
+        //      @todo refacto error handling
         if ( $GLOBALS[ 'debug' ] && $GLOBALS[ 'debug' ][ 'error' ])
             print '<pre><code class="error">'. $e ."\n"."Query : ". $query .'</code></pre>';
     }
@@ -156,12 +127,16 @@ function db_fetch( $query, $parameters = array(), $parameters_are_named = false 
  *  Basic PDO fetchall helper
  *  @return Array: structure [ num_row ][ 'nom_champ' ] = valeur
  */
-function db_fetchall( $query, $parameters = array(), $parameters_are_named = false )
+function db_fetchall( $query, $parameters = array())
 {
     $db = db_pdo();
+    
+    global $extensions;
+    $db_config = get_db_config( $extensions[ 'db' ][ 'active' ]);
+    
     try
     {
-        if ( $parameters_are_named )
+        if ( $db_config[ 'pdo_named_params' ])
         {
             $exec_query = $db->prepare( $query, array( PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY ));
             $exec_query->execute( $parameters );
@@ -176,6 +151,7 @@ function db_fetchall( $query, $parameters = array(), $parameters_are_named = fal
     catch( Exception $e )
     {
         //      Allow debug error
+        //      @todo refacto error handling
         if ( $GLOBALS[ 'debug' ] && $GLOBALS[ 'debug' ][ 'error' ])
             print '<pre><code class="error">'. $e ."\n"."Query : ". $query .'</code></pre>';
     }
@@ -534,25 +510,6 @@ function insert_if_no_existing_record( $table, $values, $options = array())
         $id = db_insert( $table, $values );
     
     return $id;
-}
-
-
-
-/**
- *  DB Validation helper
- */
-function mandatory_values_check( $values, $mandatory_fields )
-{
-    if ( empty( $values ) || empty( $mandatory_fields ))
-        return false;
-    foreach( $mandatory_fields as $field )
-    {
-        if ( !isset( $values[ $field ]))
-            return false;
-        if ( !is_numeric( $values[ $field ]) && empty( $values[ $field ]))
-            return false;
-    }
-    return true;
 }
 
 

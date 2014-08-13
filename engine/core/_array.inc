@@ -39,3 +39,26 @@ function array_merge_recursive_overwrite( $arr1, $arr2 )
     return $arr1;
 }
 
+
+/**
+ *  Associative array helper :
+ *  Checks empty values against a list of mandatory keys
+ */
+function mandatory_values_check( $values, $mandatory_fields )
+{
+    if ( empty( $values ) || empty( $mandatory_fields ))
+        return false;
+    
+    foreach( $mandatory_fields as $field )
+    {
+        if ( !isset( $values[ $field ]))
+            return false;
+        
+        if ( !is_numeric( $values[ $field ]) && empty( $values[ $field ]))
+            return false;
+    }
+    
+    return true;
+}
+
+

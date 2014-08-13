@@ -185,7 +185,7 @@ function list_files( $path, $options = array())
     }
     
     //      Sorting
-    if ( function_exists( $sort_callback )) {
+    if ( !empty( $files_arr ) && function_exists( $sort_callback )) {
         uasort( $files_arr, $sort_callback );
     }
     
